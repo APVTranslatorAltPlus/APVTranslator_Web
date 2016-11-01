@@ -55,9 +55,9 @@ namespace APVTranslator_Web
             //   consumerKey: "",
             //   consumerSecret: "");
 
-            app.UseFacebookAuthentication(
-               appId: "208292519604929",
-               appSecret: "f0149db31b28ec085f59b2927cfec9ac");
+            //app.UseFacebookAuthentication(
+            //   appId: "208292519604929",
+            //   appSecret: "f0149db31b28ec085f59b2927cfec9ac");
 
             app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
             {

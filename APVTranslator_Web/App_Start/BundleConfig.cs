@@ -24,7 +24,8 @@ namespace APVTranslator_Web
                       "~/Scripts/respond.js"));
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
-                      "~/Content/site.css"));
+                      "~/Content/site.css",
+                      "~/Content/bootstrap-social.css"));
             //material
             bundles.Add(new ScriptBundle("~/bundles/material_js").Include("~/Scripts/material.min.js"));
             bundles.Add(new StyleBundle("~/bundles/material_css").Include("~/Content/material.min.css"));
