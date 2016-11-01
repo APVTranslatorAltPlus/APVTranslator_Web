@@ -175,6 +175,6 @@ C:\Users\Tran Trong Tien DAT\Desktop\APVTranslator_Web\APVTranslator_Web\bin\Mic
 C:\Users\Tran Trong Tien DAT\Desktop\APVTranslator_Web\APVTranslator_Web\bin\Microsoft.Owin.Security.Google.xml
 C:\Users\Tran Trong Tien DAT\Desktop\APVTranslator_Web\APVTranslator_Web\bin\Microsoft.Owin.Security.Twitter.xml
 C:\Users\Tran Trong Tien DAT\Desktop\APVTranslator_Web\APVTranslator_Web\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
-C:\Users\Tran Trong Tien DAT\Desktop\APVTranslator_Web\APVTranslator_Web\obj\Debug\APVTranslator_Web.csprojResolveAssemblyReference.cache
 C:\Users\Tran Trong Tien DAT\Desktop\APVTranslator_Web\APVTranslator_Web\obj\Debug\APVTranslator_Web.dll
 C:\Users\Tran Trong Tien DAT\Desktop\APVTranslator_Web\APVTranslator_Web\obj\Debug\APVTranslator_Web.pdb
+C:\Users\Tran Trong Tien DAT\Desktop\APVTranslator_Web\APVTranslator_Web\obj\Debug\APVTranslator_Web.csprojResolveAssemblyReference.cache
