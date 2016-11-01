@@ -12,6 +12,8 @@ namespace APVTranslator_Web.Controllers
     public class HomeController : Controller
     {
         private TranslatorModel db = new TranslatorModel();
+
+        [Authorize]
         public ActionResult Index()
         {
             var s = db.Database.SqlQuery<Project>("Proc_GetListProject", new object[] { 1 });
