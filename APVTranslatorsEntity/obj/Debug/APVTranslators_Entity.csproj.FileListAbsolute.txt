@@ -2,3 +2,4 @@ C:\apv_dev\APVTranslatorsEntity\bin\Debug\APVTranslators_Entity.dll
 C:\apv_dev\APVTranslatorsEntity\bin\Debug\APVTranslators_Entity.pdb
 C:\apv_dev\APVTranslatorsEntity\obj\Debug\APVTranslators_Entity.dll
 C:\apv_dev\APVTranslatorsEntity\obj\Debug\APVTranslators_Entity.pdb
+C:\apv_dev\APVTranslatorsEntity\obj\Debug\APVTranslators_Entity.csprojResolveAssemblyReference.cache
