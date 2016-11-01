@@ -1,0 +1,5 @@
+C:\apv_dev\APVTranslator_Services\bin\Debug\APVTranslator_Services.dll
+C:\apv_dev\APVTranslator_Services\bin\Debug\APVTranslator_Services.pdb
+C:\apv_dev\APVTranslator_Services\obj\Debug\APVTranslator_Services.csprojResolveAssemblyReference.cache
+C:\apv_dev\APVTranslator_Services\obj\Debug\APVTranslator_Services.dll
+C:\apv_dev\APVTranslator_Services\obj\Debug\APVTranslator_Services.pdb

@@ -5,6 +5,16 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APVTranslator_Web", "APVTranslator_Web\APVTranslator_Web.csproj", "{EA169A11-9BBC-4B8A-B061-A03CB849F428}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APVTranslators_Entity", "APVTranslatorsEntity\APVTranslators_Entity.csproj", "{AAB6FFA4-F386-41F1-8E2E-BE94873D344D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APVTranslator_Controllers", "APVTranslator_Controllers\APVTranslator_Controllers.csproj", "{65B8EEC8-73D7-4E28-B985-3E2B6EA91781}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APVTranslator_Model", "APVTranslator_Model\APVTranslator_Model.csproj", "{C939FC03-DF18-4CB1-8010-1F9B66852EAD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APVTranslator_Services", "APVTranslator_Services\APVTranslator_Services.csproj", "{8F0F12F5-8BBA-4EA2-B0AE-41A7E68163D9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APVTranslator_Common", "APVTranslator_Common\APVTranslator_Common.csproj", "{62443BCA-7EFA-4193-BA7F-DB4D92C46D41}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +25,26 @@ Global
 		{EA169A11-9BBC-4B8A-B061-A03CB849F428}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA169A11-9BBC-4B8A-B061-A03CB849F428}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA169A11-9BBC-4B8A-B061-A03CB849F428}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAB6FFA4-F386-41F1-8E2E-BE94873D344D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAB6FFA4-F386-41F1-8E2E-BE94873D344D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAB6FFA4-F386-41F1-8E2E-BE94873D344D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAB6FFA4-F386-41F1-8E2E-BE94873D344D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65B8EEC8-73D7-4E28-B985-3E2B6EA91781}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65B8EEC8-73D7-4E28-B985-3E2B6EA91781}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65B8EEC8-73D7-4E28-B985-3E2B6EA91781}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65B8EEC8-73D7-4E28-B985-3E2B6EA91781}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C939FC03-DF18-4CB1-8010-1F9B66852EAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C939FC03-DF18-4CB1-8010-1F9B66852EAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C939FC03-DF18-4CB1-8010-1F9B66852EAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C939FC03-DF18-4CB1-8010-1F9B66852EAD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F0F12F5-8BBA-4EA2-B0AE-41A7E68163D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F0F12F5-8BBA-4EA2-B0AE-41A7E68163D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F0F12F5-8BBA-4EA2-B0AE-41A7E68163D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F0F12F5-8BBA-4EA2-B0AE-41A7E68163D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62443BCA-7EFA-4193-BA7F-DB4D92C46D41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62443BCA-7EFA-4193-BA7F-DB4D92C46D41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62443BCA-7EFA-4193-BA7F-DB4D92C46D41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62443BCA-7EFA-4193-BA7F-DB4D92C46D41}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

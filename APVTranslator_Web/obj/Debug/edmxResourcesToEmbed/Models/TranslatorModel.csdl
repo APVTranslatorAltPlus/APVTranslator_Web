@@ -1,0 +1,377 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="APVTranslatorModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="C__MigrationHistory">
+    <Key>
+      <PropertyRef Name="MigrationId" />
+      <PropertyRef Name="ContextKey" />
+    </Key>
+    <Property Name="MigrationId" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="ContextKey" Type="String" MaxLength="300" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Model" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
+    <Property Name="ProductVersion" Type="String" MaxLength="32" FixedLength="false" Unicode="true" Nullable="false" />
+  </EntityType>
+  <EntityType Name="AspNetRole">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="AspNetUsers" Relationship="Self.AspNetUserRoles" FromRole="AspNetRoles" ToRole="AspNetUsers" />
+  </EntityType>
+  <EntityType Name="AspNetUserClaim">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="ClaimType" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="ClaimValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="AspNetUser" Relationship="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUserClaims" ToRole="AspNetUsers" />
+  </EntityType>
+  <EntityType Name="AspNetUserLogin">
+    <Key>
+      <PropertyRef Name="LoginProvider" />
+      <PropertyRef Name="ProviderKey" />
+      <PropertyRef Name="UserId" />
+    </Key>
+    <Property Name="LoginProvider" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="ProviderKey" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="UserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="AspNetUser" Relationship="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUserLogins" ToRole="AspNetUsers" />
+  </EntityType>
+  <EntityType Name="AspNetUser">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Email" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="EmailConfirmed" Type="Boolean" Nullable="false" />
+    <Property Name="PasswordHash" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="SecurityStamp" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="PhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="PhoneNumberConfirmed" Type="Boolean" Nullable="false" />
+    <Property Name="TwoFactorEnabled" Type="Boolean" Nullable="false" />
+    <Property Name="LockoutEndDateUtc" Type="DateTime" Precision="3" />
+    <Property Name="LockoutEnabled" Type="Boolean" Nullable="false" />
+    <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
+    <Property Name="UserName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="AspNetUserClaims" Relationship="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUsers" ToRole="AspNetUserClaims" />
+    <NavigationProperty Name="AspNetUserLogins" Relationship="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUsers" ToRole="AspNetUserLogins" />
+    <NavigationProperty Name="AspNetRoles" Relationship="Self.AspNetUserRoles" FromRole="AspNetUsers" ToRole="AspNetRoles" />
+  </EntityType>
+  <EntityType Name="Dictionary">
+    <Key>
+      <PropertyRef Name="DictionaryId" />
+    </Key>
+    <Property Name="DictionaryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ProjectID" Type="Int32" Nullable="false" />
+    <Property Name="DictionaryName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="ProjectFile">
+    <Key>
+      <PropertyRef Name="ProjectID" />
+      <PropertyRef Name="FileID" />
+    </Key>
+    <Property Name="ProjectID" Type="Int32" Nullable="false" />
+    <Property Name="FileID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FileName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="FilePath" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="FileType" Type="Int16" Nullable="false" />
+    <Property Name="LastUpdate" Type="DateTime" Precision="3" />
+    <Property Name="IsLoadText" Type="Boolean" />
+  </EntityType>
+  <EntityType Name="ProjectMember">
+    <Key>
+      <PropertyRef Name="ProjectID" />
+      <PropertyRef Name="UserID" />
+    </Key>
+    <Property Name="ProjectID" Type="Int32" Nullable="false" />
+    <Property Name="UserID" Type="Int32" Nullable="false" />
+    <Property Name="ProjectRole" Type="Int16" Nullable="false" />
+    <NavigationProperty Name="Project" Relationship="Self.FK_ProjectMembers_Projects" FromRole="ProjectMembers" ToRole="Projects" />
+    <NavigationProperty Name="User" Relationship="Self.FK_ProjectMembers_Users" FromRole="ProjectMembers" ToRole="Users" />
+  </EntityType>
+  <EntityType Name="Project">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Title" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="UseCompanyDB" Type="Byte" />
+    <Property Name="Path" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="ProjectTypeID" Type="Int32" Nullable="false" />
+    <Property Name="Status" Type="Boolean" />
+    <Property Name="Progress" Type="Int32" />
+    <Property Name="CreateBy" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+    <Property Name="CreateAt" Type="DateTime" Precision="3" />
+    <Property Name="DeadLine" Type="DateTime" Precision="3" />
+    <Property Name="TranslateLanguageID" Type="Int32" />
+    <Property Name="Descriptions" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="ProjectMembers" Relationship="Self.FK_ProjectMembers_Projects" FromRole="Projects" ToRole="ProjectMembers" />
+    <NavigationProperty Name="TranslatorLanguage" Relationship="Self.FK__Projects__Transl__6477ECF3" FromRole="Projects" ToRole="TranslatorLanguage" />
+  </EntityType>
+  <EntityType Name="ReferenceDB">
+    <Key>
+      <PropertyRef Name="ID" />
+      <PropertyRef Name="ProjectReferID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" />
+    <Property Name="ProjectReferID" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="TextSegment">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Guid" Nullable="false" />
+    <Property Name="FileId" Type="Int64" Nullable="false" />
+    <Property Name="ProjectId" Type="Int32" Nullable="false" />
+    <Property Name="Type" Type="Int32" />
+    <Property Name="TextSegment1" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="TextSegment2" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="InsertTime" Type="DateTime" Precision="3" />
+    <Property Name="Dictionary" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Row" Type="Int32" />
+    <Property Name="Col" Type="Int32" />
+    <Property Name="SheetName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="IsSheetName" Type="Boolean" />
+    <Property Name="SheetIndex" Type="Int32" />
+  </EntityType>
+  <EntityType Name="TranslatorLanguage">
+    <Key>
+      <PropertyRef Name="TranslatorLanguageID" />
+    </Key>
+    <Property Name="TranslatorLanguageID" Type="Int32" Nullable="false" />
+    <Property Name="LanguageDescription" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="LanguagePair" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Projects" Relationship="Self.FK__Projects__Transl__6477ECF3" FromRole="TranslatorLanguage" ToRole="Projects" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FullName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Role" Type="Int32" />
+    <NavigationProperty Name="ProjectMembers" Relationship="Self.FK_ProjectMembers_Users" FromRole="Users" ToRole="ProjectMembers" />
+  </EntityType>
+  <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+    <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="AspNetUserClaims" Type="Self.AspNetUserClaim" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AspNetUserClaims">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+    <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="AspNetUserLogins" Type="Self.AspNetUserLogin" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AspNetUserLogins">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProjectMembers_Projects">
+    <End Role="Projects" Type="Self.Project" Multiplicity="1" />
+    <End Role="ProjectMembers" Type="Self.ProjectMember" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Projects">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ProjectMembers">
+        <PropertyRef Name="ProjectID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProjectMembers_Users">
+    <End Role="Users" Type="Self.User" Multiplicity="1" />
+    <End Role="ProjectMembers" Type="Self.ProjectMember" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ProjectMembers">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Projects__Transl__6477ECF3">
+    <End Role="TranslatorLanguage" Type="Self.TranslatorLanguage" Multiplicity="0..1" />
+    <End Role="Projects" Type="Self.Project" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TranslatorLanguage">
+        <PropertyRef Name="TranslatorLanguageID" />
+      </Principal>
+      <Dependent Role="Projects">
+        <PropertyRef Name="TranslateLanguageID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="AspNetUserRoles">
+    <End Role="AspNetRoles" Type="Self.AspNetRole" Multiplicity="*" />
+    <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="*" />
+  </Association>
+  <EntityContainer Name="APVTranslatorEntities1" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="C__MigrationHistory" EntityType="Self.C__MigrationHistory" />
+    <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRole" />
+    <EntitySet Name="AspNetUserClaims" EntityType="Self.AspNetUserClaim" />
+    <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogin" />
+    <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUser" />
+    <EntitySet Name="Dictionaries" EntityType="Self.Dictionary" />
+    <EntitySet Name="ProjectFiles" EntityType="Self.ProjectFile" />
+    <EntitySet Name="ProjectMembers" EntityType="Self.ProjectMember" />
+    <EntitySet Name="Projects" EntityType="Self.Project" />
+    <EntitySet Name="ReferenceDBs" EntityType="Self.ReferenceDB" />
+    <EntitySet Name="TextSegments" EntityType="Self.TextSegment" />
+    <EntitySet Name="TranslatorLanguages" EntityType="Self.TranslatorLanguage" />
+    <EntitySet Name="Users" EntityType="Self.User" />
+    <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+      <End Role="AspNetUserClaims" EntitySet="AspNetUserClaims" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+      <End Role="AspNetUserLogins" EntitySet="AspNetUserLogins" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProjectMembers_Projects" Association="Self.FK_ProjectMembers_Projects">
+      <End Role="Projects" EntitySet="Projects" />
+      <End Role="ProjectMembers" EntitySet="ProjectMembers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProjectMembers_Users" Association="Self.FK_ProjectMembers_Users">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="ProjectMembers" EntitySet="ProjectMembers" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Projects__Transl__6477ECF3" Association="Self.FK__Projects__Transl__6477ECF3">
+      <End Role="TranslatorLanguage" EntitySet="TranslatorLanguages" />
+      <End Role="Projects" EntitySet="Projects" />
+    </AssociationSet>
+    <AssociationSet Name="AspNetUserRoles" Association="Self.AspNetUserRoles">
+      <End Role="AspNetRoles" EntitySet="AspNetRoles" />
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+    </AssociationSet>
+    <FunctionImport Name="Proc_AddDictionary">
+      <Parameter Name="projectID" Mode="In" Type="Int32" />
+      <Parameter Name="dictionary" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="Proc_AddMemberToProject">
+      <Parameter Name="projectID" Mode="In" Type="Int32" />
+      <Parameter Name="memberID" Mode="In" Type="Int32" />
+      <Parameter Name="roleInProject" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="Proc_AddTextSegmentDictionary">
+      <Parameter Name="projectID" Mode="In" Type="Int32" />
+      <Parameter Name="dictionary" Mode="In" Type="String" />
+      <Parameter Name="textSegment1" Mode="In" Type="String" />
+      <Parameter Name="textSegment2" Mode="In" Type="String" />
+      <Parameter Name="insertTime" Mode="In" Type="DateTime" />
+    </FunctionImport>
+    <FunctionImport Name="Proc_CheckExistsProjectName" ReturnType="Collection(Int32)">
+      <Parameter Name="projectName" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="Proc_CreateNewProject" ReturnType="Collection(Decimal)">
+      <Parameter Name="Title" Mode="In" Type="String" />
+      <Parameter Name="UseCompanyDB" Mode="In" Type="Byte" />
+      <Parameter Name="Path" Mode="In" Type="String" />
+      <Parameter Name="ProjectTypeID" Mode="In" Type="Int32" />
+      <Parameter Name="Status" Mode="In" Type="Boolean" />
+      <Parameter Name="CreateBy" Mode="In" Type="String" />
+      <Parameter Name="CreateAt" Mode="In" Type="DateTime" />
+      <Parameter Name="DeadLine" Mode="In" Type="DateTime" />
+      <Parameter Name="TranslateLanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="Descriptions" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="Proc_DeleteDictionary">
+      <Parameter Name="projectID" Mode="In" Type="Int32" />
+      <Parameter Name="dictionaryID" Mode="In" Type="Int32" />
+      <Parameter Name="dictionaryName" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="Proc_DeleteFileProject">
+      <Parameter Name="projectID" Mode="In" Type="Int32" />
+      <Parameter Name="fileID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="Proc_GetListMember" ReturnType="Collection(APVTranslatorModel.Proc_GetListMember_Result)">
+      <Parameter Name="UserID" Mode="In" Type="Int32" />
+      <Parameter Name="TextSearch" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="Proc_GetListProject" ReturnType="Collection(APVTranslatorModel.Proc_GetListProject_Result)">
+      <Parameter Name="userID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="Proc_GetListProjectFile" ReturnType="Collection(APVTranslatorModel.Proc_GetListProjectFile_Result)">
+      <Parameter Name="projectID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="Proc_GetListTranslateLanguage" ReturnType="Collection(APVTranslatorModel.Proc_GetListTranslateLanguage_Result)">
+      <Parameter Name="textSearch" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="Proc_GetTextSearch">
+      <Parameter Name="sTextSearch" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="Proc_SaveDictionaryTextSegment">
+      <Parameter Name="id" Mode="In" Type="Guid" />
+      <Parameter Name="textSegment1" Mode="In" Type="String" />
+      <Parameter Name="textSegment2" Mode="In" Type="String" />
+      <Parameter Name="fileId" Mode="In" Type="Int32" />
+      <Parameter Name="projectID" Mode="In" Type="Int32" />
+      <Parameter Name="dictionary" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="Proc_UpdateStatusFileTranslate">
+      <Parameter Name="projectID" Mode="In" Type="Int32" />
+      <Parameter Name="fileID" Mode="In" Type="Int32" />
+      <Parameter Name="status" Mode="In" Type="Boolean" />
+      <Parameter Name="lastWriteTime" Mode="In" Type="DateTime" />
+    </FunctionImport>
+    <FunctionImport Name="Translate">
+      <Parameter Name="FileId" Mode="In" Type="Int32" />
+      <Parameter Name="ProjectId" Mode="In" Type="Int32" />
+    </FunctionImport>
+  </EntityContainer>
+  <ComplexType Name="Proc_GetListMember_Result">
+    <Property Type="Int32" Name="Id" Nullable="false" />
+    <Property Type="String" Name="FullName" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Email" Nullable="false" MaxLength="50" />
+    <Property Type="String" Name="Password" Nullable="false" MaxLength="50" />
+    <Property Type="Int32" Name="Role" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="Proc_GetListProject_Result">
+    <Property Type="Int32" Name="Id" Nullable="false" />
+    <Property Type="String" Name="Title" Nullable="false" MaxLength="500" />
+    <Property Type="Byte" Name="UseCompanyDB" Nullable="true" />
+    <Property Type="String" Name="Path" Nullable="true" MaxLength="250" />
+    <Property Type="Int32" Name="ProjectTypeID" Nullable="false" />
+    <Property Type="Boolean" Name="Status" Nullable="true" />
+    <Property Type="String" Name="CreateBy" Nullable="true" MaxLength="50" />
+    <Property Type="DateTime" Name="CreateAt" Nullable="true" Precision="23" />
+    <Property Type="DateTime" Name="DeadLine" Nullable="true" Precision="23" />
+    <Property Type="Int32" Name="TranslateLanguageID" Nullable="true" />
+    <Property Type="String" Name="Descriptions" Nullable="true" />
+    <Property Type="String" Name="LanguageDescription" Nullable="true" MaxLength="255" />
+    <Property Type="Decimal" Name="Progress" Nullable="true" Precision="6" Scale="2" />
+  </ComplexType>
+  <ComplexType Name="Proc_GetListProjectFile_Result">
+    <Property Type="Int32" Name="ProjectID" Nullable="false" />
+    <Property Type="Int64" Name="FileID" Nullable="false" />
+    <Property Type="String" Name="FileName" Nullable="true" MaxLength="255" />
+    <Property Type="String" Name="FilePath" Nullable="false" MaxLength="255" />
+    <Property Type="Int16" Name="FileType" Nullable="false" />
+    <Property Type="DateTime" Name="LastUpdate" Nullable="true" Precision="23" />
+    <Property Type="Boolean" Name="IsLoadText" Nullable="true" />
+    <Property Type="String" Name="Title" Nullable="false" MaxLength="500" />
+  </ComplexType>
+  <ComplexType Name="Proc_GetListTranslateLanguage_Result">
+    <Property Type="Int32" Name="TranslatorLanguageID" Nullable="false" />
+    <Property Type="String" Name="LanguageDescription" Nullable="true" MaxLength="255" />
+    <Property Type="String" Name="LanguagePair" Nullable="true" MaxLength="10" />
+  </ComplexType>
+</Schema>
