@@ -11,11 +11,11 @@ namespace APVTranslator_Controllers.Controllers
 {
     public class HomeController : Controller
     {
-        TranslatorModel db = new TranslatorModel();
+        DashBoardModel db = new DashBoardModel();
         public ActionResult Index()
         {
             var list=db.Proc_GetListProject(1).ToList();
-            var list2 = db.Projects.ToList();
+            //var list2 = db.Projects.ToList();
             return View(list);
         }
 

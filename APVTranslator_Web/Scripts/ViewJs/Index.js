@@ -8,7 +8,9 @@
         enableCellSelection: true,
         enableRowSelection: false,
         enableCellEditOnFocus: true,
-        columnDefs: [{ field: 'Title', displayName: 'ProjectName', enableCellEdit: true, resizable: true },
+        columnDefs: [{ displayName: 'STT', cellTemplate: '<div style="text-align:center;">{{row.rowIndex}}</div>', width: 50, enableCellEdit: false },
+                     { field: 'Title', displayName: 'ProjectName', enableCellEdit: true, resizable: true },
+                     { field: 'CreateAt', displayName: 'CreateAt', enableCellEdit: false, type: 'date', cellFilter: 'date:\'dd/MM/yyyy\'', resizable: true },
                      { field: 'Path', displayName: 'Path', enableCellEdit: true, resizable: true },
                      { field: 'CreateBy', displayName: 'CreateBy', enableCellEdit: false, resizable: true }]
     };
