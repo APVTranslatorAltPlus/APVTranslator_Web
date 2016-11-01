@@ -1,0 +1,68 @@
+﻿.gridStyle {
+    border: 1px solid rgb(212,212,212);
+    width: 100%;
+    height: 100%;
+}
+
+.app-index {
+    height: 100%;
+    width: 100%;
+    position: relative;
+}
+
+.main-left {
+    width: 100%;
+    height: 100%;
+    background-color: green;
+}
+
+.main-index {
+    height: 100%;
+    width: 100%;
+}
+
+.splitter {
+    float: right;
+    height: 100%;
+    width: 6px;
+    background-color: royalblue;
+}
+
+    .splitter:hover {
+        cursor: pointer;
+    }
+
+.fill-height {
+    height: 100%;
+}
+
+.m-top {
+    position: absolute;
+    top: 0;
+    height:60px;
+    width:100%;
+    padding-left:15px;
+    padding-right:15px;
+}
+
+.m-center {
+    position: absolute;
+    top: 60px;
+    bottom:0;
+    width:100%;
+    padding-left:15px;
+    padding-right:15px;
+    flex:1;
+}
+
+.m-footer {
+    position: absolute;
+    top: 0;
+    height:100px;
+    width:100%;
+    padding-left:15px;
+    padding-right:15px;
+}
+.m-top{
+    text-align:center;
+}

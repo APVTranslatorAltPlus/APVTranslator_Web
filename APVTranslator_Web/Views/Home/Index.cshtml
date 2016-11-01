@@ -1,0 +1,36 @@
+﻿@model IEnumerable<APVTranslator_Web.Models.Project>
+@{
+    ViewBag.Title = "Home Page";
+}
+@Styles.Render("~/bundles/index_css")
+@Scripts.Render("~/bundles/index_js")
+
+<div ng-app="myApp" class="app-index">
+    <div class="m-top">
+        <label>Project Name</label>
+    </div>
+    <div class="m-center">
+        <div class="row fill-height">
+            <div class="col-md-2 fill-height">
+                <div class="main-left">
+                    <div class="splitter"></div>
+                </div>
+            </div>
+            <div class="col-md-10 fill-height">
+                <div ng-controller="MyCtrl" ng-init="init(@Newtonsoft.Json.JsonConvert.SerializeObject(Model))" class="main-index">
+                    <div class="gridStyle" ng-grid="gridOptions"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*<div class="m-footer">
+
+        </div>*@
+
+    @*  <div class="main-left">
+            <div class="splitter"></div>
+        </div>
+        <div ng-controller="MyCtrl" class="main-index">
+            <div class="gridStyle" ng-grid="gridOptions"></div>
+        </div>*@
+</div>
