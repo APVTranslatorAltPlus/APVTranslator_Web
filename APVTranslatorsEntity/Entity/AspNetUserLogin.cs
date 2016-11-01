@@ -17,7 +17,7 @@ namespace APVTranslator_Entity.Models
 
         [Key]
         [Column(Order = 2)]
-        public Guid UserId { get; set; }
+        public string UserId { get; set; }
 
         public virtual AspNetUser AspNetUser { get; set; }
     }
