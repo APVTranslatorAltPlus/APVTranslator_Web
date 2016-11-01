@@ -11,7 +11,7 @@ namespace APVTranslator_Entity.Models
 
         [Required]
         [StringLength(128)]
-        public Guid UserId { get; set; }
+        public string UserId { get; set; }
 
         public string ClaimType { get; set; }
 
