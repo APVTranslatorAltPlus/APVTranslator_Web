@@ -211,28 +211,11 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
-    <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
-    <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\ManageController.cs" />
-    <Compile Include="Controllers\ProjectsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\Dictionary.cs" />
-    <Compile Include="Models\IdentityModels.cs" />
-    <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\Project.cs" />
-    <Compile Include="Models\ProjectFile.cs" />
-    <Compile Include="Models\ProjectMember.cs" />
-    <Compile Include="Models\ReferenceDB.cs" />
-    <Compile Include="Models\TextSegment.cs" />
-    <Compile Include="Models\TranslatorLanguage.cs" />
-    <Compile Include="Models\TranslatorModel.cs" />
-    <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -630,11 +613,6 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Projects\Create.cshtml" />
-    <Content Include="Views\Projects\Delete.cshtml" />
-    <Content Include="Views\Projects\Details.cshtml" />
-    <Content Include="Views\Projects\Edit.cshtml" />
-    <Content Include="Views\Projects\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -651,6 +629,28 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\APVTranslatorsEntity\APVTranslators_Entity.csproj">
+      <Project>{aab6ffa4-f386-41f1-8e2e-be94873d344d}</Project>
+      <Name>APVTranslators_Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\APVTranslator_Common\APVTranslator_Common.csproj">
+      <Project>{62443bca-7efa-4193-ba7f-db4d92c46d41}</Project>
+      <Name>APVTranslator_Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\APVTranslator_Controllers\APVTranslator_Controllers.csproj">
+      <Project>{65b8eec8-73d7-4e28-b985-3e2b6ea91781}</Project>
+      <Name>APVTranslator_Controllers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\APVTranslator_Model\APVTranslator_Model.csproj">
+      <Project>{C939FC03-DF18-4CB1-8010-1F9B66852EAD}</Project>
+      <Name>APVTranslator_Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\APVTranslator_Services\APVTranslator_Services.csproj">
+      <Project>{8f0f12f5-8bba-4ea2-b0ae-41a7e68163d9}</Project>
+      <Name>APVTranslator_Services</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

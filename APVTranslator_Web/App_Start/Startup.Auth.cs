@@ -5,7 +5,8 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Owin;
-using APVTranslator_Web.Models;
+using APVTranslator_Model.Models;
+using APVTranslator_Controllers;
 
 namespace APVTranslator_Web
 {
