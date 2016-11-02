@@ -1,20 +1,48 @@
-﻿var app = angular.module('myApp', ['ngGrid']).controller('MyCtrl', ['$scope', '$http', '$domUtilityService', function ($scope, $http, $domUtilityService) {
-    $scope.init = function (project) {
-        debugger;
-        $scope.data = project;
-    }
-    $scope.gridOptions = {
+﻿var app = angular.module('myApp', ['ngGrid']).controller('MyCtrl', ['$scope', '$http', 'services', function (scope, http, ser) {
+    ser.data()
+        .success(function (response) {
+            if (response.GetListProjectResult && response.GetListProjectResult.IsSuccess) {
+                scope.data = JSON.parse(response.GetListProjectResult.Value);
+            }
+        }).error(function (err) {
+            console.log(err);
+        });
+    scope.gridOptions = {
         data: 'data',
         enableCellSelection: true,
         enableRowSelection: false,
-        enableCellEditOnFocus: true,
+        enableCellEditOnFocus: false,
         columnDefs: [{ displayName: 'STT', cellTemplate: '<div style="text-align:center;">{{row.rowIndex}}</div>', width: 50, enableCellEdit: false },
-                     { field: 'Title', displayName: 'ProjectName', enableCellEdit: true, resizable: true },
-                     { field: 'CreateAt', displayName: 'CreateAt', enableCellEdit: false, type: 'date', cellFilter: 'date:\'dd/MM/yyyy\'', resizable: true },
-                     { field: 'Path', displayName: 'Path', enableCellEdit: true, resizable: true },
-                     { field: 'CreateBy', displayName: 'CreateBy', enableCellEdit: false, resizable: true }]
+                     { field: 'Title', displayName: 'ProjectName', enableCellEdit: false, minWidth: 200, resizable: true },
+                     { field: 'Status', displayName: 'Status', cellTemplate: '<div class="ngCellText ng-scope ngCellElement">{{row.entity.Progress<100?"Translating":"Translated"}}</div>', enableCellEdit: false, resizable: true },
+                     { field: 'Progress', displayName: 'Progress', cellTemplate: '<div class="ngCellText ng-scope ngCellElement">{{row.entity.Progress*100}}%</div>', width: 80, enableCellEdit: false, resizable: true },
+                     { field: 'Path', displayName: 'Path', enableCellEdit: false, resizable: true, minWidth: 220 },
+                     { field: 'LanguageDescription', displayName: 'TranslateLanguage', enableCellEdit: false, resizable: true, minWidth: 220 },
+                     { field: 'CreateAt', displayName: 'CreateAt', enableCellEdit: false, type: 'date', cellFilter: 'date:\'mm:hh dd/MM/yyyy\'', resizable: true },
+                     { field: 'CreateBy', displayName: 'CreateBy', enableCellEdit: false, resizable: true },
+                     { field: 'DeadLine', displayName: 'DeadLine', enableCellEdit: false, cellFilter: 'date:\'mm:hh dd/MM/yyyy\'', resizable: true }]
     };
 }])
+app.service('services', function ($http) {
+    this.data = function () {
+        return $http.get('Services/DashboardService.svc/GetListProject');
+    };
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 $(document).ready(function () {
     //$('.splitter').click(function () {
     //    var mleft = $('.main-left');

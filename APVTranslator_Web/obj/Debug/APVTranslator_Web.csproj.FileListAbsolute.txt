@@ -106,6 +106,7 @@ C:\apv_dev\APVTranslator_Web\bin\APVTranslator_Web.dll
 C:\apv_dev\APVTranslator_Web\bin\APVTranslator_Web.pdb
 C:\apv_dev\APVTranslator_Web\bin\Antlr3.Runtime.dll
 C:\apv_dev\APVTranslator_Web\bin\APVTranslators_Entity.dll
+C:\apv_dev\APVTranslator_Web\bin\APVTranslator_Common.dll
 C:\apv_dev\APVTranslator_Web\bin\APVTranslator_Controllers.dll
 C:\apv_dev\APVTranslator_Web\bin\APVTranslator_Model.dll
 C:\apv_dev\APVTranslator_Web\bin\APVTranslator_Services.dll
@@ -147,6 +148,7 @@ C:\apv_dev\APVTranslator_Web\bin\System.Web.WebPages.dll
 C:\apv_dev\APVTranslator_Web\bin\System.Web.WebPages.Razor.dll
 C:\apv_dev\APVTranslator_Web\bin\WebGrease.dll
 C:\apv_dev\APVTranslator_Web\bin\APVTranslators_Entity.pdb
+C:\apv_dev\APVTranslator_Web\bin\APVTranslator_Common.pdb
 C:\apv_dev\APVTranslator_Web\bin\APVTranslator_Controllers.pdb
 C:\apv_dev\APVTranslator_Web\bin\APVTranslator_Model.pdb
 C:\apv_dev\APVTranslator_Web\bin\APVTranslator_Services.pdb
@@ -186,5 +188,3 @@ C:\apv_dev\APVTranslator_Web\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
 C:\apv_dev\APVTranslator_Web\obj\Debug\APVTranslator_Web.csprojResolveAssemblyReference.cache
 C:\apv_dev\APVTranslator_Web\obj\Debug\APVTranslator_Web.dll
 C:\apv_dev\APVTranslator_Web\obj\Debug\APVTranslator_Web.pdb
-C:\apv_dev\APVTranslator_Web\bin\APVTranslator_Common.dll
-C:\apv_dev\APVTranslator_Web\bin\APVTranslator_Common.pdb

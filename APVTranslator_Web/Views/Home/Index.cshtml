@@ -1,5 +1,5 @@
 ﻿@using APVTranslator_Entity.Models;
-@model IEnumerable<APVTranslator_Entity.Models.Project>
+@*@model IEnumerable<APVTranslator_Entity.Models.Project>*@
 @{
     ViewBag.Title = "Home Page";
 }
@@ -18,7 +18,7 @@
                 </div>
             </div>
             <div class="col-md-10 fill-height">
-                <div ng-controller="MyCtrl" ng-init="init(@Newtonsoft.Json.JsonConvert.SerializeObject(Model))" class="main-index">
+                <div ng-controller="MyCtrl" class="main-index">
                     <div class="gridStyle" ng-grid="gridOptions"></div>
                 </div>
             </div>

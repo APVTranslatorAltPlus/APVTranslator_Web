@@ -33,6 +33,8 @@ namespace APVTranslator_Entity.Models
 
         public int? TranslateLanguageID { get; set; }
 
+        public string LanguageDescription { get; set; }
+
         public string Descriptions { get; set; }
     }
 }
