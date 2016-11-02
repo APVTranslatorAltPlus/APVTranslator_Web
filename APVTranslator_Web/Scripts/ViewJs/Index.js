@@ -10,6 +10,7 @@ var app = angular.module('myApp', ['ngGrid']).controller('MyCtrl', ['$scope', '$
         enableCellSelection: false,
         enableRowSelection: true,
         enableCellEditOnFocus: false,
+        multiSelect: false,
         columnDefs: [{ field: 'Title', displayName: 'ProjectName',  resizable: true },
                      { field: 'Path', displayName: 'Path',  resizable: true },
                      { field: 'CreateBy', displayName: 'CreateBy', resizable: true }],
