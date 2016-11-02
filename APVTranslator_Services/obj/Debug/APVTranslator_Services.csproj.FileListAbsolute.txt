@@ -1,9 +1,6 @@
+C:\apv_dev\APVTranslator_Services\bin\Debug\APVTranslator_Services.dll.config
 C:\apv_dev\APVTranslator_Services\bin\Debug\APVTranslator_Services.dll
 C:\apv_dev\APVTranslator_Services\bin\Debug\APVTranslator_Services.pdb
-C:\apv_dev\APVTranslator_Services\obj\Debug\APVTranslator_Services.dll
-C:\apv_dev\APVTranslator_Services\obj\Debug\APVTranslator_Services.pdb
-C:\apv_dev\APVTranslator_Services\obj\Debug\APVTranslator_Services.csprojResolveAssemblyReference.cache
-C:\apv_dev\APVTranslator_Services\bin\Debug\APVTranslator_Services.dll.config
 C:\apv_dev\APVTranslator_Services\bin\Debug\APVTranslators_Entity.dll
 C:\apv_dev\APVTranslator_Services\bin\Debug\APVTranslator_Model.dll
 C:\apv_dev\APVTranslator_Services\bin\Debug\EntityFramework.dll
@@ -40,3 +37,6 @@ C:\apv_dev\APVTranslator_Services\bin\Debug\System.Web.Razor.xml
 C:\apv_dev\APVTranslator_Services\bin\Debug\System.Web.WebPages.Razor.xml
 C:\apv_dev\APVTranslator_Services\bin\Debug\System.Web.WebPages.xml
 C:\apv_dev\APVTranslator_Services\bin\Debug\System.Web.WebPages.Deployment.xml
+C:\apv_dev\APVTranslator_Services\obj\Debug\APVTranslator_Services.csprojResolveAssemblyReference.cache
+C:\apv_dev\APVTranslator_Services\obj\Debug\APVTranslator_Services.dll
+C:\apv_dev\APVTranslator_Services\obj\Debug\APVTranslator_Services.pdb
