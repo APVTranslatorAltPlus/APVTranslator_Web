@@ -18,9 +18,9 @@
                      { field: 'Progress', displayName: 'Progress', cellTemplate: '<div class="ngCellText ng-scope ngCellElement">{{row.entity.Progress*100}}%</div>', width: 80, enableCellEdit: false, resizable: true },
                      { field: 'Path', displayName: 'Path', enableCellEdit: false, resizable: true, minWidth: 220 },
                      { field: 'LanguageDescription', displayName: 'TranslateLanguage', enableCellEdit: false, resizable: true, minWidth: 220 },
-                     { field: 'CreateAt', displayName: 'CreateAt', enableCellEdit: false, type: 'date', cellFilter: 'date:\'mm:hh dd/MM/yyyy\'', resizable: true },
+                     { field: 'CreateAt', displayName: 'CreateAt', enableCellEdit: false, type: 'date', cellFilter: 'date:\'mm:hh dd/MM/yyyy\'', resizable: true,minWidth:150 },
                      { field: 'CreateBy', displayName: 'CreateBy', enableCellEdit: false, resizable: true },
-                     { field: 'DeadLine', displayName: 'DeadLine', enableCellEdit: false, cellFilter: 'date:\'mm:hh dd/MM/yyyy\'', resizable: true }]
+                     { field: 'DeadLine', displayName: 'DeadLine', enableCellEdit: false, cellFilter: 'date:\'mm:hh dd/MM/yyyy\'', resizable: true, minWidth: 150 }]
     };
 }])
 app.service('services', function ($http) {
