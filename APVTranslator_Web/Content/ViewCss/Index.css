@@ -13,7 +13,7 @@
 .main-left {
     width: 100%;
     height: 100%;
-    background-color: #d9edf7;
+    background-color: #F5F5F5;
 }
 
 .main-index {
@@ -25,7 +25,8 @@
     float: right;
     height: 100%;
     width: 6px;
-    background-color: royalblue;
+    background-color: #086962;
+
 }
 
     .splitter:hover {

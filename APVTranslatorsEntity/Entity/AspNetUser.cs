@@ -15,7 +15,7 @@ namespace APVTranslator_Entity.Models
             AspNetRoles = new HashSet<AspNetRole>();
         }
 
-        public string Id { get; set; }
+        public int Id { get; set; }
 
         [StringLength(256)]
         public string Email { get; set; }
