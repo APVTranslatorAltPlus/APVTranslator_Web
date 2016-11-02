@@ -6,33 +6,24 @@ using System.Web;
 using System.Web.Mvc;
 using System.Data.Entity;
 using System.Net;
-using APVTranslator_Entity.Models;
-using Microsoft.AspNet.Identity;
+using Newtonsoft.Json;
 
 namespace APVTranslator_Controllers.Controllers
 {
-    
     public class HomeController : Controller
     {
-        TranslatorModel db = new TranslatorModel();
-
-        [Authorize]
+        DashBoardModel db = new DashBoardModel();
         public ActionResult Index()
         {
-            var list = db.Proc_GetListProject(1).ToList();
-            var list2 = db.AspNetUsers.ToList();
-            int userId = int.Parse(User.Identity.GetUserId());
-            IQueryable<Project> custQuery = from pm in db.ProjectMembers
-                                            where pm.UserID == userId
-                                            select pm.Project;
-
-
-            var list3 = custQuery.ToList();
-
-         
-            return View(list3);
+            //var list=db.Proc_GetListProject(1).ToList();
+            //var list2 = db.Projects.ToList();
+            return View();
         }
-
+        public string GetListProject()
+        {
+            var listProject = db.Proc_GetListProject(1).ToList();
+            return JsonConvert.SerializeObject(listProject);
+        }
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
