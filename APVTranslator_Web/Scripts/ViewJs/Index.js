@@ -1,41 +1,48 @@
-﻿
-
-var app = angular.module('myApp', ['ngGrid']).controller('MyCtrl', ['$scope', '$http', '$domUtilityService', function ($scope, $http, $domUtilityService) {
-    $scope.init = function (project) {
-        debugger;
-        $scope.data = project;
-    }
-    $scope.gridOptions = {
+﻿var app = angular.module('myApp', ['ngGrid']).controller('MyCtrl', ['$scope', '$http', 'services', function (scope, http, ser) {
+    ser.data()
+        .success(function (response) {
+            if (response.GetListProjectResult && response.GetListProjectResult.IsSuccess) {
+                scope.data = JSON.parse(response.GetListProjectResult.Value);
+            }
+        }).error(function (err) {
+            console.log(err);
+        });
+    scope.gridOptions = {
         data: 'data',
-        enableCellSelection: false,
-        enableRowSelection: true,
+        enableCellSelection: true,
+        enableRowSelection: false,
         enableCellEditOnFocus: false,
-        multiSelect: false,
-        columnDefs: [{ field: 'Title', displayName: 'ProjectName',  resizable: true },
-                     { field: 'Path', displayName: 'Path',  resizable: true },
-                     { field: 'CreateBy', displayName: 'CreateBy', resizable: true }],
-        rowTemplate: '<div ng-click="onClickRow(row)" ng-style="{\'cursor\': row.cursor, \'z-index\': col.zIndex() }" ng-repeat="col in renderedColumns" ng-class="col.colIndex()" class="ngCell {{col.cellClass}}" ng-cell></div>'
-    };
-
-    $scope.onClickRow = function (rowItem) {
-       // alert(rowItem.entity.Id);
-        document.getElementById("ProjectName").innerHTML = rowItem.entity.Title
-        document.getElementById("Status").innerHTML = rowItem.entity.Status
-        document.getElementById("Progress").innerHTML = rowItem.entity.Progress
-        document.getElementById("Path").innerHTML = rowItem.entity.Path
-        document.getElementById("TranslateLanguage").innerHTML = rowItem.entity.TranslateLanguageID
-        document.getElementById("CreateAt").innerHTML = rowItem.entity.CreateAt
-        document.getElementById("CreateBy").innerHTML = rowItem.entity.CreateBy
-        document.getElementById("Deadline").innerHTML = rowItem.entity.DeadLine
-
-        if (rowItem.entity.Status === 'false') {
-
-        } else {
-            document.getElementById("Status").innerHTML = "Translating"
-        }
-
+        columnDefs: [{ displayName: 'STT', cellTemplate: '<div style="text-align:center;">{{row.rowIndex}}</div>', width: 50, enableCellEdit: false },
+                     { field: 'Title', displayName: 'ProjectName', enableCellEdit: false, minWidth: 200, resizable: true },
+                     { field: 'Status', displayName: 'Status', cellTemplate: '<div class="ngCellText ng-scope ngCellElement">{{row.entity.Progress<100?"Translating":"Translated"}}</div>', enableCellEdit: false, resizable: true },
+                     { field: 'Progress', displayName: 'Progress', cellTemplate: '<div class="ngCellText ng-scope ngCellElement">{{row.entity.Progress*100}}%</div>', width: 80, enableCellEdit: false, resizable: true },
+                     { field: 'Path', displayName: 'Path', enableCellEdit: false, resizable: true, minWidth: 220 },
+                     { field: 'LanguageDescription', displayName: 'TranslateLanguage', enableCellEdit: false, resizable: true, minWidth: 220 },
+                     { field: 'CreateAt', displayName: 'CreateAt', enableCellEdit: false, type: 'date', cellFilter: 'date:\'mm:hh dd/MM/yyyy\'', resizable: true,minWidth:150 },
+                     { field: 'CreateBy', displayName: 'CreateBy', enableCellEdit: false, resizable: true },
+                     { field: 'DeadLine', displayName: 'DeadLine', enableCellEdit: false, cellFilter: 'date:\'mm:hh dd/MM/yyyy\'', resizable: true, minWidth: 150 }]
     };
 }])
+app.service('services', function ($http) {
+    this.data = function () {
+        return $http.get('Services/DashboardService.svc/GetListProject');
+    };
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 $(document).ready(function () {
     //$('.splitter').click(function () {
     //    var mleft = $('.main-left');

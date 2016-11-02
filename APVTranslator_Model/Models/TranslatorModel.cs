@@ -80,18 +80,6 @@ namespace APVTranslator_Model.Models
             //    .WillCascadeOnDelete(false);
             base.OnModelCreating(modelBuilder);
         }
-        /// <summary>
-        /// Get List Project
-        /// </summary>
-        /// <param name="userID"></param>
-        /// <returns></returns>
-        public virtual IEnumerable<Project> Proc_GetListProject(Nullable<int> userID)
-        {
-            var userIDParameter = userID.HasValue ?
-                new SqlParameter("@userID", userID) :
-                new SqlParameter("@userID", typeof(int));
-            IEnumerable<Project> listProjects = this.Database.SqlQuery<Project>("Proc_GetListProject @userID", userIDParameter).ToList();
-            return listProjects;
-        }
+        
     }
 }

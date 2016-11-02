@@ -71,3 +71,8 @@ textarea {
     padding-right: 0px;
     padding-left: 0px;
 }
+
+.ngHeaderText,.ngCell {
+    text-overflow: clip;
+    white-space: normal;
+}
