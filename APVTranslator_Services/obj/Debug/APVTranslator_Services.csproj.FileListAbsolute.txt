@@ -3,3 +3,8 @@ C:\apv_dev\APVTranslator_Services\bin\Debug\APVTranslator_Services.pdb
 C:\apv_dev\APVTranslator_Services\obj\Debug\APVTranslator_Services.csprojResolveAssemblyReference.cache
 C:\apv_dev\APVTranslator_Services\obj\Debug\APVTranslator_Services.dll
 C:\apv_dev\APVTranslator_Services\obj\Debug\APVTranslator_Services.pdb
+C:\Users\Tran Trong Tien DAT\Source\Repos\APVTranslator_Web\APVTranslator_Services\bin\Debug\APVTranslator_Services.dll
+C:\Users\Tran Trong Tien DAT\Source\Repos\APVTranslator_Web\APVTranslator_Services\bin\Debug\APVTranslator_Services.pdb
+C:\Users\Tran Trong Tien DAT\Source\Repos\APVTranslator_Web\APVTranslator_Services\obj\Debug\APVTranslator_Services.csprojResolveAssemblyReference.cache
+C:\Users\Tran Trong Tien DAT\Source\Repos\APVTranslator_Web\APVTranslator_Services\obj\Debug\APVTranslator_Services.dll
+C:\Users\Tran Trong Tien DAT\Source\Repos\APVTranslator_Web\APVTranslator_Services\obj\Debug\APVTranslator_Services.pdb

@@ -7,7 +7,7 @@
         data: 'data',
         enableCellSelection: true,
         enableRowSelection: false,
-        enableCellEditOnFocus: true,
+        enableCellEditOnFocus: false,
         columnDefs: [{ field: 'Title', displayName: 'ProjectName', enableCellEdit: true, resizable: true },
                      { field: 'Path', displayName: 'Path', enableCellEdit: true, resizable: true },
                      { field: 'CreateBy', displayName: 'CreateBy', enableCellEdit: false, resizable: true }]
