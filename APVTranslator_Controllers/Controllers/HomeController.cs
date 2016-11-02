@@ -16,6 +16,7 @@ namespace APVTranslator_Controllers.Controllers
         {
             var list=db.Proc_GetListProject(1).ToList();
             var list2 = db.Projects.ToList();
+            ///Demo comment
             return View(list);
         }
 
