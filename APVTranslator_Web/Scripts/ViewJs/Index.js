@@ -7,11 +7,14 @@
         }).error(function (err) {
             console.log(err);
         });
+    scope.mySelections = [];
     scope.gridOptions = {
         data: 'data',
-        enableCellSelection: true,
-        enableRowSelection: false,
+        enableCellSelection: false,
+        enableRowSelection: true,
         enableCellEditOnFocus: false,
+        selectedItems: scope.mySelections,
+        multiSelect: false,
         columnDefs: [{ displayName: 'STT', cellTemplate: '<div style="text-align:center;">{{row.rowIndex}}</div>', width: 50, enableCellEdit: false },
                      { field: 'Title', displayName: 'ProjectName', enableCellEdit: false, minWidth: 200, resizable: true },
                      { field: 'Status', displayName: 'Status', cellTemplate: '<div class="ngCellText ng-scope ngCellElement">{{row.entity.Progress<100?"Translating":"Translated"}}</div>', enableCellEdit: false, resizable: true },

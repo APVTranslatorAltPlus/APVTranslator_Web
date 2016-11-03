@@ -6,4 +6,3 @@ C:\Users\Tran Trong Tien DAT\Source\Repos\APVTranslator_Web\APVTranslatorsEntity
 C:\Users\Tran Trong Tien DAT\Source\Repos\APVTranslator_Web\APVTranslatorsEntity\bin\Debug\APVTranslators_Entity.pdb
 C:\Users\Tran Trong Tien DAT\Source\Repos\APVTranslator_Web\APVTranslatorsEntity\obj\Debug\APVTranslators_Entity.dll
 C:\Users\Tran Trong Tien DAT\Source\Repos\APVTranslator_Web\APVTranslatorsEntity\obj\Debug\APVTranslators_Entity.pdb
-C:\Users\Tran Trong Tien DAT\Source\Repos\APVTranslator_Web\APVTranslatorsEntity\obj\Debug\APVTranslators_Entity.csprojResolveAssemblyReference.cache

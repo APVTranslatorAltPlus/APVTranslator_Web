@@ -10,69 +10,72 @@
     <div class="m-top" style="font-size:19px;margin-top:10px">
         <label>APVTranslator</label>
     </div>
-    <div class="m-center">
-        <div class="row fill-height">
-            <div class="col-md-3 fill-height">
-                <div class="main-left" style="">
-                    <p style="position: absolute;padding:10px;margin-left:60px;font-size:large"><u><b>Project Details</b></u></p>
-                    @*<div style="position:absolute;padding:10px;margin-top:50px;font-size:medium;">
-                        <p style="text-align:left!important" ><b></b></p>
-                        <p style="float:left">aaa</p>
-                    </div>*@
-                    <div style="position:absolute;padding:10px;text-align:left;margin-top:50px;font-size:medium;">
-                        <b>Project Name:</b>
-                        <p style="display:inline" id="ProjectName">
-                       
-                        </p>
+    <div ng-controller="MyCtrl" ng-init="init(@Newtonsoft.Json.JsonConvert.SerializeObject(Model))">
+        <div class="m-center">
+            <div class="row fill-height">
+                <div class="col-md-3 fill-height">
+                    <div class="main-left" style="">
+                        <p style="position: absolute;padding:10px;margin-left:60px;font-size:large"><u><b>Project Details</b></u></p>
+                        @*<div style="position:absolute;padding:10px;margin-top:50px;font-size:medium;">
+                                <p style="text-align:left!important" ><b></b></p>
+                                <p style="float:left">aaa</p>
+                            </div>*@
+                        <div style="position:absolute;padding:10px;text-align:left;margin-top:50px;font-size:medium;">
+                            <b>Project Name:</b>
+                            <p style="display:inline" id="ProjectName" class="selectedItems">
+                                {{mySelections[0].Title}}
+                            </p>
+                        </div>
+                        <div style="position:absolute;padding:10px;text-align:left;margin-top:90px;font-size:medium;">
+                            <b>Status:</b>
+                            <p style="display:inline" id="Status">
+                                {{mySelections[0].Status}}
+                            </p>
+                        </div>
+                        <div style="position:absolute;padding:10px;text-align:left;margin-top:130px;font-size:medium;">
+                            <b>Progress:</b>
+                            <p style="display:inline" id="Progress">
+                                {{mySelections[0].Progress}}
+                            </p>
+                        </div>
+                        <div style="position:absolute;padding:10px;text-align:left;margin-top:170px;font-size:medium;">
+                            <b>Path:</b>
+                            <p style="display:inline" id="Path">
+                                {{mySelections[0].Path}}
+                            </p>
+                        </div>
+                        <div style="position:absolute;padding:10px;text-align:left;margin-top:210px;font-size:medium;">
+                            <b>Translate Language:</b>
+                            <p style="display:inline" id="TranslateLanguage">
+                                {{mySelections[0].TranslateLanguage}}
+                            </p>
+                        </div>
+                        <div style="position:absolute;padding:10px;text-align:left;margin-top:250px;font-size:medium;">
+                            <b>Create At:</b>
+                            <p style="display:inline" id="CreateAt">
+                                {{mySelections[0].CreateAt}}
+                            </p>
+                        </div>
+                        <div style="position:absolute;padding:10px;text-align:left;margin-top:290px;font-size:medium;">
+                            <b>Create By:</b>
+                            <p style="display:inline" id="CreateBy">
+                                {{mySelections[0].CreateBy}}
+                            </p>
+                        </div>
+                        <div style="position:absolute;padding:10px;text-align:left;margin-top:330px;font-size:medium;">
+                            <b>Deadline:</b>
+                            <p style="display:inline" id="Deadline">
+                                {{mySelections[0].DeadLine}}
+                            </p>
+                        </div>
+                        <div class="splitter" style=""></div>
                     </div>
-                    <div style="position:absolute;padding:10px;text-align:left;margin-top:90px;font-size:medium;">
-                        <b>Status:</b>
-                        <p style="display:inline" id="Status">
-                          
-                        </p>
-                    </div>
-                    <div style="position:absolute;padding:10px;text-align:left;margin-top:130px;font-size:medium;">
-                        <b>Progress:</b>
-                        <p style="display:inline" id="Progress">
-                         
-                        </p>
-                    </div>
-                    <div style="position:absolute;padding:10px;text-align:left;margin-top:170px;font-size:medium;">
-                        <b>Path:</b>
-                        <p style="display:inline" id="Path">
-
-                        </p>
-                    </div>
-                    <div style="position:absolute;padding:10px;text-align:left;margin-top:210px;font-size:medium;">
-                        <b>Translate Language:</b>
-                        <p style="display:inline" id="TranslateLanguage">
-                           
-                        </p>
-                    </div>
-                    <div style="position:absolute;padding:10px;text-align:left;margin-top:250px;font-size:medium;">
-                        <b>Create At:</b>
-                        <p style="display:inline" id="CreateAt">
-                         
-                        </p>
-                    </div>
-                    <div style="position:absolute;padding:10px;text-align:left;margin-top:290px;font-size:medium;">
-                        <b>Create By:</b>
-                        <p style="display:inline" id="CreateBy">
-                        
-                        </p>
-                    </div>
-                    <div style="position:absolute;padding:10px;text-align:left;margin-top:330px;font-size:medium;">
-                        <b>Deadline:</b>
-                        <p style="display:inline" id="Deadline">
-                       
-                        </p>
-                    </div>
-                    <div class="splitter" style=""></div>
                 </div>
-            </div>
-            <div class="col-md-9 fill-height">
-                <div ng-controller="MyCtrl" ng-init="init(@Newtonsoft.Json.JsonConvert.SerializeObject(Model))" class="main-index">
-                    <div class="gridStyle" ng-grid="gridOptions"></div>
+                <div class="col-md-9 fill-height">
+                    <div class="main-index">
+                        <div class="gridStyle" ng-grid="gridOptions"></div>
+
+                    </div>
                 </div>
             </div>
         </div>
