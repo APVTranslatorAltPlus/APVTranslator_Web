@@ -22,11 +22,12 @@
 }
 
 .splitter {
-    float: right;
+    right:0;
     height: 100%;
     width: 6px;
     background-color: #086962;
-
+    position:absolute;
+    top:0px;
 }
 
     .splitter:hover {
