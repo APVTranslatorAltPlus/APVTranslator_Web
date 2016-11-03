@@ -223,6 +223,7 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\angular-custom.css" />
     <Content Include="Content\angular-material\angular-material.css" />
     <Content Include="Content\angular-material\angular-material.layout-attributes.css" />
     <Content Include="Content\angular-material\angular-material.layout-attributes.min.css" />
@@ -234,6 +235,8 @@
     <Content Include="Content\angular-material\ng-grid.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\angular-loading-bar\loading-bar.css" />
+    <Content Include="Content\angular-loading-bar\loading-bar.min.css" />
     <Content Include="Content\material.min.css" />
     <Content Include="Content\ng-grid.css" />
     <Content Include="Content\ng-grid.min.css" />
@@ -277,6 +280,7 @@
     <Content Include="Scripts\angular-aria\angular-aria.min.js.map" />
     <Content Include="Scripts\angular-animate\angular-animate.min.js.map" />
     <Content Include="Scripts\angular.min.js.map" />
+    <Content Include="Scripts\common\Enumeration.js" />
     <Content Include="Scripts\i18n\angular-locale_af-na.js" />
     <Content Include="Scripts\i18n\angular-locale_af-za.js" />
     <Content Include="Scripts\i18n\angular-locale_af.js" />
@@ -574,6 +578,8 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\angular-loading-bar\loading-bar.js" />
+    <Content Include="Scripts\angular-loading-bar\loading-bar.min.js" />
     <Content Include="Scripts\material.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\angular-grid\ng-grid.js" />
@@ -620,7 +626,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Scripts\jquery-layout\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
