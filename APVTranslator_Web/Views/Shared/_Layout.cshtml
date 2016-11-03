@@ -21,23 +21,27 @@
     @Scripts.Render("~/bundles/loading_js")
     @Styles.Render("~/bundles/loading_css")
     @Scripts.Render("~/bundles/modernizr")
-
+    <style>
+        .onHoverChangeColor:hover{
+   background-color:#c56767 !important;
+}
+    </style>
 </head>
 <body>
     <div class="apv-navbar navbar navbar-fixed-top" style="background: linear-gradient(to right, #086962, #086962,#086962) transparent !important;" >
         <div class="container-fluid">
-            <div class="navbar-header">
+            <div class="navbar-header ">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("APVTranslator", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("APVTranslator", "Index", "Home", new { area = "" }, new { @class = "navbar-brand onHoverChangeColor" })
             </div>
-            <div class="navbar-collapse collapse">
+            <div class="navbar-collapse collapse ">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Dashboard", "Index", "Home")</li>
-                    <li>@Html.ActionLink("Help", "About", "Home")</li>
+                    <li>@Html.ActionLink("Dashboard", "Index", "Home", new { @class = "onHoverChangeColor" })</li>
+                    <li>@Html.ActionLink("Help", "About", "Home", new { @class = "onHoverChangeColor" })</li>
                   
                 </ul>
                 @Html.Partial("_LoginPartial")

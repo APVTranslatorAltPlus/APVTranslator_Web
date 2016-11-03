@@ -26,9 +26,18 @@ namespace APVTranslator_Model.Models
     }
 
     public class UserStore : UserStore<ApplicationUser, Role, int,
-        UserLogin, UserRole, UserClaim>
+        UserLogin, UserRole, UserClaim>, IUserStore<ApplicationUser, int>
     {
         public UserStore(ApplicationDbContext context) : base(context)
+        {
+        }
+        public UserStore() : this(new IdentityDbContext())
+        {
+            base.DisposeContext = true;
+        }
+
+        public UserStore(DbContext context)
+            : base(context)
         {
         }
     }
