@@ -6,6 +6,8 @@
         scope.init = function () {
             scope.loadListProject();
         }
+        scope.currentProject = {};
+        scope.gridSelections = [];
         scope.checked = false;
         scope.gridType = Enumeration.GridType.ListProject;
         scope.data = [];
@@ -28,11 +30,23 @@
                              { field: 'DeadLine', displayName: 'DeadLine', enableCellEdit: false, cellFilter: 'date:\'mm:hh dd/MM/yyyy\'', resizable: true, minWidth: 150 }];
         scope.gridOptions = {
             data: 'data',
-            enableCellSelection: true,
+            enableCellSelection: false,
             enableColumnResize: true,
-            enableRowSelection: false,
+            selectedItems: scope.gridSelections,
+            enableRowSelection: scope.enableRowSelection,
+            afterSelectionChange: function (row, event) {
+                if (scope.gridType == Enumeration.GridType.ListProject) {
+                    scope.currentProject = Utility.clone(scope.gridSelections[0]);
+                }
+                if (scope.selections != "") {
+                    scope.disabled = false;
+                } else {
+                    scope.disabled = true;
+                }
+            },
             enableFiltering: true,
             showFilter: true,
+            multiSelect: false,
             rowTemplate: rowTemplate(),
             columnDefs: 'columnDefs'
         };
@@ -73,6 +87,7 @@
 
         scope.loadListProject = function () {
             cfpLoadingBar.start();
+            scope.enableRowSelection = true;
             serListProject.data()
             .success(function (response) {
                 if (response.GetListProjectResult && response.GetListProjectResult.IsSuccess) {
@@ -90,6 +105,7 @@
 
         scope.loadListFileProject = function (row) {
             cfpLoadingBar.start();
+            scope.enableRowSelection = false;
             serListFileProject.data(row.entity.Id)
                 .success(function (response) {
                     if (response.GetListFileProjectResult && response.GetListFileProjectResult.IsSuccess) {
@@ -107,12 +123,12 @@
     }])
 app.service('serListProject', function ($http) {
     this.data = function () {
-        return $http.get('Services/DashboardService.svc/GetListProject');
+        return $http.get(Utility.getBaseUrl() + 'Services/DashboardService.svc/GetListProject');
     };
 });
 app.service('serListFileProject', function ($http) {
     this.data = function (projectId) {
-        return $http.post('Services/DashboardService.svc/GetListFileProject', { 'projectID': projectId });
+        return $http.post(Utility.getBaseUrl() + 'Services/DashboardService.svc/GetListFileProject', { 'projectID': projectId });
     };
 });
 
