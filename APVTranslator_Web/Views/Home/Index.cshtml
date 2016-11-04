@@ -1,80 +1,182 @@
 ﻿@using APVTranslator_Entity.Models;
 @model IEnumerable<APVTranslator_Entity.Models.Project>
-@{
+    @{
     ViewBag.Title = "Home Page";
-}
-@Styles.Render("~/bundles/index_css")
-@Scripts.Render("~/bundles/index_js")
-<div ng-app="myApp" ng-controller="MyCtrl" class="app-index">
-    <div class="m-top" ng-cloak style="font-size:19px;margin-top:10px">
-        <md-button style="float:right;" class="md-accent" ng-show="checked" ng-click="loadListProject()">Back</md-button>
-        <label>APVTranslator</label>
-    </div>
-    <div class="m-center">
-        <div class="row fill-height">
-            <div class="col-md-3 fill-height">
-                <div class="main-left" ng-cloak style="">
-                    <p style="position: absolute;padding:10px;margin-left:60px;font-size:large"><u><b>Project Details</b></u></p>
-                    @*<div style="position:absolute;padding:10px;margin-top:50px;font-size:medium;">
-                            <p style="text-align:left!important" ><b></b></p>
+    }
+    @Styles.Render("~/bundles/index_css")
+    @Scripts.Render("~/bundles/index_js")
+    <div ng-app="myApp" ng-controller="MyCtrl" class="app-index">
+        <div class="m-top" ng-cloak style="font-size:19px;margin-top:10px">
+            <md-button style="float:right;" class="md-accent" ng-show="checked" ng-click="loadListProject()">Back</md-button>
+            <label>APVTranslator</label>
+        </div>
+
+        <div class="m-center">
+            <div class="row fill-height">
+                <div class="col-md-3 fill-height">
+
+
+                    <div class="main-left" ng-cloak style="">
+                        <p style="position: absolute;padding:10px;margin-left:60px;font-size:large"><u><b>Project Details</b></u></p>
+                        @*<div style="position:absolute;padding:10px;margin-top:50px;font-size:medium;">
+                            <p style="text-align:left!important"><b></b></p>
                             <p style="float:left">aaa</p>
+
                         </div>*@
-                    <div style="position:absolute;padding:10px;text-align:left;margin-top:50px;font-size:medium;">
-                        <b>Project Name:</b>
-                        <p style="display:inline" id="ProjectName">
-                            {{currentProject.Title}}
-                        </p>
+                        <div style="position:absolute;padding:10px;text-align:left;margin-top:50px;font-size:medium;">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                            <b>Project Name:</b>
+                            <p style="display:inline" id="ProjectName">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                {{currentProject.Title}}
+                            </p>
+                        </div>
+
+
+
+
+                        <div style="position:absolute;padding:10px;text-align:left;margin-top:90px;font-size:medium;">
+                            <b>Status:</b>
+                            <p style="display:inline" id="Status">
+                                {{currentProject.Status?'Translated':'Translating'}}
+                            </p>
+                        </div>
+                        <div style="position:absolute;padding:10px;text-align:left;margin-top:130px;font-size:medium;">
+                            <b>Progress:</b>
+                            <p style="display:inline" id="Progress">
+                                {{(currentProject.Progress!=null?currentProject.Progress:0)*100+"%"}}
+                            </p>
+                        </div>
+                        <div style="position:absolute;padding:10px;text-align:left;margin-top:170px;font-size:medium;">
+                            <b>Path:</b>
+                            <p style="display:inline" id="Path">
+                                {{currentProject.Path}}
+                            </p>
+                        </div>
+                        <div style="position:absolute;padding:10px;text-align:left;margin-top:210px;font-size:medium;">
+                            <b>Translate Language:</b>
+                            <p style="display:inline" id="TranslateLanguage">
+                                {{currentProject.LanguageDescription}}
+                            </p>
+                        </div>
+                        <div style="position:absolute;padding:10px;text-align:left;margin-top:250px;font-size:medium;">
+                            <b>Create At:</b>
+                            <p style="display:inline" id="CreateAt">
+                                {{currentProject.CreateAt| date:'hh:mm dd/MM/yyyy'}}
+                            </p>
+                        </div>
+                        <div style="position:absolute;padding:10px;text-align:left;margin-top:290px;font-size:medium;">
+                            <b>Create By:</b>
+                            <p style="display:inline" id="CreateBy">
+                                {{currentProject.CreateBy}}
+                            </p>
+                        </div>
+                        <div style="position:absolute;padding:10px;text-align:left;margin-top:330px;font-size:medium;">
+                            <b>Deadline:</b>
+                            <p style="display:inline" id="Deadline">
+                                {{currentProject.DeadLine| date:'hh:mm dd/MM/yyyy'}}
+                            </p>
+                        </div>
+                        <div class="splitter" style=""></div>
                     </div>
-                    <div style="position:absolute;padding:10px;text-align:left;margin-top:90px;font-size:medium;">
-                        <b>Status:</b>
-                        <p style="display:inline" id="Status">
-                            {{currentProject.Status?'Translated':'Translating'}}
-                        </p>
-                    </div>
-                    <div style="position:absolute;padding:10px;text-align:left;margin-top:130px;font-size:medium;">
-                        <b>Progress:</b>
-                        <p style="display:inline" id="Progress">
-                            {{(currentProject.Progress!=null?currentProject.Progress:0)*100+"%"}}
-                        </p>
-                    </div>
-                    <div style="position:absolute;padding:10px;text-align:left;margin-top:170px;font-size:medium;">
-                        <b>Path:</b>
-                        <p style="display:inline" id="Path">
-                            {{currentProject.Path}}
-                        </p>
-                    </div>
-                    <div style="position:absolute;padding:10px;text-align:left;margin-top:210px;font-size:medium;">
-                        <b>Translate Language:</b>
-                        <p style="display:inline" id="TranslateLanguage">
-                            {{currentProject.LanguageDescription}}
-                        </p>
-                    </div>
-                    <div style="position:absolute;padding:10px;text-align:left;margin-top:250px;font-size:medium;">
-                        <b>Create At:</b>
-                        <p style="display:inline" id="CreateAt">
-                            {{currentProject.CreateAt| date:'hh:mm dd/MM/yyyy'}}
-                        </p>
-                    </div>
-                    <div style="position:absolute;padding:10px;text-align:left;margin-top:290px;font-size:medium;">
-                        <b>Create By:</b>
-                        <p style="display:inline" id="CreateBy">
-                            {{currentProject.CreateBy}}
-                        </p>
-                    </div>
-                    <div style="position:absolute;padding:10px;text-align:left;margin-top:330px;font-size:medium;">
-                        <b>Deadline:</b>
-                        <p style="display:inline" id="Deadline">
-                            {{currentProject.DeadLine| date:'hh:mm dd/MM/yyyy'}}
-                        </p>
-                    </div>
-                    <div class="splitter" style=""></div>
                 </div>
-            </div>
-            <div class="col-md-9 fill-height">
-                <div class="main-index">
-                    <div class="gridStyle" ng-init="init()" ng-grid="gridOptions"></div>
+
+                <div class="col-md-9 fill-height">
+                    <div class="main-index">
+                        <div class="gridStyle" ng-init="init()" ng-grid="gridOptions"></div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
+        <style>
+            .sidenav {
+                /*height: 100%;
+                width: 380px;
+                position: fixed;
+                z-index: 1;
+                /*top: 0;*/
+                /*left: 0;*/
+                /*background-color: white;*/
+                overflow-x: hidden;
+                transition: 0.5s;
+                /*padding-top: 0px;*/
+            }
+        </style>
+
+
+        <script>
+    var isOpen = true;
+    var initialWidth;
+    function toggle() {
+        if (isOpen == true) {
+            closeNav();
+            isOpen = false;
+            document.getElementById("splitterID").setAttribute("title", "Mở chi tiết dự án");
+        } else {
+            openNav();
+            isOpen = true;
+            document.getElementById("splitterID").setAttribute("title", "Đóng chi tiết dự án");
+        }
+    }
+    function openNav() {
+        document.getElementById("mySidenav").style.width = "25%";
+        document.getElementById("gridTable").style.width = "75%";
+        $('#gridTable').trigger('resize');
+        $('#gridTable2').trigger('resize');
+
+    }
+
+    function closeNav() {
+        initialWidth = document.getElementById('mySidenav').offsetWidth;
+        document.getElementById("mySidenav").style.width = "0.5%";
+        document.getElementById("gridTable").style.width = "99.5%";
+        $('#gridTable').trigger('resize');
+        $('.main-index').trigger('resize'); $('#DashBoard').trigger('resize');
+    }
+        </script>
