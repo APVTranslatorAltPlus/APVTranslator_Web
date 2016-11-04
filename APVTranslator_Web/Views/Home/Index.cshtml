@@ -5,15 +5,14 @@
 }
 @Styles.Render("~/bundles/index_css")
 @Scripts.Render("~/bundles/index_js")
-
-<div ng-app="myApp" class="app-index">
+<div ng-app="myApp" class="app-index" style="right:0px;" id="DashBoard">
     <div class="m-top" style="font-size:19px;margin-top:10px">
         <label>APVTranslator</label>
     </div>
-    <div ng-controller="MyCtrl" ng-init="init(@Newtonsoft.Json.JsonConvert.SerializeObject(Model))">
-        <div class="m-center">
-            <div class="row fill-height">
-                <div class="col-xs-3 fill-height">
+    <div class="m-center" ng-controller="MyCtrl" ng-init="init(@Newtonsoft.Json.JsonConvert.SerializeObject(Model))">
+        <div class="row fill-height fill-width">
+            <div class="col-xs-12 fill-height fill-width">
+                <div class="sidenav fill-height" id="mySidenav" style="width:25%;display:inline;float:left;">
                     <div class="main-left" style="position:relative">
                         <p style="position: absolute;padding:10px;margin-left:30%;font-size:large"><u><b>Project Details</b></u></p>
                         @*<div style="position:absolute;padding:10px;margin-top:50px;font-size:medium;">
@@ -71,19 +70,18 @@
                         <div class="splitter" style=""></div>
                     </div>
                 </div>
-                <div class="col-xs-9 fill-height">
-                    <div class="main-index">
+                <div class="fill-height" id="gridTable" style="width:75%;display:inline;float:left">
+                    <div class="main-index" id="gridTable2" style="width:100%;">
                         <div class="gridStyle" ng-grid="gridOptions"></div>
-
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
     @*<div class="m-footer">
 
         </div>*@
-
     @*  <div class="main-left">
             <div class="splitter"></div>
         </div>
@@ -91,3 +89,76 @@
             <div class="gridStyle" ng-grid="gridOptions"></div>
         </div>*@
 </div>
+<style>
+    .sidenav {
+        /*height: 100%;
+        width: 380px;
+        position: fixed;
+        z-index: 1;
+        /*top: 0;*/
+        /*left: 0;*/
+        /*background-color: white;*/
+        overflow-x: hidden;
+        transition: 0.5s;
+        /*padding-top: 0px;*/
+    }
+</style>
+<div id="dat">
+    @*<div id="mySidenav" class="sidenav scrollbar" style="position:absolute;left:0px;top:0px;overflow-y:auto;background-color:black;width:100px;height:600px;"></div>*@
+
+    <div id="aa" onclick="toggle()" class="ui blue big centered launch right attached fixed button" style="position: fixed; background: #4183C4; left: 0px; margin-left:380px;top:50%;transition: margin-left .5s;width:40px;height:40px;">
+        <div style="position:relative;">
+            <i id="button" class="arrow left icon"></i>
+        </div>
+    </div>
+</div>
+
+<script>
+    var isOpen = true;
+    var initialWidth;
+    function toggle() {
+        if (isOpen == true) {
+            closeNav();
+            isOpen = false;
+            document.getElementById("button").className = "arrow right icon";
+            //document.getElementById("aa").setAttribute("data-tooltip", "Mở các bài đăng");
+        } else {
+            openNav();
+            isOpen = true;
+            document.getElementById("button").className = "arrow left icon";
+            //document.getElementById("aa").setAttribute("data-tooltip", "Đóng các bài đăng");
+        }
+    }
+    function openNav() {
+        document.getElementById("mySidenav").style.width = "25%";
+        document.getElementById("gridTable").style.width = "75%";
+        document.getElementById("aa").style.marginLeft = "380px";
+        //document.getElementById("gridTable").classList.remove("col-xs-12");
+        //document.getElementById("gridTable").classList.add("col-xs-9");
+        //document.getElementById("gridTable").classList.add("fill-height");
+        //document.getElementById("gridTable").classList.remove("fill-width");
+        //  document.getElementById("gridTable").classList.add("fill-width");
+        //   document.getElementById("mySidenav").className = "col-xs-3";
+        //  $('#mySidenav').trigger('resize');
+        $('#gridTable').trigger('resize');
+        $('#gridTable2').trigger('resize');
+        // document.getElementById("gridTable").className = "col-xs-9 fill-height fill-width";
+
+    }
+
+    function closeNav() {
+        initialWidth = document.getElementById('mySidenav').offsetWidth;
+        document.getElementById("mySidenav").style.width = "0%";
+        document.getElementById("gridTable").style.width = "100%";
+        document.getElementById("aa").style.marginLeft = "0px";
+        //  document.getElementById("mySidenav").classList.remove("col-xs-3");
+        //  document.getElementById("gridTable").className = "col-xs-12 fill-height ";
+        //document.getElementById("gridTable").classList.remove("col-xs-9");
+        //document.getElementById("gridTable").classList.add("col-xs-12");
+        ////  document.getElementById("gridTable2").style.right = "0px";
+        // document.getElementById("gridTable").classList.add("fill-width");
+
+        $('#gridTable').trigger('resize');
+        $('.main-index').trigger('resize'); $('#DashBoard').trigger('resize');
+    }
+</script>

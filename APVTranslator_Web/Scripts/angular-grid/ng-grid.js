@@ -981,6 +981,9 @@ var ngEventProvider = function (grid, $scope, domUtilityService, $timeout) {
     self.dragStart = function(evt){
       evt.dataTransfer.setData('text', ''); 
     };
+    setInterval(function () {
+        domUtilityService.RebuildGrid($scope, grid);
+    }, 30);
     self.dragOver = function(evt) {
         evt.preventDefault();
     };
