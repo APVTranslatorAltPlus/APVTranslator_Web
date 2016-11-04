@@ -241,6 +241,7 @@
     <Content Include="Content\ng-grid.css" />
     <Content Include="Content\ng-grid.min.css" />
     <Content Include="Content\ViewCss\Index.css" />
+    <Content Include="Content\ViewCss\jquery.mCustomScrollbar.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -588,6 +589,8 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\ViewJs\Index.js" />
+    <Content Include="Scripts\ViewJs\jquery.mCustomScrollbar.concat.min.js" />
+    <Content Include="Scripts\ViewJs\scrollbars.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Services\DashboardService.svc" />
     <Content Include="Views\_ViewStart.cshtml" />
