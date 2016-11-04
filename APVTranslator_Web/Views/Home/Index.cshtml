@@ -67,7 +67,8 @@
                                 {{mySelections[0].DeadLine}}
                             </p>
                         </div>
-                        <div class="splitter" style=""></div>
+                        
+                        <div class="splitter" style="" onclick="toggle()" id="splitterID" data-toggle="tooltip" title="Đóng chi tiết dự án" ></div>
                     </div>
                 </div>
                 <div class="fill-height" id="gridTable" style="width:75%;display:inline;float:left">
@@ -103,15 +104,7 @@
         /*padding-top: 0px;*/
     }
 </style>
-<div id="dat">
-    @*<div id="mySidenav" class="sidenav scrollbar" style="position:absolute;left:0px;top:0px;overflow-y:auto;background-color:black;width:100px;height:600px;"></div>*@
 
-    <div id="aa" onclick="toggle()" class="ui blue big centered launch right attached fixed button" style="position: fixed; background: #4183C4; left: 0px; margin-left:380px;top:50%;transition: margin-left .5s;width:40px;height:40px;">
-        <div style="position:relative;">
-            <i id="button" class="arrow left icon"></i>
-        </div>
-    </div>
-</div>
 
 <script>
     var isOpen = true;
@@ -120,44 +113,25 @@
         if (isOpen == true) {
             closeNav();
             isOpen = false;
-            document.getElementById("button").className = "arrow right icon";
-            //document.getElementById("aa").setAttribute("data-tooltip", "Mở các bài đăng");
+            document.getElementById("splitterID").setAttribute("title", "Mở chi tiết dự án");
         } else {
             openNav();
             isOpen = true;
-            document.getElementById("button").className = "arrow left icon";
-            //document.getElementById("aa").setAttribute("data-tooltip", "Đóng các bài đăng");
+            document.getElementById("splitterID").setAttribute("title", "Đóng chi tiết dự án");
         }
     }
     function openNav() {
         document.getElementById("mySidenav").style.width = "25%";
         document.getElementById("gridTable").style.width = "75%";
-        document.getElementById("aa").style.marginLeft = "380px";
-        //document.getElementById("gridTable").classList.remove("col-xs-12");
-        //document.getElementById("gridTable").classList.add("col-xs-9");
-        //document.getElementById("gridTable").classList.add("fill-height");
-        //document.getElementById("gridTable").classList.remove("fill-width");
-        //  document.getElementById("gridTable").classList.add("fill-width");
-        //   document.getElementById("mySidenav").className = "col-xs-3";
-        //  $('#mySidenav').trigger('resize');
         $('#gridTable').trigger('resize');
         $('#gridTable2').trigger('resize');
-        // document.getElementById("gridTable").className = "col-xs-9 fill-height fill-width";
 
     }
 
     function closeNav() {
         initialWidth = document.getElementById('mySidenav').offsetWidth;
-        document.getElementById("mySidenav").style.width = "0%";
-        document.getElementById("gridTable").style.width = "100%";
-        document.getElementById("aa").style.marginLeft = "0px";
-        //  document.getElementById("mySidenav").classList.remove("col-xs-3");
-        //  document.getElementById("gridTable").className = "col-xs-12 fill-height ";
-        //document.getElementById("gridTable").classList.remove("col-xs-9");
-        //document.getElementById("gridTable").classList.add("col-xs-12");
-        ////  document.getElementById("gridTable2").style.right = "0px";
-        // document.getElementById("gridTable").classList.add("fill-width");
-
+        document.getElementById("mySidenav").style.width = "0.5%";
+        document.getElementById("gridTable").style.width = "99.5%";
         $('#gridTable').trigger('resize');
         $('.main-index').trigger('resize'); $('#DashBoard').trigger('resize');
     }
