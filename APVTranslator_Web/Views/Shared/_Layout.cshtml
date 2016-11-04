@@ -8,9 +8,7 @@
     @*@Styles.Render("~/bundles/material_css")
     @Scripts.Render("~/bundles/material_js")*@
     @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-
-    @Scripts.Render("~/bundles/commonjs")
+    @Scripts.Render("~/bundles/bootstrap")  
     @Styles.Render("~/bundles/angular-custom_css");
     @Styles.Render("~/bundles/angular_material_css")
     @Scripts.Render("~/bundles/angular_js")
@@ -20,6 +18,7 @@
     @Scripts.Render("~/bundles/angular-grid_js")
     @Scripts.Render("~/bundles/loading_js")
     @Styles.Render("~/bundles/loading_css")
+    @Scripts.Render("~/bundles/commonjs")
     @Scripts.Render("~/bundles/modernizr")
     <style>
         .onHoverChangeColor:hover{
@@ -27,8 +26,8 @@
 }
     </style>
 </head>
-<body>
-    <div class="apv-navbar navbar navbar-fixed-top" style="background: linear-gradient(to right, #086962, #086962,#086962) transparent !important;" >
+<body ng-app="apvApp">
+    <div ng-controller="ctTopbar" class="apv-navbar navbar navbar-fixed-top" style="background: linear-gradient(to right, #086962, #086962,#086962) transparent !important;" >
         <div class="container-fluid">
             <div class="navbar-header ">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
