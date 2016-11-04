@@ -26,6 +26,11 @@ namespace APVTranslator_Web
                       "~/Content/bootstrap.css",
                       "~/Content/site.css",
                       "~/Content/bootstrap-social.css"));
+            //common
+            bundles.Add(new ScriptBundle("~/bundles/commonjs").Include("~/Scripts/common/*.js"));
+            //loading-bar
+            bundles.Add(new ScriptBundle("~/bundles/loading_js").Include("~/Scripts/angular-loading-bar/*.js"));
+            bundles.Add(new StyleBundle("~/bundles/loading_css").Include("~/Content/angular-loading-bar/*.css"));
             //material
             bundles.Add(new ScriptBundle("~/bundles/material_js").Include("~/Scripts/material.min.js"));
             bundles.Add(new StyleBundle("~/bundles/material_css").Include("~/Content/material.min.css"));
@@ -35,11 +40,13 @@ namespace APVTranslator_Web
             bundles.Add(new ScriptBundle("~/bundles/angular-aria_js").Include("~/Scripts/angular-aria/*.js"));
             bundles.Add(new ScriptBundle("~/bundles/angular-material_js").Include("~/Scripts/angular-material/*.js"));
             bundles.Add(new ScriptBundle("~/bundles/angular-grid_js").Include("~/Scripts/angular-grid/*.js"));
-
+            bundles.Add(new StyleBundle("~/bundles/angular-custom_css").Include("~/Content/angular-custom.css"));
+            //
             bundles.Add(new StyleBundle("~/bundles/angular_material_css").Include("~/Content/angular-material/*.css"));
             //view
             bundles.Add(new ScriptBundle("~/bundles/index_js").Include("~/Scripts/ViewJs/Index.js"));
             bundles.Add(new StyleBundle("~/bundles/index_css").Include("~/Content/ViewCss/Index.css"));
+
             
         }
     }

@@ -1,0 +1,111 @@
+﻿
+.ngHeaderText, .ngCell {
+    text-overflow: clip;
+    white-space: normal;
+}
+
+
+
+.buttondemoBasicUsage section {
+    background: #f7f7f7;
+    border-radius: 3px;
+    text-align: center;
+    margin: 1em;
+    position: relative !important;
+    padding-bottom: 10px;
+}
+
+.buttondemoBasicUsage md-content {
+    margin-right: 7px;
+}
+
+.buttondemoBasicUsage section .md-button {
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+
+.buttondemoBasicUsage .label {
+    position: absolute;
+    bottom: 5px;
+    left: 7px;
+    font-size: 14px;
+    opacity: 0.54;
+}
+
+.md-button {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+
+.progressCirculardemoBasicUsage body {
+    padding: 20px;
+}
+
+.progressCirculardemoBasicUsage h4 {
+    margin: 10px 0;
+}
+
+.progressCirculardemoBasicUsage md-progress-circular {
+    margin-bottom: 20px;
+}
+
+.progressCirculardemoBasicUsage #loaders > md-switch {
+    margin: 0;
+    margin-left: 10px;
+    margin-top: -10px;
+}
+
+.progressCirculardemoBasicUsage #loaders > h5 {
+    margin-top: 0;
+}
+
+.progressCirculardemoBasicUsage #loaders > p {
+    margin-right: 20px;
+    margin-bottom: 24px;
+}
+
+.progressCirculardemoBasicUsage p.small {
+    font-size: 0.8em;
+    margin-top: -18px;
+}
+
+.progressCirculardemoBasicUsage hr {
+    width: 100%;
+    margin-top: 20px;
+    border-color: rgba(221, 221, 177, 0.1);
+}
+
+.progressCirculardemoBasicUsage p.small > code {
+    font-size: 0.8em;
+}
+
+.progressCirculardemoBasicUsage .visible {
+    border-color: rgba(221, 221, 177, 0);
+}
+
+#loading-bar .bar {
+    background: #ff4c05 !important;
+    height: 3px !important;
+}
+
+#loading-bar-spinner {
+    top: 5px !important;
+    left: 0 !important;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(224, 208, 208, 0.19) !important;
+}
+
+    #loading-bar-spinner .spinner-icon {
+        width: 40px !important;
+        height: 40px !important;
+        border-width: 4px;
+        margin-top: 20% !important;
+        margin-left: 50% !important;
+    }
+
+#loading-bar, #loading-bar-spinner {
+    pointer-events: fill !important;
+    -webkit-pointer-events: none !important;
+}
