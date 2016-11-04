@@ -1,6 +1,9 @@
-﻿using APVTranslator_Entity.Models;
+﻿using APVTranslator_Common;
+using APVTranslator_Entity.Models;
 using APVTranslator_Model.Models;
 using APVTranslator_Services.Untity;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -9,6 +12,7 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
+using System.Web;
 
 namespace APVTranslator_Services.Services
 {
@@ -25,8 +29,13 @@ namespace APVTranslator_Services.Services
             ServiceResult sResult = new ServiceResult();
             try
             {
-                DashBoardModel dbModel = new DashBoardModel();
-                sResult.Value = dbModel.Proc_GetListProject(1);
+                var user = HttpContext.Current.User;
+                if (user.Identity.IsAuthenticated)
+                {
+                    var userId = Convert.ToInt32(Utility.GetCurrentUserID(HttpContext.Current.User.Identity));
+                    DashBoardModel dbModel = new DashBoardModel();
+                    sResult.Value = dbModel.Proc_GetListProject(userId);
+                }
             }
             catch (Exception ex)
             {
