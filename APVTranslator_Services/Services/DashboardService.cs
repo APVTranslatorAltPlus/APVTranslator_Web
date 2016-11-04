@@ -35,5 +35,21 @@ namespace APVTranslator_Services.Services
             }
             return sResult;
         }
+
+        public ServiceResult GetListFileProject(object projectID)
+        {
+            ServiceResult sResult = new ServiceResult();
+            try
+            {
+                DashBoardModel dbModel = new DashBoardModel();
+                sResult.Value = dbModel.Proc_GetListFileProject(projectID);
+            }
+            catch (Exception ex)
+            {
+                sResult.IsSuccess = false;
+                sResult.Message = ex.Message;
+            }
+            return sResult;
+        }
     }
 }
