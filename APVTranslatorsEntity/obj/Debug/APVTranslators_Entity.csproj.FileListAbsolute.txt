@@ -6,3 +6,7 @@ C:\apv_dev\APVTranslatorsEntity\bin\Debug\APVTranslators_Entity.dll
 C:\apv_dev\APVTranslatorsEntity\bin\Debug\APVTranslators_Entity.pdb
 C:\apv_dev\APVTranslatorsEntity\obj\Debug\APVTranslators_Entity.dll
 C:\apv_dev\APVTranslatorsEntity\obj\Debug\APVTranslators_Entity.pdb
+C:\Users\Tran Trong Tien DAT\Desktop\APVTranslator_Web2\APVTranslatorsEntity\bin\Debug\APVTranslators_Entity.dll
+C:\Users\Tran Trong Tien DAT\Desktop\APVTranslator_Web2\APVTranslatorsEntity\bin\Debug\APVTranslators_Entity.pdb
+C:\Users\Tran Trong Tien DAT\Desktop\APVTranslator_Web2\APVTranslatorsEntity\obj\Debug\APVTranslators_Entity.dll
+C:\Users\Tran Trong Tien DAT\Desktop\APVTranslator_Web2\APVTranslatorsEntity\obj\Debug\APVTranslators_Entity.pdb
