@@ -22,9 +22,9 @@
         scope.columnDefs1 = [{ displayName: 'STT', cellTemplate: '<div style="text-align:center;">{{row.rowIndex}}</div>', width: 50, enableCellEdit: false },
                              { field: 'Title', displayName: 'ProjectName', enableCellEdit: false, minWidth: 200, resizable: true },
                              { field: 'Status', displayName: 'Status', minWidth: 100, cellTemplate: '<div class="ngCellText ng-scope ngCellElement">{{row.entity.Progress<100?"Translating":"Translated"}}</div>', enableCellEdit: false, resizable: true },
-                             { field: 'Progress', displayName: 'Progress', minWidth: 100, cellTemplate: '<div class="ngCellText ng-scope ngCellElement">{{row.entity.Progress*100}}%</div>', width: 80, enableCellEdit: false, resizable: true },
+                             { field: 'Progress', displayName: 'Progress', cellTemplate: '<div class="ngCellText ng-scope ngCellElement">{{row.entity.Progress*100}}%</div>', width: 150, enableCellEdit: false, resizable: true },
                              { field: 'Path', displayName: 'Path', enableCellEdit: false, resizable: true, minWidth: 220 },
-                             { field: 'LanguageDescription', displayName: 'TranslateLanguage', enableCellEdit: false, resizable: true, minWidth: 220 },
+                             { field: 'LanguageDescription', displayName: 'TranslateLanguage', enableCellEdit: false, resizable: true, minWidth: 220, cellClass: 'wrap-text' },
                              { field: 'CreateAt', displayName: 'CreateAt', enableCellEdit: false, type: 'date', cellFilter: 'date:\'mm:hh dd/MM/yyyy\'', resizable: true, minWidth: 150 },
                              { field: 'CreateBy', displayName: 'CreateBy', minWidth: 200, enableCellEdit: false, resizable: true },
                              { field: 'DeadLine', displayName: 'DeadLine', enableCellEdit: false, cellFilter: 'date:\'mm:hh dd/MM/yyyy\'', resizable: true, minWidth: 150 }];
@@ -33,6 +33,7 @@
             enableCellSelection: false,
             enableColumnResize: true,
             selectedItems: scope.gridSelections,
+            rowHeight: 50,
             enableRowSelection: scope.enableRowSelection,
             afterSelectionChange: function (row, event) {
                 if (scope.gridType == Enumeration.GridType.ListProject) {
@@ -132,3 +133,31 @@ app.service('serListFileProject', function ($http) {
     };
 });
 
+var isOpen = true;
+var initialWidth;
+function toggle() {
+    if (isOpen == true) {
+        closeNav();
+        isOpen = false;
+        document.getElementById("splitterID").setAttribute("title", "Mở chi tiết dự án");
+    } else {
+        openNav();
+        isOpen = true;
+        document.getElementById("splitterID").setAttribute("title", "Đóng chi tiết dự án");
+    }
+}
+function openNav() {
+    document.getElementById("mySidenav").style.width = "25%";
+    document.getElementById("gridTable").style.width = "75%";
+    $('#gridTable').trigger('resize');
+    $('#gridTable2').trigger('resize');
+
+}
+
+function closeNav() {
+    initialWidth = document.getElementById('mySidenav').offsetWidth;
+    document.getElementById("mySidenav").style.width = "0.5%";
+    document.getElementById("gridTable").style.width = "99.5%";
+    $('#gridTable').trigger('resize');
+    $('.main-index').trigger('resize'); $('#DashBoard').trigger('resize');
+}
