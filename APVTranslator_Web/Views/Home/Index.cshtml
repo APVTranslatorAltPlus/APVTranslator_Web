@@ -6,9 +6,60 @@
 @Styles.Render("~/bundles/index_css")
 @Scripts.Render("~/bundles/index_js")
 <div ng-controller="MyCtrl" class="app-index">
-    <div class="m-top" ng-cloak style="font-size:19px;margin-top:10px">
-        <md-button style="float:right;" class="md-accent" ng-show="checked" ng-click="loadListProject()">Back</md-button>
-        <label>APVTranslator</label>
+    <div class="m-top" ng-cloak>
+        @*<md-button style="float:right;" class="md-accent" ng-show="checked" ng-click="loadListProject()">Back</md-button>*@
+        @*<label>APVTranslator</label>*@
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <md-button class="md-raised" ng-show="!checked" ng-click="openDialog()" aria-label="New">
+                    <md-icon class="material-icons">add</md-icon>
+                    <md-tooltip md-direction="bottom">
+                        New Project
+                    </md-tooltip>  
+                    New   
+                </md-button>
+                <div class="a-divider" ng-show="!checked"></div>
+                <md-button class="md-raised" ng-show="!checked" aria-label="Edit">
+                    <md-icon class="material-icons">edit</md-icon>
+                    <md-tooltip md-direction="bottom">
+                        Edit Project
+                    </md-tooltip>
+                    Delete
+                </md-button>
+                <div class="a-divider" ng-show="!checked"></div>
+                <md-button class="md-raised" ng-show="!checked" aria-label="Delete">
+                    <md-icon class="material-icons">delete</md-icon>
+                    <md-tooltip md-direction="bottom">
+                        Delete Project
+                    </md-tooltip>
+                    Delete
+                </md-button>
+                <div class="a-divider" ng-show="!checked"></div>
+                <md-button class="md-raised" ng-show="!checked" aria-label="Setting">
+                    <md-icon class="material-icons">settings</md-icon>
+                    <md-tooltip md-direction="bottom">
+                        Project Setting
+                    </md-tooltip>
+                    Setting
+                </md-button>
+                <md-button class="md-raised" ng-show="checked" aria-label="Import">
+                    <md-icon class="material-icons">file_upload</md-icon>
+                    <md-tooltip md-direction="bottom">
+                        Import File
+                    </md-tooltip>
+                    Import
+                </md-button>
+
+                <span flex></span>
+                <md-button class="md-raised md-warn" aria-label="Back" ng-show="checked" ng-click="loadListProject()">
+                    <md-icon class="material-icons">undo</md-icon>
+                    <md-tooltip md-direction="bottom">
+                        Back To List Project
+                    </md-tooltip>  
+                    Back
+                </md-button>
+            </div>
+        </md-toolbar>
     </div>
     <div class="m-center">
         <div class="row fill-height fill-width">

@@ -231,12 +231,14 @@
     <Content Include="Content\angular-material\angular-material.layouts.ie_fixes.css" />
     <Content Include="Content\angular-material\angular-material.layouts.min.css" />
     <Content Include="Content\angular-material\angular-material.min.css" />
+    <Content Include="Content\angular-material\material-design-icons.css" />
     <Content Include="Content\angular-material\ng-grid.css" />
     <Content Include="Content\angular-material\ng-grid.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\angular-loading-bar\loading-bar.css" />
     <Content Include="Content\angular-loading-bar\loading-bar.min.css" />
+    <Content Include="Content\Images\logo-incompany.png" />
     <Content Include="Content\material.min.css" />
     <Content Include="Content\ng-grid.css" />
     <Content Include="Content\ng-grid.min.css" />
@@ -571,6 +573,7 @@
     <Content Include="Scripts\i18n\angular-locale_zh.js" />
     <Content Include="Scripts\i18n\angular-locale_zu-za.js" />
     <Content Include="Scripts\i18n\angular-locale_zu.js" />
+    <Content Include="Content\angular-material\icon_woff.woff2" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.1.1.js" />
     <Content Include="Scripts\jquery-3.1.1.min.js" />
@@ -632,6 +635,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\Icons\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

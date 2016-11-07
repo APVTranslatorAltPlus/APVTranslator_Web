@@ -3,7 +3,7 @@
 //        cfpLoadingBarProvider.includeSpinner = true;
 //    })
 
-apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFileProject', 'cfpLoadingBar', function (scope, http, serListProject, serListFileProject, cfpLoadingBar) {
+apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFileProject', 'cfpLoadingBar', '$mdDialog', function (scope, http, serListProject, serListFileProject, cfpLoadingBar, $mdDialog) {
     scope.init = function () {
         scope.loadListProject();
     }
@@ -58,12 +58,16 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                 scope.loadListFileProject(row);
             }
         } catch (e) {
-
+            Utility.showMessage(scope, $mdDialog, e.message);
         }
     };
 
     scope.backToListProject = function () {
-        scope.columnDefs = scope.columnDefs1;
+        try {
+            scope.columnDefs = scope.columnDefs1;
+        } catch (e) {
+            Utility.showMessage(scope, $mdDialog, e.message);
+        }
     }
 
     function rowTemplate() {
@@ -93,13 +97,15 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
         .success(function (response) {
             if (response.GetListProjectResult && response.GetListProjectResult.IsSuccess) {
                 scope.data = JSON.parse(response.GetListProjectResult.Value);
-                scope.columnDefs = scope.columnDefs1;
-                scope.checked = false;
-                scope.gridType = Enumeration.GridType.ListProject;
+                scope.setGridList(Enumeration.GridType.ListProject);
+            }
+            else {
+                Utility.showMessage(scope, $mdDialog, response.GetListFileProjectResult.Message);
             }
             cfpLoadingBar.complete();
         }).error(function (err) {
             console.log(err);
+            Utility.showMessage(scope, $mdDialog, err.message)
             cfpLoadingBar.complete();
         });
     }
@@ -111,15 +117,30 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
             .success(function (response) {
                 if (response.GetListFileProjectResult && response.GetListFileProjectResult.IsSuccess) {
                     scope.data = JSON.parse(response.GetListFileProjectResult.Value);
-                    scope.columnDefs = scope.columnDefs2;
-                    scope.checked = true;
-                    scope.gridType = Enumeration.GridType.ListFileProject;
+                    scope.setGridList(Enumeration.GridType.ListFileProject);
+                }
+                else {
+                    Utility.showMessage(scope, $mdDialog, response.GetListFileProjectResult.Message);
                 }
                 cfpLoadingBar.complete();
             }).error(function (err) {
                 console.log(err);
+                Utility.showMessage(scope, $mdDialog, err)
                 cfpLoadingBar.complete();
             });
+    }
+
+    scope.setGridList = function (gridType) {
+        if (gridType == Enumeration.GridType.ListProject) {
+            scope.columnDefs = scope.columnDefs1;
+            scope.checked = false;
+            scope.gridType = Enumeration.GridType.ListProject;
+        }
+        else if (gridType == Enumeration.GridType.ListFileProject) {
+            scope.columnDefs = scope.columnDefs2;
+            scope.checked = true;
+            scope.gridType = Enumeration.GridType.ListFileProject;
+        }
     }
 }])
 apvApp.service('serListProject', function ($http) {

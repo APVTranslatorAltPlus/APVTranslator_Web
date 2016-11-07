@@ -20,3 +20,19 @@ Utility.getStringDate = function (stringDate, format) {
     }
     return "null";
 }
+
+Utility.showMessage = function (scope, $mdDialog, mes, title) {
+    var _title = "APV Translator";
+    if (title!=null) {
+        _title = title;
+    }
+    $mdDialog.show(
+      $mdDialog.alert()
+        .parent(angular.element(document.body))
+        .clickOutsideToClose(true)
+        .title(_title)
+        .textContent(mes)     
+        .ariaLabel('Alert Dialog')
+        .ok('OK')
+    );
+}

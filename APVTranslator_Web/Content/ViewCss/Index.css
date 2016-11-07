@@ -54,7 +54,7 @@
     top: 60px;
     bottom:0;
     width:100%;
-    padding-left:15px;
+    padding-left:0px;
     padding-right:0px;
     flex:1;
 }
@@ -69,8 +69,4 @@
 }
 .m-top{
     text-align:center;
-}
-
-.body-content{
-    padding-right:0px !important;
 }
