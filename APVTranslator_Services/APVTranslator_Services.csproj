@@ -79,6 +79,8 @@
     <Reference Include="System.Core" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -96,6 +98,14 @@
     <ProjectReference Include="..\APVTranslatorsEntity\APVTranslators_Entity.csproj">
       <Project>{AAB6FFA4-F386-41F1-8E2E-BE94873D344D}</Project>
       <Name>APVTranslators_Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\APVTranslator_Common\APVTranslator_Common.csproj">
+      <Project>{62443BCA-7EFA-4193-BA7F-DB4D92C46D41}</Project>
+      <Name>APVTranslator_Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\APVTranslator_Controllers\APVTranslator_Controllers.csproj">
+      <Project>{65B8EEC8-73D7-4E28-B985-3E2B6EA91781}</Project>
+      <Name>APVTranslator_Controllers</Name>
     </ProjectReference>
     <ProjectReference Include="..\APVTranslator_Model\APVTranslator_Model.csproj">
       <Project>{C939FC03-DF18-4CB1-8010-1F9B66852EAD}</Project>

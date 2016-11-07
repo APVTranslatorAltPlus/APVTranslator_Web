@@ -1,8 +1,8 @@
-﻿var app = angular.module('myApp', ['ngGrid', 'ngMaterial', 'chieffancypants.loadingBar', 'ngAnimate'])
-    .config(function (cfpLoadingBarProvider) {
-        cfpLoadingBarProvider.includeSpinner = true;
-    })
-    .controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFileProject', 'cfpLoadingBar', function (scope, http, serListProject, serListFileProject, cfpLoadingBar) {
+﻿//var app = angular.module('myApp', ['ngGrid', 'ngMaterial', 'chieffancypants.loadingBar', 'ngAnimate'])
+//    .config(function (cfpLoadingBarProvider) {
+//        cfpLoadingBarProvider.includeSpinner = true;
+//    })
+apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFileProject', 'cfpLoadingBar', function (scope, http, serListProject, serListFileProject, cfpLoadingBar) {
         scope.init = function () {
             scope.loadListProject();
         }
@@ -122,12 +122,12 @@
                 });
         }
     }])
-app.service('serListProject', function ($http) {
+apvApp.service('serListProject', function ($http) {
     this.data = function () {
         return $http.get(Utility.getBaseUrl() + 'Services/DashboardService.svc/GetListProject');
     };
 });
-app.service('serListFileProject', function ($http) {
+apvApp.service('serListFileProject', function ($http) {
     this.data = function (projectId) {
         return $http.post(Utility.getBaseUrl() + 'Services/DashboardService.svc/GetListFileProject', { 'projectID': projectId });
     };
