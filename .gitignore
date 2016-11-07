@@ -3,3 +3,6 @@
 ################################################################################
 
 /APVTranslator_Services/bin/Debug
+/APVTranslator_Controllers/obj/Debug/build.force
+/APVTranslator_Services/obj/Debug
+/APVTranslator_Web/obj/Debug/build.force
