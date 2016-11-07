@@ -13,7 +13,7 @@
     <div class="m-center">
         <div class="row fill-height fill-width">
             <div class="col-xs-12 fill-height fill-width">
-                <div class="sidenav fill-height" id="mySidenav" style="width:25%;display:inline;float:left;overflow:hidden">
+                <div class="sidenav fill-height" id="mySidenav" style="width:25%;display:inline;float:left;overflow-y:auto">
                     <div class="main-left" ng-cloak style="position:relative">
                         <p style="position: absolute;padding:10px;margin-left:25%;font-size:large"><u><b>Project Details</b></u></p>
                         <div style="position:relative;padding:10px;top:30px;font-size:medium;">
@@ -22,43 +22,43 @@
                                 {{currentProject.Title}}
                             </p>
                         </div>
-                        <div style="position:relative;padding-top:40px;padding-left:10px; font-size:medium;">
+                        <div style="position:relative;padding-top:40px;padding-left:10px;padding-right:10px; font-size:medium;">
                             <b>Status:</b>
                             <p style="display:inline" id="Status">
                                 {{currentProject.Status?'Translated':'Translating'}}
                             </p>
                         </div>
-                        <div style="position:relative;padding-top:40px;padding-left:10px;font-size:medium;">
+                        <div style="position:relative;padding-top:40px;padding-left:10px;padding-right:10px;font-size:medium;">
                             <b>Progress:</b>
                             <p style="display:inline" id="Progress">
                                 {{(currentProject.Progress!=null?currentProject.Progress:0)*100+"%"}}
                             </p>
                         </div>
-                        <div style="position:relative;padding-top:40px;padding-left:10px;font-size:medium;">
+                        <div style="position:relative;padding-top:40px;padding-left:10px;padding-right:10px;font-size:medium;">
                             <b>Path:</b>
-                            <p style="display:inline" id="Path">
+                            <p style="display:inline;word-wrap:break-word" id="Path">
                                 {{currentProject.Path}}
                             </p>
                         </div>
-                        <div style="position:relative;padding-top:40px;padding-left:10px;font-size:medium;">
+                        <div style="position:relative;padding-top:40px;padding-left:10px;padding-right:10px;font-size:medium;">
                             <b>Translate Language:</b>
                             <p style="display:inline" id="TranslateLanguage">
                                 {{currentProject.LanguageDescription}}
                             </p>
                         </div>
-                        <div style="position:relative;padding-top:40px;padding-left:10px;font-size:medium;">
+                        <div style="position:relative;padding-top:40px;padding-left:10px;padding-right:10px;font-size:medium;">
                             <b>Create At:</b>
                             <p style="display:inline" id="CreateAt">
                                 {{currentProject.CreateAt| date:'hh:mm dd/MM/yyyy'}}
                             </p>
                         </div>
-                        <div style="position:relative;padding-top:40px;padding-left:10px;font-size:medium;">
+                        <div style="position:relative;padding-top:40px;padding-left:10px;padding-right:10px;font-size:medium;">
                             <b>Create By:</b>
                             <p style="display:inline" id="CreateBy">
                                 {{currentProject.CreateBy}}
                             </p>
                         </div>
-                        <div style="position:relative;padding-top:40px;padding-left:10px;font-size:medium;">
+                        <div style="position:relative;padding-top:40px;padding-left:10px;padding-right:10px;font-size:medium;">
                             <b>Deadline:</b>
                             <p style="display:inline" id="Deadline">
                                 {{currentProject.DeadLine| date:'hh:mm dd/MM/yyyy'}}
@@ -70,7 +70,7 @@
                 </div>
                 <div class="fill-height " id="gridTable" style="width:75%;display:inline;float:left">
                     <div class="main-index" style="width:100%;">
-                        <div class="gridStyle" ng-init="init()" ng-grid="gridOptions" ></div>
+                        <div class="gridStyle" ng-init="init()" ng-grid="gridOptions"></div>
                     </div>
                 </div>
             </div>
@@ -78,39 +78,8 @@
     </div>
 </div>
 <style>
-    .sidenav {
-        overflow-x: hidden;
-        transition: 0.5s;
-    }
+
+
+
 </style>
 
-<script>
-    var isOpen = true;
-    var initialWidth;
-    function toggle() {
-        if (isOpen == true) {
-            closeNav();
-            isOpen = false;
-            document.getElementById("splitterID").setAttribute("title", "Mở chi tiết dự án");
-        } else {
-            openNav();
-            isOpen = true;
-            document.getElementById("splitterID").setAttribute("title", "Đóng chi tiết dự án");
-        }
-    }
-    function openNav() {
-        document.getElementById("mySidenav").style.width = "25%";
-        document.getElementById("gridTable").style.width = "75%";
-        $('#gridTable').trigger('resize');
-        $('#gridTable2').trigger('resize');
-
-    }
-
-    function closeNav() {
-        initialWidth = document.getElementById('mySidenav').offsetWidth;
-        document.getElementById("mySidenav").style.width = "0.5%";
-        document.getElementById("gridTable").style.width = "99.5%";
-        $('#gridTable').trigger('resize');
-        $('.main-index').trigger('resize'); $('#DashBoard').trigger('resize');
-    }
-</script>
