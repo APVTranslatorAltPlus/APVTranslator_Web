@@ -47,7 +47,12 @@ namespace APVTranslator_Web
             bundles.Add(new ScriptBundle("~/bundles/index_js").Include("~/Scripts/ViewJs/Index.js"));
             bundles.Add(new StyleBundle("~/bundles/index_css").Include("~/Content/ViewCss/Index.css"));
 
-            
+            bundles.Add(new ScriptBundle("~/bundles/angular-tag-input_js").Include("~/Scripts/angular-tag-input/ng-tags-input.min.js"));
+            bundles.Add(new StyleBundle("~/bundles/angular-tag-input_css").Include(
+                "~/Content/angular-tag-input/ng-tags-input.min.css",
+                 "~/Content/angular-tag-input/ng-tags-input.bootstrap.min.css"
+                ));
+
         }
     }
 }

@@ -30,5 +30,19 @@ namespace APVTranslator_Model.Models
             List<ProjectFile> listProjects = this.Database.SqlQuery<ProjectFile>("Proc_GetListProjectFile @projectId", userIDParameter).ToList();
             return listProjects;
         }
+
+        public virtual List<AspNetUser> Proc_GetListMember()
+        {
+            //var userIDParameter = userID.HasValue ?
+            //new SqlParameter("@userID", userID) :
+            //new SqlParameter("@userID", typeof(int));
+
+            //var textSearchParameter = textSearch!=null?
+            //    new SqlParameter("@TextSearch", textSearch) :
+            //    new SqlParameter("@TextSearch", typeof(string));
+
+            List <AspNetUser> listUsers = this.Database.SqlQuery<AspNetUser>("Proc_SelectAllUsers").ToList();
+            return listUsers;
+        }
     }
 }

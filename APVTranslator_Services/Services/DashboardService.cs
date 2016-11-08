@@ -5,8 +5,10 @@ using APVTranslator_Services.Untity;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
@@ -52,6 +54,40 @@ namespace APVTranslator_Services.Services
             {
                 DashBoardModel dbModel = new DashBoardModel();
                 sResult.Value = dbModel.Proc_GetListFileProject(projectID);
+            }
+            catch (Exception ex)
+            {
+                sResult.IsSuccess = false;
+                sResult.Message = ex.Message;
+            }
+            return sResult;
+        }
+
+
+        public bool CreateNewProject(object newProject)
+        {
+            dynamic stuff = JObject.Parse(newProject.ToString());
+            // ctvar project = (Project)newProject;
+            // Console.WriteLine("aaaa"+stuff.Title);
+            string title = stuff.Title;
+            string translateLanguage = stuff.TranslateLanguage;
+            Debug.WriteLine(title);
+            Debug.WriteLine(translateLanguage);
+            return true;
+        }
+        
+        public ServiceResult GetListUser()
+        {
+            ServiceResult sResult = new ServiceResult();
+            try
+            {
+                var user = HttpContext.Current.User;
+                if (user.Identity.IsAuthenticated)
+                {
+                    //var userId = Convert.ToInt32(Utility.GetCurrentUserID(HttpContext.Current.User.Identity));
+                    DashBoardModel dbModel = new DashBoardModel();
+                    sResult.Value = dbModel.Proc_GetListMember();
+                }
             }
             catch (Exception ex)
             {
