@@ -32,7 +32,7 @@ namespace APVTranslator_Services.Services
                 var user = HttpContext.Current.User;
                 if (user.Identity.IsAuthenticated)
                 {
-                    var userId = Convert.ToInt32(Utility.GetCurrentUserID(HttpContext.Current.User.Identity));
+                    var userId = SessionUser.GetUserId();
                     DashBoardModel dbModel = new DashBoardModel();
                     sResult.Value = dbModel.Proc_GetListProject(userId);
                 }

@@ -10,9 +10,6 @@ namespace APVTranslator_Common
 {
     public static class Utility
     {
-        public static string GetCurrentUserID(IIdentity identity)
-        {
-            return IdentityExtensions.GetUserId(identity);
-        }
+        
     }
 }
