@@ -52,7 +52,15 @@ namespace APVTranslator_Web
                 "~/Content/angular-tag-input/ng-tags-input.min.css",
                  "~/Content/angular-tag-input/ng-tags-input.bootstrap.min.css"
                 ));
-
+            bundles.Add(new ScriptBundle("~/bundles/angular-bootstrap-datetimepicker_js").Include(
+                "~/Scripts/angular-bootstrap-datetimepicker/moment.js",
+                 "~/Scripts/angular-bootstrap-datetimepicker/datetimepicker.js",
+                  "~/Scripts/angular-bootstrap-datetimepicker/datetimepicker.templates.js",
+                  "~/Scripts/angular-bootstrap-datetimepicker/dateTimeInput.js"
+                ));
+            bundles.Add(new StyleBundle("~/bundles/angular-bootstrap-datetimepicker_css").Include(
+               "~/Content/angular-bootstrap-datetimepicker/datetimepicker.css"
+               ));
         }
     }
 }

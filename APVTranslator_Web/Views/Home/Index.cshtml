@@ -14,7 +14,7 @@
     <div class="m-center">
         <div class="row fill-height fill-width">
             <div class="col-xs-12 fill-height fill-width">
-                <div class="sidenav fill-height" id="mySidenav" style="width:25%;display:inline;float:left;overflow-y:auto">
+                <div class="sidenav fill-height" id="mySidenav" style="width:25%;display:inline;float:left;overflow-y:auto;border-radius:4px;">
                     <div class="main-left" ng-cloak style="position:relative">
                         <p style="position: absolute;padding:10px;margin-left:25%;font-size:large"><u><b>Project Details</b></u></p>
                         <div style="position:relative;padding:10px;top:30px;font-size:medium;">
@@ -82,14 +82,14 @@
     <div class="modal fade" tabindex="-1" role="dialog" id="createNewProjectModal">
         <div class="modal-dialog" role="document">
             <div class="modal-content" style="width:100%">
-                <div class="modal-header">
+                <div class="modal-header" style="background-color:rgb(216, 218, 247);border-radius:3px;">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">Create New Project</h4>
                 </div>
 
                 <div class="modal-body" style="width:100%">
-                    <div id="Title" style="padding:10px;width:100%!important">
-                        <div class="form-groupx">
+
+                        <div class="form-group">
                             <label for="usr">Project Name:</label>
                             <input type="text" class="form-control" id="projectName" style="max-width:100%!important">
                         </div>
@@ -104,29 +104,53 @@
 
                         <div class="form-group">
                             <label for="pwd">Member:</label>
-                            <select type="text" class="form-control" id="member" style="max-width:100%!important"  ng-change="changedValue(data2.selectedOption)" ng-options="option.Email for option in data2.availableOptions track by option.Email"
+                            <select type="text" class="form-control" id="member" style="max-width:100%!important" ng-change="changedValue(data2.selectedOption)" ng-options="option.Email for option in data2.availableOptions track by option.Email"
                                     ng-model="data2.selectedOption"></select>
-                            <hr>
-                            <tt>option = {{data2.selectedOption.Email}}</tt><br />
+                            @*    <hr>*@
+                            @*   <tt>option = {{data2.selectedOption.Email}}</tt><br />*@
                         </div>
-                        <tags-input display-property="Email" key-property="Id" ng-model="tags" placeholder="&nbsp" add-from-autocomplete-only ="true" style="height:150px;">
+                        <tags-input display-property="Email" key-property="Id" ng-model="tags" placeholder="&nbsp" add-from-autocomplete-only="true" style="height:100px;">
                             <auto-complete source="loadTags($query)"></auto-complete>
                         </tags-input>
+
                         <div class="form-group">
-                            <label for="pwd">Descriptions:</label>
-                            <input type="text" class="form-control" id="descriptions" style="max-width:100%!important">
-                        </div>
-                        <div class="form-group">
-                            <label for="pwd">Create At:</label>
-                            <input type="text" class="form-control" id="translateLanguage" style="max-width:100%!important">
-                        </div>
-                        <div class="form-group">
-                            <label for="pwd">Deadline:</label>
-                            <input type="text" class="form-control" id="translateLanguage" style="max-width:100%!important">
+                            <label for="descriptions">Descriptions:</label>
+                            <textarea class="form-control" rows="5" id="descriptions" style="max-width:900px!important"></textarea>
                         </div>
 
+                        <div class="dropdown form-group">
+                            <label>Create At:</label>
+                            <a class="dropdown-toggle" id="dropdownStart" role="button" data-toggle="dropdown" 
+                              >
+                                <div class="input-group date">
+                                    <input type="text" data-date-time-input="YYYY-MM-DD HH:MM:SS" class="form-control" data-ng-model="dateRangeStart" style="max-width:900px!important">
+                                    <span class="input-group-addon" style="color:#3f4a54"><i class="glyphicon glyphicon-calendar"></i></span>
+                                </div>
+                            </a>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                <datetimepicker data-ng-model="dateRangeStart"
+                                                data-datetimepicker-config="{ dropdownSelector: '#dropdownStart', renderOn: 'end-date-changed' }"
+                                                data-on-set-time="startDateOnSetTime()"
+                                                data-before-render="startDateBeforeRender($dates)"></datetimepicker>
+                            </ul>
+                        </div>
 
-                    </div>
+                        <div class="dropdown form-group">
+                            <label>Deadline</label>
+                            <a class="dropdown-toggle" id="dropdownEnd" role="button" data-toggle="dropdown" 
+                              >
+                                <div class="input-group date">
+                                    <input type="text" data-date-time-input="YYYY-MM-DD HH:MM:SS" class="form-control" data-ng-model="dateRangeEnd" style="max-width:900px!important">
+                                    <span class="input-group-addon" style="color:#3f4a54"><i class="glyphicon glyphicon-calendar"></i></span>
+                                </div>
+                            </a>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                <datetimepicker data-ng-model="dateRangeEnd"
+                                                data-datetimepicker-config="{ dropdownSelector: '#dropdownEnd', renderOn: 'start-date-changed' }"
+                                                data-on-set-time="endDateOnSetTime()"
+                                                data-before-render="endDateBeforeRender($view, $dates, $leftDate, $upDate, $rightDate)"></datetimepicker>
+                            </ul>
+                        </div>
 
                 </div>
                 <div class="modal-footer">
@@ -148,6 +172,3 @@
         }
     }
 </style>
-
-
-

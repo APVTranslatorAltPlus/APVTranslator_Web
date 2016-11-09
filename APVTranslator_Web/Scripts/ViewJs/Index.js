@@ -2,7 +2,7 @@
 //    .config(function (cfpLoadingBarProvider) {
 //        cfpLoadingBarProvider.includeSpinner = true;
 //    })
-apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFileProject', 'serCreateNewProject', 'serGetListUser', 'cfpLoadingBar', function (scope, $http, serListProject, serListFileProject, serCreateNewProject, serGetListUser, cfpLoadingBar) {
+apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFileProject', 'serCreateNewProject', 'serGetListUser', 'cfpLoadingBar', function (scope, http, serListProject, serListFileProject, serCreateNewProject, serGetListUser, cfpLoadingBar) {
     scope.init = function () {
         scope.loadListProject();
     }
@@ -181,18 +181,58 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
         var isDuplicated = false;
         //scope.data2.availableOptions.push();
         for (var i = 0; i < scope.tags.length; i++) {
-            if(){
-                 scope.tags[i][text] == item.Email
+            //if(){
+            //     scope.tags[i][text] == item.Email
+            //}
+            var obj = scope.tags[i];
+            if(obj.Email === item.Email){
+                isDuplicated = true;
+                break;
             }
         }
-        if(!(item in scope.tags)){
+        if(!isDuplicated){
             scope.tags.push(item);
 
         }
         //alert(item.value);
         console.log(scope.tags);
     }
+    scope.endDateBeforeRender = endDateBeforeRender
+    scope.endDateOnSetTime = endDateOnSetTime
+    scope.startDateBeforeRender = startDateBeforeRender
+    scope.startDateOnSetTime = startDateOnSetTime
    
+    function startDateOnSetTime() {
+        scope.$broadcast('start-date-changed');
+    }
+
+    function endDateOnSetTime() {
+        scope.$broadcast('end-date-changed');
+    }
+
+    function startDateBeforeRender($dates) {
+        if (scope.dateRangeEnd) {
+            var activeDate = moment(scope.dateRangeEnd);
+
+            $dates.filter(function (date) {
+                return date.localDateValue() >= activeDate.valueOf()
+            }).forEach(function (date) {
+                date.selectable = false;
+            })
+        }
+    }
+
+    function endDateBeforeRender($view, $dates) {
+        if (scope.dateRangeStart) {
+            var activeDate = moment(scope.dateRangeStart).subtract(1, $view).add(1, 'minute');
+
+            $dates.filter(function (date) {
+                return date.localDateValue() <= activeDate.valueOf()
+            }).forEach(function (date) {
+                date.selectable = false;
+            })
+        }
+    }
 }])
 apvApp.service('serListProject', function ($http) {
     this.data = function () {
