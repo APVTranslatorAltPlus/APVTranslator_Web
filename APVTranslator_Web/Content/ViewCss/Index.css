@@ -13,7 +13,7 @@
 .main-left {
     width: 100%;
     height: 100%;
-    background-color: #EAF2F8    ;
+    background-color: #EAF2F8;
 }
 
 .main-index {
@@ -22,12 +22,12 @@
 }
 
 .splitter {
-    right:0;
+    right: 0;
     height: 100%;
     width: 6px;
     background-color: #086962;
-    position:absolute;
-    top:0px;
+    position: absolute;
+    top: 0px;
 }
 
     .splitter:hover {
@@ -45,28 +45,78 @@
 .m-top {
     position: absolute;
     top: 0;
-    height:60px;
-    width:100%;
+    height: 60px;
+    width: 100%;
 }
 
 .m-center {
     position: absolute;
     top: 60px;
-    bottom:0;
-    width:100%;
-    padding-left:0px;
-    padding-right:0px;
-    flex:1;
+    bottom: 0;
+    width: 100%;
+    padding-left: 15px;
+    padding-right: 0px;
+    flex: 1;
 }
 
 .m-footer {
     position: absolute;
     top: 0;
-    height:100px;
-    width:100%;
-    padding-left:15px;
-    padding-right:15px;
+    height: 100px;
+    width: 100%;
+    padding-left: 15px;
+    padding-right: 15px;
 }
-.m-top{
-    text-align:center;
+
+.m-top {
+    text-align: center;
+}
+
+.body-content {
+    padding-right: 0px !important;
+}
+
+#mySidenav::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    background-color: #F5F5F5;
+}
+
+#mySidenav::-webkit-scrollbar {
+    width: 6px;
+    background-color: #F5F5F5;
+}
+
+#mySidenav::-webkit-scrollbar-thumb {
+    background-color: #FFFF66;
+    background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, .2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%, transparent 75%, transparent);
+}
+
+.sidenav {
+    overflow-x: hidden;
+    transition: 0.5s;
+}
+
+.ngCell {
+    display: table-cell;
+    height: auto !important;
+    overflow: auto;
+    position: static;
+}
+
+.ngRow {
+    display: table-row;
+    height: auto !important;
+    position: static;
+    word-wrap: break-word;
+    text-wrap: normal;
+    overflow-wrap: break-word;
+}
+
+.ngCellText {
+    height: auto !important;
+    white-space: normal;
+    overflow: visible;
+    word-wrap: break-word;
+    text-wrap: normal;
+    overflow-wrap: break-word;
 }
