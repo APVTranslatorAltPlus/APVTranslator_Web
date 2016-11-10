@@ -23,7 +23,7 @@ Utility.getStringDate = function (stringDate, format) {
 
 Utility.showMessage = function (scope, $mdDialog, mes, title) {
     var _title = "APV Translator";
-    if (title!=null) {
+    if (title != null) {
         _title = title;
     }
     $mdDialog.show(
@@ -31,8 +31,24 @@ Utility.showMessage = function (scope, $mdDialog, mes, title) {
         .parent(angular.element(document.body))
         .clickOutsideToClose(true)
         .title(_title)
-        .textContent(mes)     
+        .textContent(mes)
         .ariaLabel('Alert Dialog')
         .ok('OK')
     );
+}
+Utility.showConfirm = function (scope, $mdDialog, mes, callback, title) {
+    var _title = "APV Translator";
+    if (title != null) {
+        _title = title;
+    }
+    var confirm = $mdDialog.confirm()
+          .title(_title)
+          .textContent(mes)
+          .ariaLabel('Alert confirm dialog')
+          .ok('OK')
+          .cancel('Cancel');
+
+    $mdDialog.show(confirm).then(callback, function () {
+       //cancel
+    });
 }

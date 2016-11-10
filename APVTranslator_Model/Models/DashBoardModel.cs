@@ -33,7 +33,13 @@ namespace APVTranslator_Model.Models
             List<ProjectFile> listProjects = this.Database.SqlQuery<ProjectFile>("Proc_GetListProjectFile @projectId", userIDParameter).ToList();
             return listProjects;
         }
-
+        /// <summary>
+        /// Insert file to project
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <param name="importPath"></param>
+        /// <param name="lstFile"></param>
+        /// <returns>true/false</returns>
         public virtual Boolean InsertProjectFile(int projectId, string importPath, List<HttpPostedFile> lstFile)
         {
             try
@@ -83,6 +89,48 @@ namespace APVTranslator_Model.Models
                     }
                 }
                 return bSuccess;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// check user has permission to delete file
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <returns>true/false</returns>
+        public Boolean CheckUserPermissionToDelete(int projectId)
+        {
+            try
+            {
+                var roleInProject = this.Database.SqlQuery<Int16>("Proc_CheckUserPermissionToDelete @userId, @projectId",
+                                                                                                 new SqlParameter("@userId", SessionUser.GetUserId()),
+                                                                                                 new SqlParameter("@projectId", projectId)).FirstOrDefault();
+                if (roleInProject == 1)
+                {
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public Boolean DeleteFileProject(int projectId, int fileId)
+        {
+            try
+            {
+               int rowEffect= this.Database.ExecuteSqlCommand("[dbo].[Proc_DeleteFileProject] @projectId, @fileId",
+                                                                                          new SqlParameter("@projectId", projectId),
+                                                                                          new SqlParameter("@fileId", fileId));
+                if (rowEffect>0)
+                {
+                    return true;
+                }
+                return false;
             }
             catch (Exception)
             {

@@ -37,7 +37,7 @@ namespace APVTranslator_Web.Handler
                     {
                         //check again projectID and projectName
                         DashBoardModel dbm = new DashBoardModel();
-                        string rootPath = context.Server.MapPath("~");
+                        string rootPath = Utility.GetRootPath();
                         string importPath = rootPath + "Projects\\" + projectName + "\\Imports";
                         string exportPath = rootPath + "Projects\\" + projectName + "\\Exports";
                         if (!Directory.Exists(importPath))

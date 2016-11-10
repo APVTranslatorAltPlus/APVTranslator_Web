@@ -50,12 +50,20 @@
                     Import
                 </md-button>
                 <div class="a-divider" ng-show="fileProjectSelection"></div>
-                <md-button class="md-raised" ng-show="fileProjectSelection" ng-click="" ng-disabled="!fileProjectSelection" aria-label="delete file">
+                <md-button class="md-raised" ng-show="fileProjectSelection" ng-click="confirmDeleteFile()" ng-disabled="!fileProjectSelection" aria-label="delete file">
                     <md-icon class="material-icons">delete</md-icon>
                     <md-tooltip md-direction="bottom">
                         Delete File
                     </md-tooltip>
                     Delete  
+                </md-button>
+                <div class="a-divider" ng-show="fileProjectSelection"></div>
+                <md-button class="md-raised" ng-show="fileProjectSelection" ng-click="" ng-disabled="!fileProjectSelection" aria-label="Trans;ate file">
+                    <md-icon class="material-icons">g_translate</md-icon>
+                    <md-tooltip md-direction="bottom">
+                        Translate file
+                    </md-tooltip>
+                    Translate
                 </md-button>
                 <input type="file" id="file" accept=".xlsx,.xls,.doc,.docx.,.ppt,.pptx" style="display:none" value="upload" multiple />
                 <span flex></span>

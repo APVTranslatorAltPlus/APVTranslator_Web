@@ -19,5 +19,8 @@ namespace APVTranslator_Services.Services
         [OperationContract]
         [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped)]
         ServiceResult GetListFileProject(object projectID);
+        [OperationContract]
+        [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped)]
+        ServiceResult DeleteFileProject(int projectId, string projectName, int fileId, string fileName);
     }
 }

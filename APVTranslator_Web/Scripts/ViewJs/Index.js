@@ -3,7 +3,7 @@
 //        cfpLoadingBarProvider.includeSpinner = true;
 //    })
 
-apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFileProject', 'cfpLoadingBar', '$mdDialog', function (scope, http, serListProject, serListFileProject, cfpLoadingBar, $mdDialog) {
+apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFileProject', 'cfpLoadingBar', '$mdDialog', 'deleteFileProject', function (scope, http, serListProject, serListFileProject, cfpLoadingBar, $mdDialog, deleteFileProject) {
     scope.init = function () {
         scope.loadListProject();
     }
@@ -214,6 +214,41 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
         }
     }
 
+    scope.confirmDeleteFile = function () {
+        var fileName="";
+        if (scope.currentFileProject) {
+            fileName = scope.currentFileProject.FileName;
+        }
+        Utility.showConfirm(scope, $mdDialog, 'Do you want delete the file "' + fileName+'"?', scope.deleteFile)
+    }
+
+    scope.deleteFile = function () {
+        try {
+            debugger;
+            cfpLoadingBar.start();
+            var data = {};
+            data.projectId = scope.currentFileProject.ProjectID;
+            data.projectName = scope.currentProject.Title;
+            data.fileId = scope.currentFileProject.FileID;
+            data.fileName = scope.currentFileProject.FileName;
+            deleteFileProject.delete(data)
+            .success(function (response) {
+                if (response.DeleteFileProjectResult && response.DeleteFileProjectResult.IsSuccess) {
+                    scope.loadListFileProject(scope.currentFileProject.ProjectID);
+                }
+                else {
+                    Utility.showMessage(scope, $mdDialog, response.DeleteFileProjectResult.Message);
+                }
+                cfpLoadingBar.complete();
+            }).error(function (err) {
+                console.log(err);
+                Utility.showMessage(scope, $mdDialog, err)
+                cfpLoadingBar.complete();
+            });
+        } catch (e) {
+            Utility.showMessage(scope, $mdDialog, e.message);
+        }
+    }
 }])
 apvApp.service('serListProject', function ($http) {
     this.data = function () {
@@ -223,5 +258,10 @@ apvApp.service('serListProject', function ($http) {
 apvApp.service('serListFileProject', function ($http) {
     this.data = function (projectId) {
         return $http.post(Utility.getBaseUrl() + 'Services/DashboardService.svc/GetListFileProject', { 'projectID': projectId });
+    };
+});
+apvApp.service('deleteFileProject', function ($http) {
+    this.delete = function (data) {
+        return $http.post(Utility.getBaseUrl() + 'Services/DashboardService.svc/DeleteFileProject', data);
     };
 });

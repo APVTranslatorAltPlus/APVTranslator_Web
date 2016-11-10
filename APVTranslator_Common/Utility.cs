@@ -5,11 +5,15 @@ using System.Linq;
 using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace APVTranslator_Common
 {
     public static class Utility
     {
-        
+        public static string GetRootPath()
+        {
+            return HttpContext.Current.Server.MapPath("~");
+        }
     }
 }
