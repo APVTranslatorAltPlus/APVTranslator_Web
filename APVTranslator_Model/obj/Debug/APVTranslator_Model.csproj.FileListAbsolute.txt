@@ -130,3 +130,5 @@ C:\apv_dev\APVTranslator_Model\bin\Debug\System.Web.WebPages.Razor.xml
 C:\apv_dev\APVTranslator_Model\obj\Debug\APVTranslator_Model.csprojResolveAssemblyReference.cache
 C:\apv_dev\APVTranslator_Model\obj\Debug\APVTranslator_Model.dll
 C:\apv_dev\APVTranslator_Model\obj\Debug\APVTranslator_Model.pdb
+C:\apv_dev\APVTranslator_Model\bin\Debug\APVTranslator_Common.dll
+C:\apv_dev\APVTranslator_Model\bin\Debug\APVTranslator_Common.pdb

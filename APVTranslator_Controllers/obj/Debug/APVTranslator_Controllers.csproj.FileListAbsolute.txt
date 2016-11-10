@@ -142,3 +142,9 @@ C:\apv_dev\APVTranslator_Controllers\bin\Debug\System.Web.WebPages.Razor.xml
 C:\apv_dev\APVTranslator_Controllers\obj\Debug\APVTranslator_Controllers.csprojResolveAssemblyReference.cache
 C:\apv_dev\APVTranslator_Controllers\obj\Debug\APVTranslator_Controllers.dll
 C:\apv_dev\APVTranslator_Controllers\obj\Debug\APVTranslator_Controllers.pdb
+C:\apv_dev\APVTranslator_Controllers\bin\Debug\System.Net.Http.Formatting.dll
+C:\apv_dev\APVTranslator_Controllers\bin\Debug\System.Web.Http.dll
+C:\apv_dev\APVTranslator_Controllers\bin\Debug\System.Web.Http.WebHost.dll
+C:\apv_dev\APVTranslator_Controllers\bin\Debug\System.Net.Http.Formatting.xml
+C:\apv_dev\APVTranslator_Controllers\bin\Debug\System.Web.Http.xml
+C:\apv_dev\APVTranslator_Controllers\bin\Debug\System.Web.Http.WebHost.xml

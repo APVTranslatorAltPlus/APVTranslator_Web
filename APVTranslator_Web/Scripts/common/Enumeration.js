@@ -4,7 +4,8 @@ Enumeration.GridType = {
     ListFileProject: 2
 }
 Enumeration.FileType = {
-    Word:1,
-    PowerPoint:2,
-    Excel:3
+    Excel: 1,
+    Word: 2,
+    PowerPoint: 3,
+    PDF: 4
 }

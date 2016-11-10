@@ -8,8 +8,11 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
         scope.loadListProject();
     }
     scope.currentProject = {};
+    scope.currentFileProject = {};
     scope.gridSelections = [];
     scope.checked = false;
+    scope.projectSelection = false;
+    scope.fileProjectSelection = false;
     scope.gridType = Enumeration.GridType.ListProject;
     scope.data = [];
     scope.columnDefs = [];
@@ -26,7 +29,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                          { field: 'Progress', displayName: 'Progress', minWidth: 100, cellTemplate: '<div class="ngCellText ng-scope ngCellElement">{{row.entity.Progress*100}}%</div>', width: 80, enableCellEdit: false, resizable: true },
                          { field: 'Path', displayName: 'Path', enableCellEdit: false, resizable: true, minWidth: 220 },
                          { field: 'LanguageDescription', displayName: 'TranslateLanguage', enableCellEdit: false, resizable: true, minWidth: 220 },
-                         { field: 'CreateAt', displayName: 'CreateAt', enableCellEdit: false, type: 'date', cellFilter: 'date:\'mm:hh dd/MM/yyyy\'', resizable: true, minWidth: 150 },
+                         { field: 'CreateAt', displayName: 'CreateAt', enableCellEdit: false, type: 'date', cellFilter: 'date:\'hh:mm dd/MM/yyyy\'', resizable: true, minWidth: 150 },
                          { field: 'CreateBy', displayName: 'CreateBy', minWidth: 200, enableCellEdit: false, resizable: true },
                          { field: 'DeadLine', displayName: 'DeadLine', enableCellEdit: false, cellFilter: 'date:\'mm:hh dd/MM/yyyy\'', resizable: true, minWidth: 150 }];
     scope.gridOptions = {
@@ -38,6 +41,11 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
         afterSelectionChange: function (row, event) {
             if (scope.gridType == Enumeration.GridType.ListProject) {
                 scope.currentProject = Utility.clone(scope.gridSelections[0]);
+                scope.projectSelection = true;
+            }
+            else if (scope.gridType == Enumeration.GridType.ListFileProject) {
+                scope.currentFileProject = Utility.clone(scope.gridSelections[0]);
+                scope.fileProjectSelection = true;
             }
             if (scope.selections != "") {
                 scope.disabled = false;
@@ -55,7 +63,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
     scope.rowDblClick = function (row) {
         try {
             if (scope.gridType == Enumeration.GridType.ListProject) {
-                scope.loadListFileProject(row);
+                scope.loadListFileProject(row.entity.Id);
             }
         } catch (e) {
             Utility.showMessage(scope, $mdDialog, e.message);
@@ -110,10 +118,10 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
         });
     }
 
-    scope.loadListFileProject = function (row) {
+    scope.loadListFileProject = function (Id) {
         cfpLoadingBar.start();
         scope.enableRowSelection = false;
-        serListFileProject.data(row.entity.Id)
+        serListFileProject.data(Id)
             .success(function (response) {
                 if (response.GetListFileProjectResult && response.GetListFileProjectResult.IsSuccess) {
                     scope.data = JSON.parse(response.GetListFileProjectResult.Value);
@@ -130,18 +138,82 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
             });
     }
 
+
     scope.setGridList = function (gridType) {
         if (gridType == Enumeration.GridType.ListProject) {
             scope.columnDefs = scope.columnDefs1;
             scope.checked = false;
             scope.gridType = Enumeration.GridType.ListProject;
+            if (scope.projectSelection) {
+                scope.projectSelection = false;
+                scope.currentProject = {};
+            }
+            if (scope.fileProjectSelection) {
+                scope.fileProjectSelection = false;
+                scope.currentFileProject = {};
+            }
         }
         else if (gridType == Enumeration.GridType.ListFileProject) {
             scope.columnDefs = scope.columnDefs2;
             scope.checked = true;
             scope.gridType = Enumeration.GridType.ListFileProject;
+            if (scope.projectSelection) {
+                scope.projectSelection = false;
+            }
+            if (scope.fileProjectSelection) {
+                scope.fileProjectSelection = false;
+                scope.currentFileProject = {};
+            }
         }
     }
+    scope.showInputFile = function () {
+        try {
+            $('#file').one('change', function () {
+                try {
+                    cfpLoadingBar.start();
+                    var formData = new FormData();
+                    var hadFile = false;
+                    var projectId = scope.currentProject.Id;
+                    var projectName = scope.currentProject.Title;
+                    formData.append('projectId', projectId);
+                    formData.append('projectName', projectName);
+                    var files = $('#file')[0].files;
+                    $.each(files, function (i, file) {
+                        var ext = file.name.split('.').pop();
+                        if (Contanst.TypeFile.indexOf(ext) != -1) {
+                            hadFile = true;
+                            formData.append('file[' + i + ']', file);
+                        }
+                    });
+                    if (hadFile) {
+                        $.ajax({
+                            type: "POST",
+                            url: Utility.getBaseUrl() + 'Handler/UploadHandler.ashx',
+                            enctype: 'multipart/form-data',
+                            data: formData,
+                            cache: false,
+                            contentType: false,
+                            processData: false,
+                            success: function (response) {
+                                cfpLoadingBar.complete();
+                                scope.loadListFileProject(projectId);
+                            },
+                            error: function (error) {
+                                cfpLoadingBar.complete();
+                                Utility.showMessage(scope, $mdDialog, error);
+                            }
+                        });
+                    }
+                } catch (e) {
+                    Utility.showMessage(scope, $mdDialog, e.message);
+                }
+            })
+            $('#file').click();
+        } catch (e) {
+            Utility.showMessage(scope, $mdDialog, e.message);
+        }
+    }
+
 }])
 apvApp.service('serListProject', function ($http) {
     this.data = function () {
@@ -153,4 +225,3 @@ apvApp.service('serListFileProject', function ($http) {
         return $http.post(Utility.getBaseUrl() + 'Services/DashboardService.svc/GetListFileProject', { 'projectID': projectId });
     };
 });
-
