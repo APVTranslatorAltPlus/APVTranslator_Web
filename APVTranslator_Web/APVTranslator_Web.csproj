@@ -240,6 +240,9 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\angular-loading-bar\loading-bar.css" />
     <Content Include="Content\angular-loading-bar\loading-bar.min.css" />
+    <Content Include="Content\Images\error.jpg" />
+    <Content Include="Content\Images\logo-incompany.png" />
+    <Content Include="Content\Images\success.png" />
     <Content Include="Content\material.min.css" />
     <Content Include="Content\ng-grid.css" />
     <Content Include="Content\ng-grid.min.css" />

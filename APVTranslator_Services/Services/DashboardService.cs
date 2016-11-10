@@ -64,18 +64,76 @@ namespace APVTranslator_Services.Services
         }
 
 
-        public bool CreateNewProject(object newProject)
+        public bool CreateNewProject(object newProject, IEnumerable<int> listMember)
         {
-            dynamic stuff = JObject.Parse(newProject.ToString());
-            // ctvar project = (Project)newProject;
-            // Console.WriteLine("aaaa"+stuff.Title);
-            string title = stuff.Title;
-            string translateLanguage = stuff.TranslateLanguage;
-            Debug.WriteLine(title);
-            Debug.WriteLine(translateLanguage);
-            return true;
+            try
+            {
+                dynamic stuff = JObject.Parse(newProject.ToString());
+
+                string title = stuff.Title;
+                int translateLanguage = stuff.TranslateLanguage;
+                string descriptions = stuff.Descriptions;
+                string path = stuff.Path;
+                List<string> IdList = new List<string>();
+                var user = HttpContext.Current.User;
+                string createBy = user.Identity.Name;
+
+                string startDate = null;
+                string deadline = null;
+                DateTime? dtDeadline = null;
+                DateTime? dtStartDate = null;
+               
+                if (stuff.CreateAt != null && stuff.CreateAt != "" )
+                {
+                    startDate = stuff.CreateAt;
+                    dtStartDate = Convert.ToDateTime(startDate);
+                   
+                }
+                if (stuff.Deadline != null && stuff.Deadline != "")
+                {
+                    deadline = stuff.Deadline;
+                    dtDeadline = Convert.ToDateTime(deadline);
+                }
+
+                Project newProjectToDB = new Project(title, null, path, 0, null, null, createBy, dtStartDate, dtDeadline, translateLanguage, descriptions);
+                // Debug.WriteLine("Year: {0}, Month: {1}, Day: {2}", dt.Year, dt.Month, dt.Day);
+                //Debug.WriteLine("Title = " + newProjectToDB.Title);
+                //Debug.WriteLine("UseCompanyDB = " + newProjectToDB.UseCompanyDB);
+                //Debug.WriteLine("Path = " + newProjectToDB.Path);
+                //Debug.WriteLine("ProjectTypeID = " + newProjectToDB.ProjectTypeID);
+                //Debug.WriteLine("Status = " + newProjectToDB.Status);
+                //Debug.WriteLine("Progress = " + newProjectToDB.Progress);
+                //Debug.WriteLine("CreateBy = " + newProjectToDB.CreateBy);
+                //Debug.WriteLine("StartDate = " + newProjectToDB.CreateAt);
+                //Debug.WriteLine("Deadline = " + newProjectToDB.DeadLine);
+                //Debug.WriteLine("TranslateLanguage = " + newProjectToDB.TranslateLanguageID);
+                //Debug.WriteLine("Description = " + newProjectToDB.Descriptions);
+
+                try
+                {
+                    DashBoardModel dbModel = new DashBoardModel();
+                    return dbModel.CreateNewProject(newProjectToDB,listMember);
+                }
+                catch (System.Data.SqlClient.SqlException e)
+                {
+                    Debug.WriteLine("Error: " + e.ToString());
+                    return false;
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine("Error: " + ex.ToString());
+                    return false;
+                }
+
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("Error: " + e.ToString());
+                return false;
+            }
+
         }
-        
+
         public ServiceResult GetListUser()
         {
             ServiceResult sResult = new ServiceResult();
@@ -84,7 +142,6 @@ namespace APVTranslator_Services.Services
                 var user = HttpContext.Current.User;
                 if (user.Identity.IsAuthenticated)
                 {
-                    //var userId = Convert.ToInt32(Utility.GetCurrentUserID(HttpContext.Current.User.Identity));
                     DashBoardModel dbModel = new DashBoardModel();
                     sResult.Value = dbModel.Proc_GetListMember();
                 }

@@ -22,7 +22,7 @@ namespace APVTranslator_Services.Services
         ServiceResult GetListFileProject(object projectID);
         [OperationContract]
         [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped)]
-        bool CreateNewProject(object newProject);
+        bool CreateNewProject(object newProject, IEnumerable<int> listMember);
         [OperationContract]
         [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped)]
         ServiceResult GetListUser();

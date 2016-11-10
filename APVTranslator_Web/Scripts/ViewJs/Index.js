@@ -88,7 +88,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
     }
 
     scope.loadListProject = function () {
-        cfpLoadingBar.start();
+        //  cfpLoadingBar.start();
         scope.enableRowSelection = true;
         serListProject.data()
         .success(function (response) {
@@ -97,6 +97,8 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                 scope.columnDefs = scope.columnDefs1;
                 scope.checked = false;
                 scope.gridType = Enumeration.GridType.ListProject;
+            } else {
+                alert(1);
             }
             cfpLoadingBar.complete();
         }).error(function (err) {
@@ -123,22 +125,58 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
             });
     }
 
+    //Tag list to add to ng-tag
+    scope.tags = [];
+    //User id list to pass to service
+    scope.IdList = [];
+
+
+    //Create new project
     scope.createNewProject = function (object) {
         // cfpLoadingBar.start();
 
-      
         var projectObject = {};
         projectObject["Title"] = angular.element('#projectName').val();
 
+        if (projectObject["Title"].trim() === "" || projectObject["Title"] == null) {
+            angular.element("#errorMess").text("Please enter project name!!!");
+            return;
+        }
         var translateLanguage = document.getElementById("translateLanguage");
         var translateLanguageValue = translateLanguage.options[translateLanguage.selectedIndex].value;
        
         projectObject["TranslateLanguage"] = translateLanguageValue;
+        projectObject["Path"] = "APVTranslator_Projects/" + angular.element('#projectName').val();
+        projectObject["UseCompanyDB"] = 0;
+        projectObject["ProjectTypeID"] = 0;
+        projectObject["Status"] = "False";
+        projectObject["CreateBy"] = "";
 
-        serCreateNewProject.data(JSON.stringify(projectObject))
+        var startDate = document.getElementById("startDate");
+        var deadline = document.getElementById("deadline");
+        var descriptions = document.getElementById("descriptions");
+
+        projectObject["CreateAt"] = startDate.value;
+        projectObject["Deadline"] = deadline.value;
+        projectObject["Descriptions"] = descriptions.value;
+        console.log("STARTDATE" + startDate.value);
+        for (var i = 0; i < scope.tags.length; i++) {
+        
+            var obj = scope.tags[i];
+            scope.IdList.push(obj.Id);
+            console.log(obj.Id);
+        }
+
+        serCreateNewProject.data(JSON.stringify(projectObject), (scope.IdList))
           .success(function (response) {
               if (response.CreateNewProjectResult) {
-
+                  scope.loadListProject();
+                  console.log(response.CreateNewProjectResult);
+                  $('#successModal').modal('show');
+                  $('#createNewProjectModal').modal('hide');
+              } else {
+                  $('#errorModal').modal('show');
+                  $('#createNewProjectModal').modal('hide');
               }
               cfpLoadingBar.complete();
           }).error(function (err) {
@@ -152,24 +190,31 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
         selectedOption: {} //This sets the default value of the select in the ui
     };
 
-    scope.tags = [];
-
-    //scope.loadTags = function (query) {
-    //    return $http.get(scope.tags);
-    //};
-
+    //Get list users when create new project
     scope.getListUser = function () {
-        cfpLoadingBar.start();
 
+        angular.element('#projectName').val('');
+        angular.element('#member').val('');
+        angular.element('#tagList').val('');
+        scope.tags = [];
+        angular.element('#descriptions').val('');
+        angular.element('#startDate').val('');
+        angular.element('#deadline').val('');
+        scope.IdList = [];
+        scope.dateRangeStart = '';
+        scope.dateRangeEnd = '';
+        angular.element("#errorMess").text("");
+        //scope.data2.selectedOption = scope.tags[0];
+        cfpLoadingBar.start();
         serGetListUser.data()
         .success(function (response) {
             console.log(response.GetListUserResult);
             console.log(response.GetListUserResult.IsSuccess);
             if (response.GetListUserResult && response.GetListUserResult.IsSuccess) {
                 scope.data2.availableOptions = JSON.parse(response.GetListUserResult.Value);
-               // alert(scope.data2.availableOptions[0].Title);
+                scope.data2.selectedOption = scope.data2.availableOptions[0];
             } else {
-                alert(1);
+                alert("error");
             }
         }).error(function (err) {
             console.log(err);
@@ -177,6 +222,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
         });
     }
 
+    //Handle user selection event from ng-select
     scope.changedValue = function (item) {
         var isDuplicated = false;
         //scope.data2.availableOptions.push();
@@ -197,6 +243,8 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
         //alert(item.value);
         console.log(scope.tags);
     }
+
+    //Handle datetime validation
     scope.endDateBeforeRender = endDateBeforeRender
     scope.endDateOnSetTime = endDateOnSetTime
     scope.startDateBeforeRender = startDateBeforeRender
@@ -234,6 +282,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
         }
     }
 }])
+
 apvApp.service('serListProject', function ($http) {
     this.data = function () {
         return $http.get(Utility.getBaseUrl() + 'Services/DashboardService.svc/GetListProject');
@@ -245,8 +294,8 @@ apvApp.service('serListFileProject', function ($http) {
     };
 });
 apvApp.service('serCreateNewProject', function ($http) {
-    this.data = function (object) {
-        return $http.post(Utility.getBaseUrl() + 'Services/DashboardService.svc/CreateNewProject', { 'newProject': object });
+    this.data = function (newProject,listMember) {
+        return $http.post(Utility.getBaseUrl() + 'Services/DashboardService.svc/CreateNewProject', { 'newProject': newProject, 'listMember': listMember });
     };
 });
 apvApp.service('serGetListUser', function ($http) {
@@ -275,6 +324,7 @@ function openNav() {
     document.getElementById("gridTable").style.width = "75%";
     $('#gridTable').trigger('resize');
     $('#gridTable2').trigger('resize');
+    document.getElementById("mySidenav").style.overflowY = "auto";
 
 }
 
@@ -284,6 +334,6 @@ function closeNav() {
     document.getElementById("gridTable").style.width = "99.5%";
     $('#gridTable').trigger('resize');
     $('.main-index').trigger('resize'); $('#DashBoard').trigger('resize');
+    document.getElementById("mySidenav").style.overflow = "hidden";
 }
 
-//Create New Project Modal

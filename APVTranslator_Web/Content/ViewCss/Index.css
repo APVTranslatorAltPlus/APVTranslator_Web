@@ -96,7 +96,7 @@
     transition: 0.5s;
 }
 
-.ngCell {
+/*.ngCell {
     display: table-cell;
     height: auto !important;
     overflow: auto;
@@ -119,4 +119,4 @@
     word-wrap: break-word;
     text-wrap: normal;
     overflow-wrap: break-word;
-}
+}*/
