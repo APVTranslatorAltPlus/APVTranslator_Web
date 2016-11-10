@@ -72,3 +72,16 @@ textarea {
     padding-right: 0px;
     padding-left: 0px;
 }
+
+.row {
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+}
+
+.a-divider {
+    vertical-align: middle;
+    min-height: 33px;
+    border-left: 1px #e6e6e6 solid;
+    width: 1px;
+    margin: 15px 7px;
+}

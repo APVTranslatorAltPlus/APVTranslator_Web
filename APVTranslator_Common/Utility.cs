@@ -5,14 +5,15 @@ using System.Linq;
 using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace APVTranslator_Common
 {
     public static class Utility
     {
-        public static string GetCurrentUserID(IIdentity identity)
+        public static string GetRootPath()
         {
-            return IdentityExtensions.GetUserId(identity);
+            return HttpContext.Current.Server.MapPath("~");
         }
     }
 }

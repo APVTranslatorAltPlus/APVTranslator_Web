@@ -6,14 +6,81 @@
 @Styles.Render("~/bundles/index_css")
 @Scripts.Render("~/bundles/index_js")
 <div ng-controller="MyCtrl" class="app-index">
-    <div class="m-top" ng-cloak style="font-size:19px;margin-top:10px">
-        <md-button style="float:right;" class="md-accent" ng-show="checked" ng-click="loadListProject()">Back</md-button>
-        <label>APVTranslator</label>
+    <div class="m-top" ng-cloak>
+        @*<md-button style="float:right;" class="md-accent" ng-show="checked" ng-click="loadListProject()">Back</md-button>*@
+        @*<label>APVTranslator</label>*@
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <md-button class="md-raised" ng-show="!checked" ng-click="openDialog()" aria-label="New">
+                    <md-icon class="material-icons">add</md-icon>
+                    <md-tooltip md-direction="bottom">
+                        New Project
+                    </md-tooltip>  
+                    New   
+                </md-button>
+                <div class="a-divider" ng-show="projectSelection"></div>
+                <md-button class="md-raised" ng-show="projectSelection" ng-disabled="!projectSelection" aria-label="Edit">
+                    <md-icon class="material-icons">edit</md-icon>
+                    <md-tooltip md-direction="bottom">
+                        Edit Project
+                    </md-tooltip>
+                    Delete
+                </md-button>
+                <div class="a-divider" ng-show="projectSelection"></div>
+                <md-button class="md-raised" ng-show="projectSelection" ng-disabled="!projectSelection" aria-label="Delete">
+                    <md-icon class="material-icons">delete</md-icon>
+                    <md-tooltip md-direction="bottom">
+                        Delete Project
+                    </md-tooltip>
+                    Delete
+                </md-button>
+                <div class="a-divider" ng-show="projectSelection"></div>
+                <md-button class="md-raised" ng-show="projectSelection" ng-disabled="!projectSelection" aria-label="Setting">
+                    <md-icon class="material-icons">settings</md-icon>
+                    <md-tooltip md-direction="bottom">
+                        Project Setting
+                    </md-tooltip>
+                    Setting
+                </md-button>
+                <md-button class="md-raised" ng-show="checked" ng-click="showInputFile()" aria-label="Import">
+                    <md-icon class="material-icons">file_upload</md-icon>
+                    <md-tooltip md-direction="bottom">
+                        Import File
+                    </md-tooltip>
+                    Import
+                </md-button>
+                <div class="a-divider" ng-show="fileProjectSelection"></div>
+                <md-button class="md-raised" ng-show="fileProjectSelection" ng-click="confirmDeleteFile()" ng-disabled="!fileProjectSelection" aria-label="delete file">
+                    <md-icon class="material-icons">delete</md-icon>
+                    <md-tooltip md-direction="bottom">
+                        Delete File
+                    </md-tooltip>
+                    Delete  
+                </md-button>
+                <div class="a-divider" ng-show="fileProjectSelection"></div>
+                <md-button class="md-raised" ng-show="fileProjectSelection" ng-click="" ng-disabled="!fileProjectSelection" aria-label="Trans;ate file">
+                    <md-icon class="material-icons">g_translate</md-icon>
+                    <md-tooltip md-direction="bottom">
+                        Translate file
+                    </md-tooltip>
+                    Translate
+                </md-button>
+                <input type="file" id="file" accept=".xlsx,.xls,.doc,.docx.,.ppt,.pptx" style="display:none" value="upload" multiple />
+                <span flex></span>
+                <md-button class="md-raised md-warn" aria-label="Back" ng-show="checked" ng-click="loadListProject()">
+                    <md-icon class="material-icons">undo</md-icon>
+                    <md-tooltip md-direction="bottom">
+                        Back To List Project
+                    </md-tooltip>  
+                    Back
+                </md-button>
+            </div>
+        </md-toolbar>
     </div>
     <div class="m-center">
         <div class="row fill-height fill-width">
             <div class="col-xs-12 fill-height fill-width">
-                <div class="sidenav fill-height" id="mySidenav" style="width:25%;display:inline;float:left;overflow-y:auto">
+                <div class="sidenav fill-height" id="mySidenav" style="width:25%;display:inline;float:left;overflow:hidden">
                     <div class="main-left" ng-cloak style="position:relative">
                         <p style="position: absolute;padding:10px;margin-left:25%;font-size:large"><u><b>Project Details</b></u></p>
                         <div style="position:relative;padding:10px;top:30px;font-size:medium;">
@@ -22,43 +89,43 @@
                                 {{currentProject.Title}}
                             </p>
                         </div>
-                        <div style="position:relative;padding-top:40px;padding-left:10px;padding-right:10px; font-size:medium;">
+                        <div style="position:relative;padding-top:40px;padding-left:10px; font-size:medium;">
                             <b>Status:</b>
                             <p style="display:inline" id="Status">
                                 {{currentProject.Status?'Translated':'Translating'}}
                             </p>
                         </div>
-                        <div style="position:relative;padding-top:40px;padding-left:10px;padding-right:10px;font-size:medium;">
+                        <div style="position:relative;padding-top:40px;padding-left:10px;font-size:medium;">
                             <b>Progress:</b>
                             <p style="display:inline" id="Progress">
                                 {{(currentProject.Progress!=null?currentProject.Progress:0)*100+"%"}}
                             </p>
                         </div>
-                        <div style="position:relative;padding-top:40px;padding-left:10px;padding-right:10px;font-size:medium;">
+                        <div style="position:relative;padding-top:40px;padding-left:10px;font-size:medium;">
                             <b>Path:</b>
-                            <p style="display:inline;word-wrap:break-word" id="Path">
+                            <p style="display:inline" id="Path">
                                 {{currentProject.Path}}
                             </p>
                         </div>
-                        <div style="position:relative;padding-top:40px;padding-left:10px;padding-right:10px;font-size:medium;">
+                        <div style="position:relative;padding-top:40px;padding-left:10px;font-size:medium;">
                             <b>Translate Language:</b>
                             <p style="display:inline" id="TranslateLanguage">
                                 {{currentProject.LanguageDescription}}
                             </p>
                         </div>
-                        <div style="position:relative;padding-top:40px;padding-left:10px;padding-right:10px;font-size:medium;">
+                        <div style="position:relative;padding-top:40px;padding-left:10px;font-size:medium;">
                             <b>Create At:</b>
                             <p style="display:inline" id="CreateAt">
                                 {{currentProject.CreateAt| date:'hh:mm dd/MM/yyyy'}}
                             </p>
                         </div>
-                        <div style="position:relative;padding-top:40px;padding-left:10px;padding-right:10px;font-size:medium;">
+                        <div style="position:relative;padding-top:40px;padding-left:10px;font-size:medium;">
                             <b>Create By:</b>
                             <p style="display:inline" id="CreateBy">
                                 {{currentProject.CreateBy}}
                             </p>
                         </div>
-                        <div style="position:relative;padding-top:40px;padding-left:10px;padding-right:10px;font-size:medium;">
+                        <div style="position:relative;padding-top:40px;padding-left:10px;font-size:medium;">
                             <b>Deadline:</b>
                             <p style="display:inline" id="Deadline">
                                 {{currentProject.DeadLine| date:'hh:mm dd/MM/yyyy'}}
@@ -70,7 +137,7 @@
                 </div>
                 <div class="fill-height " id="gridTable" style="width:75%;display:inline;float:left">
                     <div class="main-index" style="width:100%;">
-                        <div class="gridStyle" ng-init="init()" ng-grid="gridOptions"></div>
+                        <div class="gridStyle" ng-init="init()" ng-grid="gridOptions" ></div>
                     </div>
                 </div>
             </div>
@@ -78,8 +145,39 @@
     </div>
 </div>
 <style>
-
-
-
+    .sidenav {
+        overflow-x: hidden;
+        transition: 0.5s;
+    }
 </style>
 
+<script>
+    var isOpen = true;
+    var initialWidth;
+    function toggle() {
+        if (isOpen == true) {
+            closeNav();
+            isOpen = false;
+            document.getElementById("splitterID").setAttribute("title", "Mở chi tiết dự án");
+        } else {
+            openNav();
+            isOpen = true;
+            document.getElementById("splitterID").setAttribute("title", "Đóng chi tiết dự án");
+        }
+    }
+    function openNav() {
+        document.getElementById("mySidenav").style.width = "25%";
+        document.getElementById("gridTable").style.width = "75%";
+        $('#gridTable').trigger('resize');
+        $('#gridTable2').trigger('resize');
+
+    }
+
+    function closeNav() {
+        initialWidth = document.getElementById('mySidenav').offsetWidth;
+        document.getElementById("mySidenav").style.width = "0.5%";
+        document.getElementById("gridTable").style.width = "99.5%";
+        $('#gridTable').trigger('resize');
+        $('.main-index').trigger('resize'); $('#DashBoard').trigger('resize');
+    }
+</script>

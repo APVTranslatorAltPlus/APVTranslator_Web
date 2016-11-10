@@ -20,3 +20,35 @@ Utility.getStringDate = function (stringDate, format) {
     }
     return "null";
 }
+
+Utility.showMessage = function (scope, $mdDialog, mes, title) {
+    var _title = "APV Translator";
+    if (title != null) {
+        _title = title;
+    }
+    $mdDialog.show(
+      $mdDialog.alert()
+        .parent(angular.element(document.body))
+        .clickOutsideToClose(true)
+        .title(_title)
+        .textContent(mes)
+        .ariaLabel('Alert Dialog')
+        .ok('OK')
+    );
+}
+Utility.showConfirm = function (scope, $mdDialog, mes, callback, title) {
+    var _title = "APV Translator";
+    if (title != null) {
+        _title = title;
+    }
+    var confirm = $mdDialog.confirm()
+          .title(_title)
+          .textContent(mes)
+          .ariaLabel('Alert confirm dialog')
+          .ok('OK')
+          .cancel('Cancel');
+
+    $mdDialog.show(confirm).then(callback, function () {
+       //cancel
+    });
+}

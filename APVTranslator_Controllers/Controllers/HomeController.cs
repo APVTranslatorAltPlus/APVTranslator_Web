@@ -8,42 +8,33 @@ using System.Data.Entity;
 using System.Net;
 using Newtonsoft.Json;
 using Microsoft.AspNet.Identity;
+using System.IO;
 
 namespace APVTranslator_Controllers.Controllers
 {
-  
+
     public class HomeController : Controller
     {
         DashBoardModel db = new DashBoardModel();
-        
+
         [Authorize(Roles = "Admin")]
         public ActionResult Index()
         {
-            //var list=db.Proc_GetListProject(1).ToList();
-            //var list2 = db.Projects.ToList();
-            //if (User.Identity.IsAuthenticated)
-            //{
-            //    var userID = User.Identity.GetUserId<int>();
-            //    var user = User.Identity;
-            //    ApplicationDbContext context = new ApplicationDbContext();
-            //    var UserManager = new UserManager<ApplicationUser, int>(new UserStore(context));
-            //    var s = UserManager.GetRoles(userID);
-                //if (s[0].CompareTo("Admin")==0)
-                //{
-                //    Console.WriteLine("Admin");
-                //}
-                //else
-                //{
-                //    Console.WriteLine(s[0].ToString());
-                //}
-            //}
             return View();
         }
 
-        public string GetListProject()
+        public ActionResult upload(IEnumerable<HttpPostedFileBase> files)
         {
-            var listProject = db.Proc_GetListProject(1).ToList();
-            return JsonConvert.SerializeObject(listProject);
+            foreach (var file in files)
+            {
+                if (file.ContentLength > 0)
+                {
+                    var fileName = Path.GetFileName(file.FileName);
+                    var path = Path.Combine(Server.MapPath("~/App_Data/uploads"), fileName);
+                    file.SaveAs(path);
+                }
+            }
+            return View();
         }
         public ActionResult About()
         {

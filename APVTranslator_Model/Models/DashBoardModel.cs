@@ -1,10 +1,13 @@
-﻿using APVTranslator_Entity.Models;
+﻿using APVTranslator_Common;
+using APVTranslator_Entity.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace APVTranslator_Model.Models
 {
@@ -29,6 +32,110 @@ namespace APVTranslator_Model.Models
             var userIDParameter = new SqlParameter("@projectId", projectId);
             List<ProjectFile> listProjects = this.Database.SqlQuery<ProjectFile>("Proc_GetListProjectFile @projectId", userIDParameter).ToList();
             return listProjects;
+        }
+        /// <summary>
+        /// Insert file to project
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <param name="importPath"></param>
+        /// <param name="lstFile"></param>
+        /// <returns>true/false</returns>
+        public virtual Boolean InsertProjectFile(int projectId, string importPath, List<HttpPostedFile> lstFile)
+        {
+            try
+            {
+                bool bSuccess = true;
+                using (var dbContextTransaction = this.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        foreach (var file in lstFile)
+                        {
+                            int fileType = 1;//default excel
+                            var ext = Path.GetExtension(file.FileName);
+                            switch (ext)
+                            {
+                                case ".xls":
+                                case ".xlsx":
+                                    fileType = (int)FileTypes.EXCEL;
+                                    break;
+                                case ".doc":
+                                case ".docx":
+                                    fileType = (int)FileTypes.WORD;
+                                    break;
+                                case ".ppt":
+                                case ".pptx":
+                                    fileType = (int)FileTypes.POWERPOINT;
+                                    break;
+                                case ".pdf":
+                                    fileType = (int)FileTypes.PDF;
+                                    break;
+                            }
+                            this.Database.ExecuteSqlCommand("Proc_InsertFileToProject @projectId, @FileName, @FilePath, @FileType, @IsLoadText ,@LastUpdate",
+                                                                                          new SqlParameter("@projectId", projectId),
+                                                                                          new SqlParameter("@FileName", file.FileName),
+                                                                                          new SqlParameter("@FilePath", importPath),
+                                                                                          new SqlParameter("@FileType", fileType),
+                                                                                          new SqlParameter("@IsLoadText", false),
+                                                                                          new SqlParameter("@LastUpdate", DateTime.Now));
+                        }
+                        this.SaveChanges();
+                        dbContextTransaction.Commit();
+                    }
+                    catch (Exception ex)
+                    {
+                        bSuccess = false;
+                        dbContextTransaction.Rollback();
+                    }
+                }
+                return bSuccess;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// check user has permission to delete file
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <returns>true/false</returns>
+        public Boolean CheckUserPermissionToDelete(int projectId)
+        {
+            try
+            {
+                var roleInProject = this.Database.SqlQuery<Int16>("Proc_CheckUserPermissionToDelete @userId, @projectId",
+                                                                                                 new SqlParameter("@userId", SessionUser.GetUserId()),
+                                                                                                 new SqlParameter("@projectId", projectId)).FirstOrDefault();
+                if (roleInProject == 1)
+                {
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public Boolean DeleteFileProject(int projectId, int fileId)
+        {
+            try
+            {
+               int rowEffect= this.Database.ExecuteSqlCommand("[dbo].[Proc_DeleteFileProject] @projectId, @fileId",
+                                                                                          new SqlParameter("@projectId", projectId),
+                                                                                          new SqlParameter("@fileId", fileId));
+                if (rowEffect>0)
+                {
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }
