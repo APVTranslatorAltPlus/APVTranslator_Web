@@ -199,10 +199,12 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                             success: function (response) {
                                 cfpLoadingBar.complete();
                                 scope.loadListFileProject(projectId);
+                                $('#file').replaceWith($('#file').val('').clone(true));
                             },
                             error: function (error) {
                                 cfpLoadingBar.complete();
                                 Utility.showMessage(scope, $mdDialog, error);
+                                $('#file').replaceWith($('#file').val('').clone(true));
                             }
                         });
                     }
@@ -451,7 +453,7 @@ function toggle() {
     }
 }
 function openNav() {
-    document.getElementById("mySidenav").style.width = "25%";
+    document.getElementById("mySidenav").style.display = "block";
     document.getElementById("gridTable").style.width = "75%";
     $('#gridTable').trigger('resize');
     $('#gridTable2').trigger('resize');
@@ -460,9 +462,9 @@ function openNav() {
 }
 
 function closeNav() {
-    initialWidth = document.getElementById('mySidenav').offsetWidth;
-    document.getElementById("mySidenav").style.width = "0.5%";
-    document.getElementById("gridTable").style.width = "99.5%";
+    //initialWidth = document.getElementById('mySidenav').offsetWidth;
+    document.getElementById("mySidenav").style.display = "none";
+    document.getElementById("gridTable").style.width = "100%";
     $('#gridTable').trigger('resize');
     $('.main-index').trigger('resize'); $('#DashBoard').trigger('resize');
     document.getElementById("mySidenav").style.overflow = "hidden";

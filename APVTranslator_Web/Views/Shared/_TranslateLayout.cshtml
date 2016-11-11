@@ -1,0 +1,32 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Styles.Render("~/bundles/angular-custom_css")
+    @Styles.Render("~/bundles/angular_material_css")
+    @Scripts.Render("~/bundles/angular_js")
+    @Scripts.Render("~/bundles/angular-animate_js")
+    @Scripts.Render("~/bundles/angular-aria_js")
+    @Scripts.Render("~/bundles/angular-material_js")
+    @Scripts.Render("~/bundles/angular-grid_js")
+    @Scripts.Render("~/bundles/loading_js")
+    @Styles.Render("~/bundles/loading_css")
+    @Scripts.Render("~/bundles/commonjs")
+    @Scripts.Render("~/bundles/script/_TranslateLayout")
+    @Styles.Render("~/bundles/content/_TranslateLayout")
+</head>
+<body>
+    <div class="container-fluid center">      
+        @RenderBody()
+    </div>
+    <footer class="footer">
+        <p>&copy; @DateTime.Now.Month/@DateTime.Now.Year - APV Translator Tool</p>
+    </footer>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

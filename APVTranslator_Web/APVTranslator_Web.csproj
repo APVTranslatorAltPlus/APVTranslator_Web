@@ -244,11 +244,14 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Images\logo-incompany.png" />
+    <Content Include="Content\layouts\_Layout.css" />
+    <Content Include="Content\layouts\_TranslateLayout.css" />
     <Content Include="Content\material.min.css" />
     <Content Include="Content\ng-grid.css" />
     <Content Include="Content\ng-grid.min.css" />
-    <Content Include="Content\ViewCss\Index.css" />
-    <Content Include="Content\ViewCss\jquery.mCustomScrollbar.min.css" />
+    <Content Include="Content\views\home\Index.css" />
+    <Content Include="Content\views\home\jquery.mCustomScrollbar.min.css" />
+    <Content Include="Content\views\translate\index.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -290,7 +293,7 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\common\Contants.js" />
     <Content Include="Scripts\common\Enumeration.js" />
-    <Content Include="Scripts\common\Layout.js" />
+    <Content Include="Scripts\layouts\_Layout.js" />
     <Content Include="Scripts\common\Utility.js" />
     <Content Include="Scripts\i18n\angular-locale_af-na.js" />
     <Content Include="Scripts\i18n\angular-locale_af-za.js" />
@@ -598,6 +601,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\angular-loading-bar\loading-bar.js" />
     <Content Include="Scripts\angular-loading-bar\loading-bar.min.js" />
+    <Content Include="Scripts\layouts\_TranslateLayout.js" />
     <Content Include="Scripts\material.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\angular-grid\ng-grid.js" />
@@ -605,9 +609,10 @@
     <Content Include="Scripts\npm.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
-    <Content Include="Scripts\ViewJs\Index.js" />
-    <Content Include="Scripts\ViewJs\jquery.mCustomScrollbar.concat.min.js" />
-    <Content Include="Scripts\ViewJs\scrollbars.js" />
+    <Content Include="Scripts\views\home\Index.js" />
+    <Content Include="Scripts\views\home\jquery.mCustomScrollbar.concat.min.js" />
+    <Content Include="Scripts\views\home\scrollbars.js" />
+    <Content Include="Scripts\views\translate\Index.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Services\DashboardService.svc" />
     <Content Include="Views\_ViewStart.cshtml" />
@@ -639,6 +644,8 @@
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Views\Shared\_TranslateLayout.cshtml" />
+    <Content Include="Views\Translate\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

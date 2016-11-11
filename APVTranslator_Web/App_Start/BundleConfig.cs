@@ -24,7 +24,6 @@ namespace APVTranslator_Web
                       "~/Scripts/respond.js"));
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
-                      "~/Content/site.css",
                       "~/Content/bootstrap-social.css"));
             //common
             bundles.Add(new ScriptBundle("~/bundles/commonjs").Include("~/Scripts/common/*.js"));
@@ -43,10 +42,18 @@ namespace APVTranslator_Web
             bundles.Add(new StyleBundle("~/bundles/angular-custom_css").Include("~/Content/angular-custom.css"));
             //
             bundles.Add(new StyleBundle("~/bundles/angular_material_css").Include("~/Content/angular-material/*.css"));
+            //layout
+            bundles.Add(new ScriptBundle("~/bundles/script/_Layout").Include("~/Scripts/layouts/_Layout.js"));
+            bundles.Add(new StyleBundle("~/bundles/content/_Layout").Include("~/Content/layouts/_Layout.css"));
+            bundles.Add(new ScriptBundle("~/bundles/script/_TranslateLayout").Include("~/Scripts/layouts/_TranslateLayout.js"));
+            bundles.Add(new StyleBundle("~/bundles/content/_TranslateLayout").Include("~/Content/layouts/_TranslateLayout.css"));
             //view
-            bundles.Add(new ScriptBundle("~/bundles/index_js").Include("~/Scripts/ViewJs/Index.js"));
-            bundles.Add(new StyleBundle("~/bundles/index_css").Include("~/Content/ViewCss/Index.css"));
+            bundles.Add(new ScriptBundle("~/bundles/script/home").Include("~/Scripts/views/home/*.js"));
+            bundles.Add(new StyleBundle("~/bundles/content/home").Include("~/Content/views/home/*.css"));
+            bundles.Add(new ScriptBundle("~/bundles/script/translate").Include("~/Scripts/views/translate/*.js"));
+            bundles.Add(new StyleBundle("~/bundles/content/translate").Include("~/Content/views/translate/*.css"));
 
+            //
             bundles.Add(new ScriptBundle("~/bundles/angular-tag-input_js").Include("~/Scripts/angular-tag-input/ng-tags-input.min.js"));
             bundles.Add(new StyleBundle("~/bundles/angular-tag-input_css").Include(
                 "~/Content/angular-tag-input/ng-tags-input.min.css",

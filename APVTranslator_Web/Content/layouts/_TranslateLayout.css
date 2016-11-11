@@ -1,0 +1,22 @@
+﻿body {
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-flow: column;
+}
+
+.fill-height {
+    height: inherit;
+}
+
+.center {
+    flex: 1 1 auto;
+}
+
+.footer {
+    flex: 0 1 40px;
+    background-color: #086962;
+    color: white;
+    text-align: center;
+    padding-top: 10px;
+}

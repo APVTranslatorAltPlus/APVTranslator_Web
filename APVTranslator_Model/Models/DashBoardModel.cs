@@ -72,7 +72,12 @@ namespace APVTranslator_Model.Models
                                     break;
                             }
                             this.Database.ExecuteSqlCommand("Proc_InsertFileToProject @projectId, @FileName, @FilePath, @FileType, @IsLoadText ,@LastUpdate",
-                                                                                     new SqlParameter("@LastUpdate", DateTime.Now));
+                                                                                          new SqlParameter("@projectId", projectId),
+                                                                                          new SqlParameter("@FileName", file.FileName),
+                                                                                          new SqlParameter("@FilePath", importPath),
+                                                                                          new SqlParameter("@FileType", fileType),
+                                                                                          new SqlParameter("@IsLoadText", false),
+                                                                                          new SqlParameter("@LastUpdate", DateTime.Now));
                         }
                         this.SaveChanges();
                         dbContextTransaction.Commit();

@@ -1,0 +1,5 @@
+﻿.translate-body {
+    display:flex;
+    flex-flow:column;
+    padding:8px;
+}
