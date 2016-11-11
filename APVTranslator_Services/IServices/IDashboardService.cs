@@ -1,5 +1,4 @@
-﻿using APVTranslator_Entity.Models;
-using APVTranslator_Services.Untity;
+﻿using APVTranslator_Services.Untity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +19,9 @@ namespace APVTranslator_Services.Services
         [OperationContract]
         [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped)]
         ServiceResult GetListFileProject(object projectID);
+        [OperationContract]
+        [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped)]
+        ServiceResult DeleteFileProject(int projectId, string projectName, int fileId, string fileName);
         [OperationContract]
         [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped)]
         bool CreateNewProject(object newProject, IEnumerable<int> listMember);

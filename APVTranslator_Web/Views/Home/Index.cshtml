@@ -6,10 +6,76 @@
 @Styles.Render("~/bundles/index_css")
 @Scripts.Render("~/bundles/index_js")
 <div ng-controller="MyCtrl" class="app-index">
-    <div class="m-top" ng-cloak style="font-size:19px;margin-top:10px">
-        <button style="width:100px;float:right;margin-right:10px;" type="button" class="btn btn-warning" ng-show="checked" ng-click="loadListProject()">Back</button>
-        <button style="float:left;" type="button" class="btn btn-success" data-toggle="modal" data-target="#createNewProjectModal" ng-click="getListUser()">Create New Project</button>
-        @*   <label>APVTranslator</label>*@
+    <div class="m-top" ng-cloak>
+        @*<md-button style="float:right;" class="md-accent" ng-show="checked" ng-click="loadListProject()">Back</md-button>*@
+        @*<label>APVTranslator</label>*@
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <md-button class="md-raised" ng-show="!checked" ng-click="openDialog()" aria-label="New">
+                    <md-icon class="material-icons">add</md-icon>
+                    <md-tooltip md-direction="bottom">
+                        New Project
+                    </md-tooltip>
+                    New
+                </md-button>
+                <div class="a-divider" ng-show="projectSelection"></div>
+                <md-button class="md-raised" ng-show="projectSelection" ng-disabled="!projectSelection" aria-label="Edit">
+                    <md-icon class="material-icons">edit</md-icon>
+                    <md-tooltip md-direction="bottom">
+                        Edit Project
+                    </md-tooltip>
+                    Delete
+                </md-button>
+                <div class="a-divider" ng-show="projectSelection"></div>
+                <md-button class="md-raised" ng-show="projectSelection" ng-disabled="!projectSelection" aria-label="Delete">
+                    <md-icon class="material-icons">delete</md-icon>
+                    <md-tooltip md-direction="bottom">
+                        Delete Project
+                    </md-tooltip>
+                    Delete
+                </md-button>
+                <div class="a-divider" ng-show="projectSelection"></div>
+                <md-button class="md-raised" ng-show="projectSelection" ng-disabled="!projectSelection" aria-label="Setting">
+                    <md-icon class="material-icons">settings</md-icon>
+                    <md-tooltip md-direction="bottom">
+                        Project Setting
+                    </md-tooltip>
+                    Setting
+                </md-button>
+                <md-button class="md-raised" ng-show="checked" ng-click="showInputFile()" aria-label="Import">
+                    <md-icon class="material-icons">file_upload</md-icon>
+                    <md-tooltip md-direction="bottom">
+                        Import File
+                    </md-tooltip>
+                    Import
+                </md-button>
+                <div class="a-divider" ng-show="fileProjectSelection"></div>
+                <md-button class="md-raised" ng-show="fileProjectSelection" ng-click="confirmDeleteFile()" ng-disabled="!fileProjectSelection" aria-label="delete file">
+                    <md-icon class="material-icons">delete</md-icon>
+                    <md-tooltip md-direction="bottom">
+                        Delete File
+                    </md-tooltip>
+                    Delete
+                </md-button>
+                <div class="a-divider" ng-show="fileProjectSelection"></div>
+                <md-button class="md-raised" ng-show="fileProjectSelection" ng-click="" ng-disabled="!fileProjectSelection" aria-label="Trans;ate file">
+                    <md-icon class="material-icons">g_translate</md-icon>
+                    <md-tooltip md-direction="bottom">
+                        Translate file
+                    </md-tooltip>
+                    Translate
+                </md-button>
+                <input type="file" id="file" accept=".xlsx,.xls,.doc,.docx.,.ppt,.pptx" style="display:none" value="upload" multiple />
+                <span flex></span>
+                <md-button class="md-raised md-warn" aria-label="Back" ng-show="checked" ng-click="loadListProject()">
+                    <md-icon class="material-icons">undo</md-icon>
+                    <md-tooltip md-direction="bottom">
+                        Back To List Project
+                    </md-tooltip>
+                    Back
+                </md-button>
+            </div>
+        </md-toolbar>
     </div>
     <div class="m-center">
         <div class="row fill-height fill-width">
@@ -29,13 +95,13 @@
                                 {{currentProject.Status?'Translated':'Translating'}}
                             </p>
                         </div>
-                        <div style="position:relative;padding-top:40px;padding-left:10px;padding-right:10px;font-size:medium;">
+                        <div style="position:relative;padding-top:40px;padding-left:10px;padding-right:10px; font-size:medium;">
                             <b>Progress:</b>
                             <p style="display:inline" id="Progress">
                                 {{(currentProject.Progress!=null?currentProject.Progress:0)*100+"%"}}
                             </p>
                         </div>
-                        <div style="position:relative;padding-top:40px;padding-left:10px;padding-right:10px;font-size:medium;">
+                        <div style="position:relative;padding-top:40px;padding-left:10px;padding-right:10px; font-size:medium;">
                             <b>Path:</b>
                             <p style="display:inline;word-wrap:break-word" id="Path">
                                 {{currentProject.Path}}
@@ -88,69 +154,67 @@
                 </div>
 
                 <div class="modal-body" style="width:100%">
-                        <div id="errorMess" style="color:red"></div>
-                        <div class="form-group">
-                            <label for="usr">Project Name:<span style="color:red;display:inline">(*)</span></label>
-                            <input type="text" class="form-control" id="projectName" style="max-width:100%!important">
-                        </div>
+                    <div id="errorMess" style="color:red"></div>
+                    <div class="form-group">
+                        <label for="usr">Project Name:<span style="color:red;display:inline">(*)</span></label>
+                        <input type="text" class="form-control" id="projectName" style="max-width:100%!important">
+                    </div>
 
-                        <div class="form-group">
-                            <label for="translateLanguage">Translate Language:</label>
-                            <select class="form-control" id="translateLanguage" style="max-width:100%!important">
-                                <option value="2">Vietnamese To Japanese</option>
-                                <option value="1">Japanese to Vietnamese</option>
-                            </select>
-                        </div>
+                    <div class="form-group">
+                        <label for="translateLanguage">Translate Language:</label>
+                        <select class="form-control" id="translateLanguage" style="max-width:100%!important">
+                            <option value="2">Vietnamese To Japanese</option>
+                            <option value="1">Japanese to Vietnamese</option>
+                        </select>
+                    </div>
 
-                        <div class="form-group">
-                            <label for="pwd">Member:</label>
-                            <select type="text" class="form-control" id="member" style="max-width:100%!important" ng-change="changedValue(data2.selectedOption)" ng-options="option.Email for option in data2.availableOptions track by option.Email"
-                                    ng-model="data2.selectedOption" ng-init="data2.selectedOption = data2.availableOptions[0].Email"></select>
-                            @*    <hr>*@
-                            @*   <tt>option = {{data2.selectedOption.Email}}</tt><br />*@
-                        </div>
-                        <tags-input id="tagList" display-property="Email" key-property="Id" ng-model="tags" placeholder="Add new member here" add-from-autocomplete-only="true" style="height:100px;">
-                            <auto-complete source="loadTags($query)"></auto-complete>
-                        </tags-input>
+                    <div class="form-group">
+                        <label for="pwd">Member:</label>
+                        <select type="text" class="form-control" id="member" style="max-width:100%!important" ng-change="changedValue(data2.selectedOption)" ng-options="option.Email for option in data2.availableOptions track by option.Email"
+                                ng-model="data2.selectedOption" ng-init="data2.selectedOption = data2.availableOptions[0].Email"></select>
+                        @*    <hr>*@
+                        @*   <tt>option = {{data2.selectedOption.Email}}</tt><br />*@
+                    </div>
+                    <tags-input id="tagList" display-property="Email" key-property="Id" ng-model="tags" placeholder="Add new member here" add-from-autocomplete-only="true" style="height:100px;">
+                        <auto-complete source="loadTags($query)"></auto-complete>
+                    </tags-input>
 
-                        <div class="form-group">
-                            <label for="descriptions">Descriptions:</label>
-                            <textarea class="form-control" rows="5" id="descriptions" style="max-width:900px!important"></textarea>
-                        </div>
+                    <div class="form-group">
+                        <label for="descriptions">Descriptions:</label>
+                        <textarea class="form-control" rows="5" id="descriptions" style="max-width:900px!important"></textarea>
+                    </div>
 
-                        <div class="dropdown form-group">
-                            <label>Create At:</label>
-                            <a class="dropdown-toggle" id="dropdownStart" role="button" data-toggle="dropdown" 
-                              >
-                                <div class="input-group date">
-                                    <input type="text" id="startDate" data-date-time-input="YYYY-MM-DD HH:MM:SS" class="form-control" data-ng-model="dateRangeStart" style="max-width:900px!important">
-                                    <span class="input-group-addon" style="color:#3f4a54"><i class="glyphicon glyphicon-calendar"></i></span>
-                                </div>
-                            </a>
-                            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                                <datetimepicker data-ng-model="dateRangeStart"
-                                                data-datetimepicker-config="{ dropdownSelector: '#dropdownStart', renderOn: 'end-date-changed' }"
-                                                data-on-set-time="startDateOnSetTime()"
-                                                data-before-render="startDateBeforeRender($dates)"></datetimepicker>
-                            </ul>
-                        </div>
+                    <div class="dropdown form-group">
+                        <label>Create At:</label>
+                        <a class="dropdown-toggle" id="dropdownStart" role="button" data-toggle="dropdown">
+                            <div class="input-group date">
+                                <input type="text" id="startDate" data-date-time-input="YYYY-MM-DD HH:MM:SS" class="form-control" data-ng-model="dateRangeStart" style="max-width:900px!important">
+                                <span class="input-group-addon" style="color:#3f4a54"><i class="glyphicon glyphicon-calendar"></i></span>
+                            </div>
+                        </a>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                            <datetimepicker data-ng-model="dateRangeStart"
+                                            data-datetimepicker-config="{ dropdownSelector: '#dropdownStart', renderOn: 'end-date-changed' }"
+                                            data-on-set-time="startDateOnSetTime()"
+                                            data-before-render="startDateBeforeRender($dates)"></datetimepicker>
+                        </ul>
+                    </div>
 
-                        <div class="dropdown form-group">
-                            <label>Deadline:</label>
-                            <a class="dropdown-toggle" id="dropdownEnd" role="button" data-toggle="dropdown" 
-                              >
-                                <div class="input-group date">
-                                    <input type="text" id="deadline" data-date-time-input="YYYY-MM-DD HH:MM:SS" class="form-control" data-ng-model="dateRangeEnd" style="max-width:900px!important">
-                                    <span class="input-group-addon" style="color:#3f4a54"><i class="glyphicon glyphicon-calendar"></i></span>
-                                </div>
-                            </a>
-                            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                                <datetimepicker data-ng-model="dateRangeEnd"
-                                                data-datetimepicker-config="{ dropdownSelector: '#dropdownEnd', renderOn: 'start-date-changed' }"
-                                                data-on-set-time="endDateOnSetTime()"
-                                                data-before-render="endDateBeforeRender($view, $dates, $leftDate, $upDate, $rightDate)"></datetimepicker>
-                            </ul>
-                        </div>
+                    <div class="dropdown form-group">
+                        <label>Deadline:</label>
+                        <a class="dropdown-toggle" id="dropdownEnd" role="button" data-toggle="dropdown">
+                            <div class="input-group date">
+                                <input type="text" id="deadline" data-date-time-input="YYYY-MM-DD HH:MM:SS" class="form-control" data-ng-model="dateRangeEnd" style="max-width:900px!important">
+                                <span class="input-group-addon" style="color:#3f4a54"><i class="glyphicon glyphicon-calendar"></i></span>
+                            </div>
+                        </a>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                            <datetimepicker data-ng-model="dateRangeEnd"
+                                            data-datetimepicker-config="{ dropdownSelector: '#dropdownEnd', renderOn: 'start-date-changed' }"
+                                            data-on-set-time="endDateOnSetTime()"
+                                            data-before-render="endDateBeforeRender($view, $dates, $leftDate, $upDate, $rightDate)"></datetimepicker>
+                        </ul>
+                    </div>
 
                 </div>
                 <div class="modal-footer">
@@ -166,17 +230,16 @@
 <div class="modal" tabindex="-1" role="dialog" id="successModal">
     <div class="modal-dialog" role="document">
         <div class="modal-content" style="width:100%">
-           
+
 
             <div class="modal-body" style="width:100%">
                 <p style="display:inline;font-size:35px;color:#5cb85c;padding:10px;">Create new project successfully!!!</p>
                 <img src="~/Content/Images/success.png" alt="" style="height:30px;width:30px;margin-bottom:12px; object-fit: cover;overflow:hidden ;display:inline">
             </div>
-            
+
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-
 @*Error Modal*@
 <div class="modal" tabindex="-1" role="dialog" id="errorModal">
     <div class="modal-dialog" role="document">
@@ -198,7 +261,6 @@
         #createNewProjectModal .modal-dialog {
             width: 900px;
         }
-
     }
 
     @@media screen and (min-width: 768px) {
@@ -209,7 +271,7 @@
         }
     }
 
-     @@media screen and (min-width: 768px) {
+    @@media screen and (min-width: 768px) {
 
         #errorModal .modal-dialog {
             width: 820px !important;

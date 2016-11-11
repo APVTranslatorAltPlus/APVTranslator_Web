@@ -5,10 +5,9 @@ using APVTranslator_Services.Untity;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
@@ -34,7 +33,7 @@ namespace APVTranslator_Services.Services
                 var user = HttpContext.Current.User;
                 if (user.Identity.IsAuthenticated)
                 {
-                    var userId = Convert.ToInt32(Utility.GetCurrentUserID(HttpContext.Current.User.Identity));
+                    var userId = SessionUser.GetUserId();
                     DashBoardModel dbModel = new DashBoardModel();
                     sResult.Value = dbModel.Proc_GetListProject(userId);
                 }
@@ -63,6 +62,48 @@ namespace APVTranslator_Services.Services
             return sResult;
         }
 
+        public ServiceResult DeleteFileProject(int projectId, string projectName, int fileId, string fileName)
+        {
+            ServiceResult sResult = new ServiceResult();
+            try
+            {
+                var user = HttpContext.Current.User;
+                if (user.Identity.IsAuthenticated)
+                {
+                    DashBoardModel dbModel = new DashBoardModel();
+                    ApplicationDbContext db = new ApplicationDbContext();
+                    List<Role> lstUserRoles = db.GetUserRoleId(SessionUser.GetUserId());
+                    if (lstUserRoles.Any(r => r.Id == (int)UserRoles.Admin) || dbModel.CheckUserPermissionToDelete(projectId))
+                    {
+                        sResult.IsSuccess = dbModel.DeleteFileProject(projectId, fileId);
+                    }
+                    //delete File
+                    if (sResult.IsSuccess)
+                    {
+                        try
+                        {
+                            string filePath = Utility.GetRootPath() + "Projects\\" + projectName + "\\Imports\\" + fileName;
+                            if (File.Exists(filePath))
+                            {
+                                File.Delete(filePath);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            sResult.IsSuccess = false;
+                            sResult.Message = "Can't delete physical file!\n" + ex.Message;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                sResult.IsSuccess = false;
+                sResult.Message = ex.Message;
+            }
+            return sResult;
+        }
+
 
         public bool CreateNewProject(object newProject, IEnumerable<int> listMember)
         {
@@ -82,12 +123,12 @@ namespace APVTranslator_Services.Services
                 string deadline = null;
                 DateTime? dtDeadline = null;
                 DateTime? dtStartDate = null;
-               
-                if (stuff.CreateAt != null && stuff.CreateAt != "" )
+
+                if (stuff.CreateAt != null && stuff.CreateAt != "")
                 {
                     startDate = stuff.CreateAt;
                     dtStartDate = Convert.ToDateTime(startDate);
-                   
+
                 }
                 if (stuff.Deadline != null && stuff.Deadline != "")
                 {
@@ -112,7 +153,7 @@ namespace APVTranslator_Services.Services
                 try
                 {
                     DashBoardModel dbModel = new DashBoardModel();
-                    return dbModel.CreateNewProject(newProjectToDB,listMember);
+                    return dbModel.CreateNewProject(newProjectToDB, listMember);
                 }
                 catch (System.Data.SqlClient.SqlException e)
                 {
