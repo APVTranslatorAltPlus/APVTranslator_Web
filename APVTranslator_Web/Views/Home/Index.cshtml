@@ -11,7 +11,7 @@
         @*<label>APVTranslator</label>*@
         <md-toolbar>
             <div class="md-toolbar-tools">
-                <md-button class="md-raised" ng-show="!checked" ng-click="openDialog()" aria-label="New">
+                <md-button class="md-raised" ng-show="!checked" ng-click="getListUser()" data-toggle="modal" data-target="#createNewProjectModal" aria-label="New">
                     <md-icon class="material-icons">add</md-icon>
                     <md-tooltip md-direction="bottom">
                         New Project
@@ -226,7 +226,7 @@
     </div><!-- /.modal -->
 </div>
 
-@*Sucess Modal*@
+@*Success Modal*@
 <div class="modal" tabindex="-1" role="dialog" id="successModal">
     <div class="modal-dialog" role="document">
         <div class="modal-content" style="width:100%">
