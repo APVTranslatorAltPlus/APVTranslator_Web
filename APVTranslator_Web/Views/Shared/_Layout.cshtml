@@ -4,12 +4,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - My ASP.NET Application</title>
-    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/css") 
     @*@Styles.Render("~/bundles/material_css")
-        @Scripts.Render("~/bundles/material_js")*@
+    @Scripts.Render("~/bundles/material_js")*@
     @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @Styles.Render("~/bundles/angular-custom_css");
+    @Scripts.Render("~/bundles/bootstrap")  
+    @Styles.Render("~/bundles/angular-custom_css")
     @Styles.Render("~/bundles/angular_material_css")
     @Scripts.Render("~/bundles/angular_js")
     @Scripts.Render("~/bundles/angular-animate_js")
@@ -27,17 +27,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
     <style>
-        .onHoverChangeColor:hover {
-            background-color: #c56767 !important;
-        }
-
-        .onHoverChangeColor:active {
-            background-color: #c56767 !important;
-        }
+        .onHoverChangeColor:hover{
+   background-color:#c56767 !important;
+}
     </style>
 </head>
 <body ng-app="apvApp">
-    <div ng-controller="ctTopbar" class="apv-navbar navbar navbar-fixed-top" style="background: linear-gradient(to right, #086962, #086962,#086962) transparent !important;">
+    <div ng-controller="ctTopbar" class="apv-navbar navbar navbar-fixed-top" style="background: linear-gradient(to right, #086962, #086962,#086962) transparent !important;" >
         <div class="container-fluid">
             <div class="navbar-header ">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -51,7 +47,7 @@
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Dashboard", "Index", "Home", new { @class = "onHoverChangeColor" })</li>
                     <li>@Html.ActionLink("Help", "About", "Home", new { @class = "onHoverChangeColor" })</li>
-
+                  
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
