@@ -9,5 +9,6 @@ namespace APVTranslator_Common
     public static class Contanst
     {
         public static string[] fileType = new string[] { ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx" };
+        public static string sRegexLink = "^http(s)?://([\\w-]+.)+[\\w-]+(/[\\w- ./?%&#=])?$";
     }
 }

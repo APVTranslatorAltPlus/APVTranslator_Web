@@ -3,6 +3,7 @@
     margin: 0;
     display: flex;
     flex-flow: column;
+    overflow:hidden;
 }
 
 .fill-height {
@@ -11,6 +12,8 @@
 
 .center {
     flex: 1 1 auto;
+    display:flex;
+    flex-flow:column;
 }
 
 .footer {

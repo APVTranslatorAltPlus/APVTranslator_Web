@@ -5,12 +5,12 @@
     ViewBag.Title = "Translate";
     Layout = "~/Views/Shared/_TranslateLayout.cshtml";
 }
-<div class="translate-body">
-    <div class="row translate-top">
-        top
+<div class="translate-body" ng-controller="translateCtrl">
+    <div class="translate-top">
+        <p>FileName.xlsx - (Project Name)</p>
     </div>
-    <div class="row translate-center">
-        grid
+    <div class="translate-center">
+        <div class="grid-translate gridStyle" ng-init="init()" ng-grid="gridOptions" />
     </div>
 </div>
 

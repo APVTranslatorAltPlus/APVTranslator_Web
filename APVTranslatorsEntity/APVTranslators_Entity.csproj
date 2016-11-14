@@ -51,6 +51,7 @@
     <Compile Include="Entity\ProjectFile.cs" />
     <Compile Include="Entity\ProjectMember.cs" />
     <Compile Include="Entity\ReferenceDB.cs" />
+    <Compile Include="Entity\TextRead.cs" />
     <Compile Include="Entity\TextSegment.cs" />
     <Compile Include="Entity\TranslatorLanguage.cs" />
     <Compile Include="Entity\User.cs" />

@@ -6,10 +6,10 @@
     @Scripts.Render("~/bundles/script/home")
     @Styles.Render("~/bundles/content/home")
     <div ng-controller="MyCtrl" class="app-index">
-        <div class="m-top" ng-cloak>
+        <div class="m-top">
             @*<md-button style="float:right;" class="md-accent" ng-show="checked" ng-click="loadListProject()">Back</md-button>*@
             @*<label>APVTranslator</label>*@
-            <md-toolbar>
+            <md-toolbar  ng-cloak>
                 <div class="md-toolbar-tools">
                     <md-button class="md-raised" ng-show="!checked" ng-click="getListUser()" data-toggle="modal" data-target="#createNewProjectModal" aria-label="New">
                         <md-icon class="material-icons">add</md-icon>
@@ -58,7 +58,7 @@
                         Delete
                     </md-button>
                     <div class="a-divider" ng-show="fileProjectSelection"></div>
-                    <md-button class="md-raised" ng-show="fileProjectSelection" ng-click="" ng-disabled="!fileProjectSelection" aria-label="Trans;ate file">
+                    <md-button class="md-raised" ng-show="fileProjectSelection" ng-click="translateFile()" ng-disabled="!fileProjectSelection" aria-label="Trans;ate file">
                         <md-icon class="material-icons">g_translate</md-icon>
                         <md-tooltip md-direction="bottom">
                             Translate file
@@ -78,58 +78,60 @@
             </md-toolbar>
         </div>
         <div class="m-center">
-            <div class="sidenav main-left" ng-cloak id="mySidenav">
-                <div class="detail-title">
-                    <p>Project Details</p>
+            <div class="sidenav main-left" id="mySidenav">
+                <div ng-cloak>
+                    <div class="detail-title">
+                        <p>Project Details</p>
+                    </div>
+                    <div class="detail-item">
+                        <b>Project Name:</b>
+                        <p id="ProjectName">
+                            {{currentProject.Title}}
+                        </p>
+                    </div>
+                    <div class="detail-item">
+                        <b>Status:</b>
+                        <p id="Status">
+                            {{currentProject.Status?'Translated':'Translating'}}
+                        </p>
+                    </div>
+                    <div class="detail-item">
+                        <b>Progress:</b>
+                        <p id="Progress">
+                            {{(currentProject.Progress!=null?currentProject.Progress:0)*100+"%"}}
+                        </p>
+                    </div>
+                    <div class="detail-item">
+                        <b>Path:</b>
+                        <p id="Path">
+                            {{currentProject.Path}}
+                        </p>
+                    </div>
+                    <div class="detail-item">
+                        <b>Translate Language:</b>
+                        <p id="TranslateLanguage">
+                            {{currentProject.LanguageDescription}}
+                        </p>
+                    </div>
+                    <div class="detail-item">
+                        <b>Create At:</b>
+                        <p id="CreateAt">
+                            {{currentProject.CreateAt| date:'hh:mm dd/MM/yyyy'}}
+                        </p>
+                    </div>
+                    <div class="detail-item">
+                        <b>Create By:</b>
+                        <p id="CreateBy">
+                            {{currentProject.CreateBy}}
+                        </p>
+                    </div>
+                    <div class="detail-item">
+                        <b>Deadline:</b>
+                        <p id="Deadline">
+                            {{currentProject.DeadLine| date:'hh:mm dd/MM/yyyy'}}
+                        </p>
+                    </div>
                 </div>
-                <div class="detail-item">
-                    <b>Project Name:</b>
-                    <p id="ProjectName">
-                        {{currentProject.Title}}
-                    </p>
-                </div>
-                <div class="detail-item">
-                    <b>Status:</b>
-                    <p id="Status">
-                        {{currentProject.Status?'Translated':'Translating'}}
-                    </p>
-                </div>
-                <div class="detail-item">
-                    <b>Progress:</b>
-                    <p id="Progress">
-                        {{(currentProject.Progress!=null?currentProject.Progress:0)*100+"%"}}
-                    </p>
-                </div>
-                <div class="detail-item">
-                    <b>Path:</b>
-                    <p id="Path">
-                        {{currentProject.Path}}
-                    </p>
-                </div>
-                <div class="detail-item">
-                    <b>Translate Language:</b>
-                    <p id="TranslateLanguage">
-                        {{currentProject.LanguageDescription}}
-                    </p>
-                </div>
-                <div class="detail-item">
-                    <b>Create At:</b>
-                    <p id="CreateAt">
-                        {{currentProject.CreateAt| date:'hh:mm dd/MM/yyyy'}}
-                    </p>
-                </div>
-                <div class="detail-item">
-                    <b>Create By:</b>
-                    <p id="CreateBy">
-                        {{currentProject.CreateBy}}
-                    </p>
-                </div>
-                <div class="detail-item">
-                    <b>Deadline:</b>
-                    <p id="Deadline">
-                        {{currentProject.DeadLine| date:'hh:mm dd/MM/yyyy'}}
-                    </p>
-                </div>  
             </div>
             <div class="grid-center" id="gridTable">
                 <div class="splitter" onclick="toggle()" id="splitterID" data-toggle="tooltip" title="Đóng chi tiết dự án"></div>

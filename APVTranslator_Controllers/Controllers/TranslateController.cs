@@ -9,9 +9,21 @@ namespace APVTranslator_Controllers.Controllers
 {
     public class TranslateController : Controller
     {
-        public ActionResult Index()
+        //public ActionResult Index()
+        //{
+        //    return View();
+        //}
+
+        public ActionResult Index(int projectId, int fileId)
         {
-            return View();
+            if (User.Identity.IsAuthenticated)
+            {
+                return View();
+            }
+            else
+            {
+                return View("Error");
+            }
         }
     }
 }
