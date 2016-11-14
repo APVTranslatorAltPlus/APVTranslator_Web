@@ -4,9 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - My ASP.NET Application</title>
-    @Styles.Render("~/Content/css") 
-    @*@Styles.Render("~/bundles/material_css")
-    @Scripts.Render("~/bundles/material_js")*@
+    @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")  
     @Styles.Render("~/bundles/angular-custom_css")
@@ -19,13 +17,15 @@
     @Scripts.Render("~/bundles/loading_js")
     @Styles.Render("~/bundles/loading_css")
     @Scripts.Render("~/bundles/commonjs")
-    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/script/_Layout")
+    @Styles.Render("~/bundles/content/_Layout")
+    @*@Scripts.Render("~/bundles/modernizr")*@
     @Scripts.Render("~/bundles/angular-tag-input_js")
     @Styles.Render("~/bundles/angular-tag-input_css")
     @Styles.Render("~/bundles/angular-bootstrap-datetimepicker_css")
     @Scripts.Render("~/bundles/angular-bootstrap-datetimepicker_js")
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>*@
     <style>
         .onHoverChangeColor:hover{
    background-color:#c56767 !important;
@@ -33,7 +33,7 @@
     </style>
 </head>
 <body ng-app="apvApp">
-    <div ng-controller="ctTopbar" class="apv-navbar navbar navbar-fixed-top" style="background: linear-gradient(to right, #086962, #086962,#086962) transparent !important;" >
+    <div ng-controller="ctTopbar" class="apv-navbar navbar layout-top">
         <div class="container-fluid">
             <div class="navbar-header ">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -53,10 +53,10 @@
             </div>
         </div>
     </div>
-    <div class="main container-fluid body-content">
+    <div class="main body-content">
         @RenderBody()
     </div>
-    <footer style="background-color:#086962;color:white">
+    <footer>
         <p>&copy; @DateTime.Now.Month/@DateTime.Now.Year - APV Translator Tool</p>
     </footer>
     @RenderSection("scripts", required: false)

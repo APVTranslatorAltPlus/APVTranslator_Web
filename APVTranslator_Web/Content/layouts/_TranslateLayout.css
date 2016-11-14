@@ -1,0 +1,25 @@
+﻿body {
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-flow: column;
+    overflow:hidden;
+}
+
+.fill-height {
+    height: inherit;
+}
+
+.center {
+    flex: 1 1 auto;
+    display:flex;
+    flex-flow:column;
+}
+
+.footer {
+    flex: 0 1 40px;
+    background-color: #086962;
+    color: white;
+    text-align: center;
+    padding-top: 10px;
+}
