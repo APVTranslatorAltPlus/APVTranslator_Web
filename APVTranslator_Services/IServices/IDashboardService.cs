@@ -39,6 +39,6 @@ namespace APVTranslator_Services.Services
         bool UpdateProject(object project, IEnumerable<int> newlyInsertedIDList, IEnumerable<int> deletedIDList);
         [OperationContract]
         [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped)]
-        bool DeleteProject(int projectId);
+        bool DeleteProject(int projectId, string projectTitle);
     }
 }

@@ -442,8 +442,13 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                         //angular.element('#tagList').val('');
                         // scope.tags = [];
                         document.getElementById("modalTitle").innerHTML = "Edit project";
-                        angular.element('#startDate').val(moment(project.CreateAt).format('YYYY-MM-DD HH:MM:SS'));
-                        angular.element('#deadline').val(moment(project.DeadLine).format('YYYY-MM-DD HH:MM:SS'));
+                        if (project.CreateAt != '' && project.CreateAt != null) {
+                            angular.element('#startDate').val(moment(project.CreateAt).format('YYYY-MM-DD HH:MM:SS'));
+                        }
+                       
+                        if (project.DeadLine != '' && project.DeadLine != null) {
+                            angular.element('#deadline').val(moment(project.DeadLine).format('YYYY-MM-DD HH:MM:SS'));
+                        }
                         document.getElementById("projectName").disabled = "disabled";
 
                         //scope.IdList = [];
@@ -587,7 +592,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
 
     scope.deleteProject = function () {
         cfpLoadingBar.start();
-        serDeleteProject.data(scope.currentProject.Id)
+        serDeleteProject.data(scope.currentProject.Id, scope.currentProject.Title)
            .success(function (response) {
                if (response.DeleteProjectResult) {
                    scope.loadListProject();
@@ -654,8 +659,8 @@ apvApp.service('serUpdateProject', function ($http) {
     };
 });
 apvApp.service('serDeleteProject', function ($http) {
-    this.data = function (projectId) {
-        return $http.post(Utility.getBaseUrl() + 'Services/DashboardService.svc/DeleteProject', { 'projectId' : projectId});
+    this.data = function (projectId,projectTitle) {
+        return $http.post(Utility.getBaseUrl() + 'Services/DashboardService.svc/DeleteProject', { 'projectId' : projectId,'projectTitle':projectTitle});
     };
 });
 

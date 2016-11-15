@@ -225,7 +225,7 @@ namespace APVTranslator_Model.Models
                 {
                     foreach (var memberId in newlyInsertedIDList)
                     {
-                        Debug.WriteLine("Insert = "+project.Id + "/" + memberId);
+                        Debug.WriteLine("Insert = " + project.Id + "/" + memberId);
                         var sql = @"INSERT INTO ProjectMembers VALUES({0}, {1}, 0)";
                         this.Database.ExecuteSqlCommand(sql, project.Id, memberId);
                     }
@@ -233,7 +233,7 @@ namespace APVTranslator_Model.Models
 
                     foreach (var memberId in deletedIDList)
                     {
-                        Debug.WriteLine(project.Id+"/"+memberId);
+                        Debug.WriteLine(project.Id + "/" + memberId);
                         var sql = @"DELETE FROM ProjectMembers WHERE  ProjectMembers.ProjectID = {0} AND ProjectMembers.UserID = {1}";
                         this.Database.ExecuteSqlCommand(sql, project.Id, memberId);
                     }
@@ -253,7 +253,38 @@ namespace APVTranslator_Model.Models
             }
         }
 
-        //return this.Projects.Find(projectId);
+        public bool DeleteProject(int projectId)
+        {
+            using (System.Data.Entity.DbContextTransaction dbTran = this.Database.BeginTransaction())
+            {
+                try
+                {
+
+                    //Delete all files of this project from DB
+                    var sql = @"DELETE FROM ProjectFiles WHERE  ProjectFiles.ProjectID = {0} ";
+                    this.Database.ExecuteSqlCommand(sql, projectId);
+
+                    //Delete all members of this project from DB
+                    var sql2 = @"DELETE FROM ProjectMembers WHERE ProjectID = {0} ";
+                    this.Database.ExecuteSqlCommand(sql2, projectId);
+
+                    //Delete this project
+                    var sql3 = @"DELETE FROM Projects WHERE Id = {0} ";
+                    this.Database.ExecuteSqlCommand(sql3, projectId);
+
+                    this.SaveChanges();
+
+                    dbTran.Commit();
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    dbTran.Rollback();
+                    Debug.WriteLine("Error: " + e.Message);
+                    return false;
+                }
+            }
+        }
 
     }
 }

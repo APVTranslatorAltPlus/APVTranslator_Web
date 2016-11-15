@@ -215,13 +215,11 @@ namespace APVTranslator_Services.Services
 
         public ServiceResult GetListProjectMember(int projectId)
         {
-            Debug.WriteLine("#############"+projectId);
             ServiceResult sResult = new ServiceResult();
             try
             {
                 DashBoardModel dbModel = new DashBoardModel();
                 sResult.Value = dbModel.GetListProjectMember(projectId);
-                Debug.WriteLine("#############" + sResult.Value);
             }
             catch (Exception ex)
             {
@@ -292,9 +290,58 @@ namespace APVTranslator_Services.Services
 
         }
 
-        public bool DeleteProject(int projectId)
+        public bool DeleteProject(int projectId, string projectTitle)
         {
-            return true;
+            try
+            {
+                DashBoardModel dbModel = new DashBoardModel();
+                var user = HttpContext.Current.User;
+
+                if (user.Identity.IsAuthenticated)
+                {
+                    ApplicationDbContext db = new ApplicationDbContext();
+                    List<Role> lstUserRoles = db.GetUserRoleId(SessionUser.GetUserId());
+                    if (lstUserRoles.Any(r => r.Id == (int)UserRoles.Admin) || dbModel.CheckUserPermissionToDelete(projectId))
+                    {
+                        if (dbModel.DeleteProject(projectId))
+                        {
+                            //Delete all files of this project from server
+
+                            var projectFolderPath = Utility.GetRootPath() + "Projects\\" + projectTitle;
+
+                            System.IO.DirectoryInfo di = new DirectoryInfo(projectFolderPath);
+                            try
+                            {
+                                foreach (FileInfo file in di.GetFiles())
+                                {
+                                    file.Delete();
+                                }
+                                foreach (DirectoryInfo dir in di.GetDirectories())
+                                {
+                                    dir.Delete(true);
+                                }
+                                Directory.Delete(projectFolderPath, true);
+                            }
+                            catch (Exception e)
+                            {
+                                Debug.WriteLine("DELETE FILES ERROR: " + e.ToString());
+                                return true;
+                            }
+                          
+                       
+                            return true;
+                        }
+                        return false;
+                    }
+                    return false;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Error: " + ex.ToString());
+                return false;
+            }
         }
     }
 }
