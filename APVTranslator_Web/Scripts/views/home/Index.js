@@ -253,6 +253,16 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
             Utility.showMessage(scope, $mdDialog, e.message);
         }
     }
+
+    scope.translateFile = function () {
+        try {
+            var projectId = scope.currentFileProject.ProjectID;
+            var fileId = scope.currentFileProject.FileID;
+            window.location.href = Utility.getBaseUrl() + 'Translate/Index' + '?projectId=' + projectId + '&fileId=' + fileId;
+        } catch (e) {
+            Utility.showMessage(scope, $mdDialog, e.message);
+        }
+    }
     //Tag list to add to ng-tag
     scope.tags = [];
     //User id list to pass to service
