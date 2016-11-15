@@ -19,7 +19,7 @@ namespace APVTranslator_Model.Models
 
         public virtual DbSet<C__MigrationHistory> C__MigrationHistory { get; set; }
         public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
-        public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
+        //public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
         public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
         public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
         public virtual DbSet<Dictionary> Dictionaries { get; set; }
@@ -78,6 +78,7 @@ namespace APVTranslator_Model.Models
             //    .HasMany(e => e.ProjectMembers)
             //    .WithRequired(e => e.User)
             //    .WillCascadeOnDelete(false);
+            modelBuilder.Configurations.Add(new AspNetRoleMap());
             base.OnModelCreating(modelBuilder);
         }
         

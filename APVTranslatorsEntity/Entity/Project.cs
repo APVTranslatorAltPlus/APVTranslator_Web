@@ -7,7 +7,7 @@ namespace APVTranslator_Entity.Models
 
     public partial class Project
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
 
         [Required]
         [StringLength(500)]
@@ -42,8 +42,9 @@ namespace APVTranslator_Entity.Models
 
         }
 
-        public Project(string Title,byte? UseCompanyDB,string Path,int ProjectTypeID, bool?Status, decimal?Progress, string CreateBy,DateTime? CreateAt,DateTime? DeadLine,int? TranslateLanguageID, string Descriptions)
+        public Project(int? Id,string Title,byte? UseCompanyDB,string Path,int ProjectTypeID, bool?Status, decimal?Progress, string CreateBy,DateTime? CreateAt,DateTime? DeadLine,int? TranslateLanguageID, string Descriptions)
         {
+            this.Id = Id.HasValue ? Id:null;
             this.Title = Title;
             this.UseCompanyDB = UseCompanyDB.HasValue ? UseCompanyDB : 0;
             this.Path = Path;
@@ -56,6 +57,7 @@ namespace APVTranslator_Entity.Models
             this.TranslateLanguageID = TranslateLanguageID.HasValue ? TranslateLanguageID : 1;
             this.Descriptions = Descriptions;
         }
+
     }
 
 

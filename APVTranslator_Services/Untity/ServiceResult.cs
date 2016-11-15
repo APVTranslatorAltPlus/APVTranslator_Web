@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,10 +21,22 @@ namespace APVTranslator_Services.Untity
             }
             set
             {
-                if (value != null)
+                try
                 {
-                    _Value = JsonConvert.SerializeObject(value);
+                    if (value != null)
+                    {
+                        _Value = JsonConvert.SerializeObject(value, Formatting.Indented,
+new JsonSerializerSettings
+{
+    PreserveReferencesHandling = PreserveReferencesHandling.Objects
+});
+                    }
                 }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e.ToString());
+                }
+
             }
         }
         public string Message { get; set; }

@@ -119,6 +119,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\AspNetRoleMap.cs" />
     <Compile Include="Models\DashBoardModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />

@@ -3,7 +3,7 @@
 //        cfpLoadingBarProvider.includeSpinner = true;
 //    })
 
-apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFileProject', 'cfpLoadingBar', '$mdDialog', 'deleteFileProject', 'serCreateNewProject', 'serGetListUser', 'cfpLoadingBar', function (scope, http, serListProject, serListFileProject, cfpLoadingBar, $mdDialog, deleteFileProject, serCreateNewProject, serGetListUser, cfpLoadingBar) {
+apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFileProject', 'cfpLoadingBar', '$mdDialog', 'deleteFileProject', 'serCreateNewProject', 'serGetListUser', 'cfpLoadingBar', 'serGetProjectInfo', 'serGetListProjectMember', 'serUpdateProject', 'serDeleteProject', function (scope, http, serListProject, serListFileProject, cfpLoadingBar, $mdDialog, deleteFileProject, serCreateNewProject, serGetListUser, cfpLoadingBar, serGetProjectInfo, serGetListProjectMember, serUpdateProject, serDeleteProject) {
     scope.init = function () {
         scope.loadListProject();
     }
@@ -17,6 +17,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
     scope.data = [];
     scope.data2 = [];
     scope.columnDefs = [];
+    scope.isEdit = false;
     //columns list file in project
     scope.columnDefs2 = [{ displayName: 'STT', cellTemplate: '<div style="text-align:center;">{{row.rowIndex}}</div>', width: 50, enableCellEdit: false },
                          { field: 'FileName', displayName: 'FileName', enableCellEdit: false, minWidth: 220, resizable: true },
@@ -224,12 +225,13 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
         Utility.showConfirm(scope, $mdDialog, 'Do you want delete the file "' + fileName + '"?', scope.deleteFile)
     }
 
-    scope.deleteFile = function () {
+    scope.confirmDeleteFile = function () {
         try {
             debugger;
             cfpLoadingBar.start();
             var data = {};
             data.projectId = scope.currentFileProject.ProjectID;
+            alert(data.projectId)
             data.projectName = scope.currentProject.Title;
             data.fileId = scope.currentFileProject.FileID;
             data.fileName = scope.currentFileProject.FileName;
@@ -260,8 +262,8 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
     //Create new project
     scope.createNewProject = function (object) {
         // cfpLoadingBar.start();
-
         var projectObject = {};
+        scope.IdList = [];
         projectObject["Title"] = angular.element('#projectName').val();
 
         if (projectObject["Title"].trim() === "" || projectObject["Title"] == null) {
@@ -300,6 +302,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                   console.log(response.CreateNewProjectResult);
                   $('#successModal').modal('show');
                   $('#createNewProjectModal').modal('hide');
+                  document.getElementById("successMessage").innerHTML = "Create new project successfully!!!";
               } else {
                   $('#errorModal').modal('show');
                   $('#createNewProjectModal').modal('hide');
@@ -307,7 +310,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
               cfpLoadingBar.complete();
           }).error(function (err) {
               console.log(err);
-              cfpLoadingBar.complete();
+              //cfpLoadingBar.complete();
           });
     }
 
@@ -319,6 +322,9 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
     //Get list users when create new project
     scope.getListUser = function () {
 
+        scope.isEdit = false;
+        document.getElementById("modalTitle").innerHTML = "Create new project";
+        document.getElementById("projectName").disabled = "";
         angular.element('#projectName').val('');
         angular.element('#member').val('');
         angular.element('#tagList').val('');
@@ -334,8 +340,6 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
         cfpLoadingBar.start();
         serGetListUser.data()
         .success(function (response) {
-            console.log(response.GetListUserResult);
-            console.log(response.GetListUserResult.IsSuccess);
             if (response.GetListUserResult && response.GetListUserResult.IsSuccess) {
                 scope.data2.availableOptions = JSON.parse(response.GetListUserResult.Value);
                 scope.data2.selectedOption = scope.data2.availableOptions[0];
@@ -364,7 +368,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
         }
         if (!isDuplicated) {
             scope.tags.push(item);
-
+            isDuplicated = false;
         }
         //alert(item.value);
         console.log(scope.tags);
@@ -407,6 +411,200 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
             })
         }
     }
+
+    scope.listMembers = [];
+    scope.newlyInsertedIDList = [];
+    scope.deletedIDList = [];
+    scope.oldIDList = [];
+   
+
+    //Edit project
+    scope.editProject = function () {
+        var projectId = "";
+        scope.newlyInsertedIDList = [];
+        scope.deletedIDList = [];
+        scope.oldIDList = [];
+        if (scope.currentProject) {
+            projectId = scope.currentProject.Id;
+            //alert(projectId);
+            serGetProjectInfo.data(projectId)
+                .success(function (response) {
+                    if (response.GetProjectInfoResult && response.GetProjectInfoResult.IsSuccess) {
+                        var project = JSON.parse(response.GetProjectInfoResult.Value);
+
+                        scope.getListUser();
+                        scope.isEdit = true;
+
+                        scope.getListProjectMember(projectId);
+                        $('#createNewProjectModal').modal('show');
+                        angular.element('#projectName').val(project.Title);
+                        //angular.element('#member').val('');
+                        //angular.element('#tagList').val('');
+                        // scope.tags = [];
+                        document.getElementById("modalTitle").innerHTML = "Edit project";
+                        angular.element('#startDate').val(moment(project.CreateAt).format('YYYY-MM-DD HH:MM:SS'));
+                        angular.element('#deadline').val(moment(project.DeadLine).format('YYYY-MM-DD HH:MM:SS'));
+                        document.getElementById("projectName").disabled = "disabled";
+
+                        //scope.IdList = [];
+                        //scope.dateRangeStart = '';
+                        //scope.dateRangeEnd = '';
+                        //angular.element("#errorMess").text("");
+                    }
+                    else {
+                        alert(2);
+                        //   Utility.showMessage(scope, $mdDialog, response.GetListFileProjectResult.Message);
+                    }
+                }).error(function (err) {
+                    console.log(err);
+                    Utility.showMessage(scope, $mdDialog, err.message)
+                    cfpLoadingBar.complete();
+                });
+        }
+    }
+
+   
+    //Get list members of an existing project
+    scope.getListProjectMember = function (projectId) {
+        serGetListProjectMember.data(projectId)
+        .success(function (response) {
+            console.log(response.GetListProjectMemberResult);
+
+            if (response.GetListProjectMemberResult && response.GetListProjectMemberResult.IsSuccess) {
+                console.log(response.GetListProjectMemberResult.Value);
+                scope.tags = JSON.parse(response.GetListProjectMemberResult.Value);
+                for (var i = 0; i < scope.tags.length; i++) {
+                    var obj = scope.tags[i];
+                    scope.oldIDList.push(obj.Id);
+                    console.log("INITIAL = " + scope.oldIDList[i]);
+                }
+            } else {
+                alert("error");
+            }
+        }).error(function (err) {
+            console.log(err);
+            cfpLoadingBar.complete();
+        });
+    }
+
+
+    //Save changes when editing project completed
+    scope.saveChanges = function () {
+        // cfpLoadingBar.start();
+       
+        var projectObject = {};
+
+        projectObject["Title"] = angular.element('#projectName').val();
+        var translateLanguage = document.getElementById("translateLanguage");
+        var translateLanguageValue = translateLanguage.options[translateLanguage.selectedIndex].value;
+
+        projectObject["TranslateLanguage"] = translateLanguageValue;
+        projectObject["Path"] = "APVTranslator_Projects/" + angular.element('#projectName').val();
+        projectObject["UseCompanyDB"] = 0;
+        projectObject["ProjectTypeID"] = 0;
+        projectObject["Status"] = "False";
+        projectObject["CreateBy"] = "";
+
+        var startDate = document.getElementById("startDate");
+        var deadline = document.getElementById("deadline");
+        var descriptions = document.getElementById("descriptions");
+
+        projectObject["CreateAt"] = startDate.value;
+        projectObject["Deadline"] = deadline.value;
+        projectObject["Descriptions"] = descriptions.value;
+        projectObject["Id"] = scope.currentProject.Id;
+
+        if (moment(startDate.value).valueOf() > moment(deadline.value).valueOf()) {
+            angular.element("#errorMess").text("Invalid Create At or Deadline Datetime!!!");
+            return;
+        }
+
+        for (var i = 0; i < scope.tags.length; i++) {
+
+            var obj = scope.tags[i];
+            scope.IdList.push(obj.Id);
+            console.log("Idlist = " + scope.IdList[i]);
+        }
+
+        //Check inserted/deleted user ID
+        var isInserted = true;
+        var isDeleted = true;
+
+        //If an element in newly created IDList does not exist in initial oldIDList, then add it to newlyInsertedIDList
+        for (var i = 0; i < scope.IdList.length; i++) {
+            isInserted = true;
+            for (var j = 0; j < scope.oldIDList.length; j++) {
+                if (scope.IdList[i] === scope.oldIDList[j]) {
+                    isInserted = false;
+                    break;
+                }
+            }
+            if (isInserted) {
+                scope.newlyInsertedIDList.push(scope.IdList[i]);
+                console.log("INSERT = " + scope.IdList[i]);
+            }
+
+        }
+
+        //If an element in initial oldIDList does not exist in newly created IDList, then add it to deletedIDList
+        for (var i = 0; i < scope.oldIDList.length; i++) {
+            isDeleted = true;
+            for (var j = 0; j < scope.IdList.length; j++) {
+                if (scope.oldIDList[i] === scope.IdList[j]) {
+                    isDeleted = false;
+                    break;
+                }
+            }
+            if (isDeleted) {
+                scope.deletedIDList.push(scope.oldIDList[i]);
+                console.log("DELETE = " + scope.oldIDList[i]);
+            }
+        }
+
+        for (var i = 0; i < scope.IdList.length; i++) {
+            console.log(scope.IdList[i]);
+        }
+
+        cfpLoadingBar.start();
+        serUpdateProject.data(JSON.stringify(projectObject), (scope.newlyInsertedIDList),(scope.deletedIDList))
+          .success(function (response) {
+              if (response.UpdateProjectResult) {
+                  scope.loadListProject();
+                  console.log(response.UpdateProjectResult);
+                  $('#successModal').modal('show');
+                  $('#createNewProjectModal').modal('hide');
+                  document.getElementById("successMessage").innerHTML = "Update project successfully!!!";
+              } else {
+                  $('#errorModal').modal('show');
+                  $('#createNewProjectModal').modal('hide');
+              }
+              cfpLoadingBar.complete();
+          }).error(function (err) {
+              console.log(err);
+              //cfpLoadingBar.complete();
+          });
+    }
+
+    scope.deleteProject = function () {
+        cfpLoadingBar.start();
+        serDeleteProject.data(scope.currentProject.Id)
+           .success(function (response) {
+               if (response.DeleteProjectResult) {
+                   scope.loadListProject();
+                   console.log(response.DeleteProjectResult);
+                   $('#successModal').modal('show');
+                   $('#createNewProjectModal').modal('hide');
+                   document.getElementById("successMessage").innerHTML = "Delete project successfully!!!";
+               } else {
+                   $('#errorModal').modal('show');
+                   $('#createNewProjectModal').modal('hide');
+               }
+               cfpLoadingBar.complete();
+           }).error(function (err) {
+               console.log(err);
+               //cfpLoadingBar.complete();
+           });
+    }
 }])
 apvApp.service('serListProject', function ($http) {
     this.data = function () {
@@ -434,7 +632,32 @@ apvApp.service('serGetListUser', function ($http) {
         return $http.get(Utility.getBaseUrl() + 'Services/DashboardService.svc/GetListUser');
     };
 });
+apvApp.service('serGetProjectInfo', function ($http) {
+    this.data = function (projectId) {
+        return $http.post(Utility.getBaseUrl() + 'Services/DashboardService.svc/GetProjectInfo', { 'projectId': projectId });
+    };
+});
+apvApp.service('serGetListProjectMember', function ($http) {
+    this.data = function (projectId) {
+        return $http.post(Utility.getBaseUrl() + 'Services/DashboardService.svc/GetListProjectMember', { 'projectId': projectId });
+    };
+});
 
+apvApp.service('serGetListProjectMember', function ($http) {
+    this.data = function (projectId) {
+        return $http.post(Utility.getBaseUrl() + 'Services/DashboardService.svc/GetListProjectMember', { 'projectId': projectId });
+    };
+});
+apvApp.service('serUpdateProject', function ($http) {
+    this.data = function (project, newlyInsertedIDList, deletedIDList) {
+        return $http.post(Utility.getBaseUrl() + 'Services/DashboardService.svc/UpdateProject', { 'project': project, 'newlyInsertedIDList': newlyInsertedIDList, 'deletedIDList': deletedIDList });
+    };
+});
+apvApp.service('serDeleteProject', function ($http) {
+    this.data = function (projectId) {
+        return $http.post(Utility.getBaseUrl() + 'Services/DashboardService.svc/DeleteProject', { 'projectId' : projectId});
+    };
+});
 
 //Handle splitter transition 
 var isOpen = true;

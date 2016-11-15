@@ -6,6 +6,7 @@ using System.Web;
 using System.IO;
 using APVTranslator_Model.Models;
 using APVTranslator_Common;
+using System.Diagnostics;
 
 namespace APVTranslator_Web.Handler
 {
@@ -40,6 +41,7 @@ namespace APVTranslator_Web.Handler
                         string rootPath = Utility.GetRootPath();
                         string importPath = rootPath + "Projects\\" + projectName + "\\Imports";
                         string exportPath = rootPath + "Projects\\" + projectName + "\\Exports";
+                        Debug.WriteLine("PATH = " + importPath);
                         if (!Directory.Exists(importPath))
                         {
                             Directory.CreateDirectory(importPath);
