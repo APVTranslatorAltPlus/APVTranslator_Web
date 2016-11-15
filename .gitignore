@@ -105,3 +105,9 @@
 /APVTranslator_Web/bin/ApplicationInsights.config
 /APVTranslator_Web/bin/Antlr3.Runtime.pdb
 /APVTranslator_Web/bin/Antlr3.Runtime.dll
+/APVTranslatorsEntity/bin/Debug
+/APVTranslatorsEntity/obj/Debug
+/APVTranslator_Common
+/APVTranslator_Controllers
+/APVTranslator_Model/bin/Debug
+/APVTranslator_Services/bin
