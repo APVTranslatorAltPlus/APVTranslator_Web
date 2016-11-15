@@ -270,6 +270,12 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
             angular.element("#errorMess").text("Please enter project name!!!");
             return;
         }
+
+        if (/^[a-zA-Z0-9- ]*$/.test(projectObject["Title"]) == false) {
+            angular.element("#errorMess").text("Your search string contains illegal characters!!!");
+            return;
+        }
+
         var translateLanguage = document.getElementById("translateLanguage");
         var translateLanguageValue = translateLanguage.options[translateLanguage.selectedIndex].value;
 
