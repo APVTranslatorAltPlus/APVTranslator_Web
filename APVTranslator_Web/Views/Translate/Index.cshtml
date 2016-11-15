@@ -12,6 +12,12 @@
     <div class="translate-center">
         <div class="grid-translate gridStyle" ng-init="init()" ng-grid="gridOptions" />
     </div>
+    @section scripts{
+        <script>
+            var projectId = '@ViewBag.ProjectId';
+            var fileId = '@ViewBag.FileId';       
+        </script>
+    }
 </div>
 
 

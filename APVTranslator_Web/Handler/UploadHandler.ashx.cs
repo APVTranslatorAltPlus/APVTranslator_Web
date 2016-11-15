@@ -38,8 +38,8 @@ namespace APVTranslator_Web.Handler
                         //check again projectID and projectName
                         DashBoardModel dbm = new DashBoardModel();
                         string rootPath = Utility.GetRootPath();
-                        string importPath = rootPath + "Projects\\" + projectName + "\\Imports";
-                        string exportPath = rootPath + "Projects\\" + projectName + "\\Exports";
+                        string importPath = rootPath + Contanst.rootProject + "\\" + projectName + "\\Imports";
+                        string exportPath = rootPath + Contanst.rootProject + "\\" + projectName + "\\Exports";
                         if (!Directory.Exists(importPath))
                         {
                             Directory.CreateDirectory(importPath);
@@ -60,7 +60,7 @@ namespace APVTranslator_Web.Handler
                                     lstFile.Add(file);
                                 }
                             }
-                            catch (Exception)
+                            catch (Exception ex)
                             {
                                 continue;
                             }

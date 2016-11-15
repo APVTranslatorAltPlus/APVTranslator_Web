@@ -13,9 +13,16 @@ namespace APVTranslator_Common
         POWERPOINT,
         PDF
     }
+
     public enum UserRoles
     {
         Admin = 1,
         Other = 2
+    }
+
+    public enum TextSegmentType
+    {
+        TEXT = 0,
+        OBJECT = 1
     }
 }

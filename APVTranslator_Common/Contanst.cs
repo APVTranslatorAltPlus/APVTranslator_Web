@@ -10,5 +10,6 @@ namespace APVTranslator_Common
     {
         public static string[] fileType = new string[] { ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx" };
         public static string sRegexLink = "^http(s)?://([\\w-]+.)+[\\w-]+(/[\\w- ./?%&#=])?$";
+        public static string rootProject = "Projects";
     }
 }
