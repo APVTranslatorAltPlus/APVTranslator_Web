@@ -106,7 +106,7 @@
     border-radius: 4px;
 }
 
-.ngCell {
+/*.ngCell {
     display: table-cell;
     height: auto !important;
     overflow: auto;
@@ -129,10 +129,16 @@
     word-wrap: break-word;
     text-wrap: normal;
     overflow-wrap: break-word;
-}
+}*/
 
 
 
 .gridStyle {
     z-index: 2;
+}
+md-toolbar{
+    z-index:0!important;
+}
+.ngTopPanel{
+      z-index:0!important;
 }

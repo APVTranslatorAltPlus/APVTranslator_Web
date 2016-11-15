@@ -19,15 +19,15 @@
                         New
                     </md-button>
                     <div class="a-divider" ng-show="projectSelection"></div>
-                    <md-button class="md-raised" ng-show="projectSelection" ng-disabled="!projectSelection" aria-label="Edit">
+                    <md-button class="md-raised" ng-show="projectSelection" ng-disabled="!projectSelection" ng-click="editProject()" aria-label="Edit">
                         <md-icon class="material-icons">edit</md-icon>
                         <md-tooltip md-direction="bottom">
                             Edit Project
                         </md-tooltip>
-                        Delete
+                        Edit
                     </md-button>
                     <div class="a-divider" ng-show="projectSelection"></div>
-                    <md-button class="md-raised" ng-show="projectSelection" ng-disabled="!projectSelection" aria-label="Delete">
+                    <md-button class="md-raised" ng-show="projectSelection" ng-disabled="!projectSelection" ng-click="deleteProject()" aria-label="Delete">
                         <md-icon class="material-icons">delete</md-icon>
                         <md-tooltip md-direction="bottom">
                             Delete Project
@@ -147,7 +147,7 @@
                 <div class="modal-content" style="width:100%">
                     <div class="modal-header" style="background-color:rgb(216, 218, 247);border-radius:3px;">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Create New Project</h4>
+                        <h4 class="modal-title" id="modalTitle">Create New Project</h4>
                     </div>
 
                     <div class="modal-body" style="width:100%">
@@ -168,7 +168,7 @@
                         <div class="form-group">
                             <label for="pwd">Member:</label>
                             <select type="text" class="form-control" id="member" style="max-width:100%!important" ng-change="changedValue(data2.selectedOption)" ng-options="option.Email for option in data2.availableOptions track by option.Email"
-                                    ng-model="data2.selectedOption" ng-init="data2.selectedOption = data2.availableOptions[0].Email"></select>
+                                    ng-model="data2.selectedOption" @*ng-init="data2.selectedOption = data2.availableOptions[0].Email"*@></select>
                             @*    <hr>*@
                             @*   <tt>option = {{data2.selectedOption.Email}}</tt><br />*@
                         </div>
@@ -216,7 +216,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-success" ng-click="createNewProject(1)">Save changes</button>
+                        <button type="button" class="btn btn-success" ng-click="isEdit?saveChanges():createNewProject(1)">Save changes</button>
                     </div>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
