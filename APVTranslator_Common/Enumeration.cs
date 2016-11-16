@@ -25,4 +25,10 @@ namespace APVTranslator_Common
         TEXT = 0,
         OBJECT = 1
     }
+
+    public enum RoleInProject
+    {
+        ComterMember = 0,
+        ComterLeader = 1,
+    };
 }

@@ -488,3 +488,4 @@ C:\APV_Web\APVTranslator_Web\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
 C:\APV_Web\APVTranslator_Web\obj\Debug\APVTranslator_Web.csprojResolveAssemblyReference.cache
 C:\APV_Web\APVTranslator_Web\obj\Debug\APVTranslator_Web.dll
 C:\APV_Web\APVTranslator_Web\obj\Debug\APVTranslator_Web.pdb
+C:\APV_Web\APVTranslator_Web\bin\Microsoft.WebSockets.dll

@@ -178,3 +178,4 @@ C:\APV_Web\APVTranslator_Services\bin\Debug\System.Web.WebPages.Deployment.xml
 C:\APV_Web\APVTranslator_Services\obj\Debug\APVTranslator_Services.csprojResolveAssemblyReference.cache
 C:\APV_Web\APVTranslator_Services\obj\Debug\APVTranslator_Services.dll
 C:\APV_Web\APVTranslator_Services\obj\Debug\APVTranslator_Services.pdb
+C:\APV_Web\APVTranslator_Services\bin\Debug\Microsoft.WebSockets.dll

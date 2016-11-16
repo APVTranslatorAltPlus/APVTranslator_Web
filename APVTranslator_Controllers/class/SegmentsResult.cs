@@ -10,5 +10,7 @@ namespace APVTranslator_Controllers
     {
         public ControllerResult ControllerResult { get; set; } = new ControllerResult();
         public int FileType { get; set; }
+        public String FileName { get; set; }
+        public String ProjectName { get; set; }
     }
 }

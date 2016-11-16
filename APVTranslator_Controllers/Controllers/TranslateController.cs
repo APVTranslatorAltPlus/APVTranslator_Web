@@ -40,13 +40,15 @@ namespace APVTranslator_Controllers.Controllers
             SegmentsResult sResult = new SegmentsResult();
             try
             {
-                if (User.Identity.IsAuthenticated)
+                if (User.Identity.IsAuthenticated && GetUserPermission(SessionUser.GetUserId(), projectId))
                 {
                     TranslateModel translateModel = new TranslateModel();
                     Project project = translateModel.GetProject(projectId);
                     ProjectFile file = translateModel.GetFile(fileId);
                     if (project != null && file != null)
                     {
+                        sResult.FileName = file.FileName;
+                        sResult.ProjectName = project.Title;
                         string importFile = Utility.GetRootPath() + Contanst.rootProject + "\\" + project.Title + "\\Imports\\" + file.FileName;
                         var extFile = Path.GetExtension(importFile);
                         switch (extFile)
@@ -199,6 +201,25 @@ namespace APVTranslator_Controllers.Controllers
                 sResult.ControllerResult.Message = ex.Message;
             }
             return Json(sResult);
+        }
+
+        private bool GetUserPermission(int userId, int projectId)
+        {
+            try
+            {
+                TranslateModel translateModel = new TranslateModel();
+                ApplicationDbContext appDb = new ApplicationDbContext();
+                List<Role> lstUserRoles = appDb.GetUserRoleId(SessionUser.GetUserId());
+                if (lstUserRoles.Any(r => r.Id == (int)UserRoles.Admin))
+                {
+                    return true;
+                }
+                return translateModel.GetUserPermission(userId, projectId);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }

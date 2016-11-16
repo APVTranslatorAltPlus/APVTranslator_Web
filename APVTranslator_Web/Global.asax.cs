@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using APVTranslator_Web.Socket;
+using Newtonsoft.Json;
+using System.ServiceModel.Activation;
 using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
@@ -19,6 +21,7 @@ namespace APVTranslator_Web
             config.Formatters.JsonFormatter
                         .SerializerSettings
                         .ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+
         }
     }
 }

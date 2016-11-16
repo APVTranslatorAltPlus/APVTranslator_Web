@@ -31,6 +31,27 @@ namespace APVTranslator_Model.Models
             }
         }
 
+        public Boolean SaveTextSegment(TextSegment textSegment)
+        {
+            try
+            {
+                const string qry = "UPDATE [dbo].[TextSegment] SET [TextSegment2] = @TextSegment2 WHERE [Id] = @Id AND [TextSegment1] = @TextSegment1";
+                int rowEffect = this.Database.ExecuteSqlCommand(qry,
+                    new SqlParameter("@Id", textSegment.Id),
+                    new SqlParameter("@TextSegment1", textSegment.TextSegment1),
+                    new SqlParameter("@TextSegment2", textSegment.TextSegment2));
+                if (rowEffect > 0)
+                {
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public Project GetProject(int projectId)
         {
             try
@@ -140,6 +161,21 @@ namespace APVTranslator_Model.Models
                                                                                 new SqlParameter("@projectID", projectId),
                                                                                 new SqlParameter("@fileID", fileId),
                                                                                 new SqlParameter("@status", status));
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+        /// <summary>
+        /// get permission user in a project
+        /// </summary>
+        public bool GetUserPermission(int userId, int projectId)
+        {
+            try
+            {
+                return ProjectMembers.Any(a => a.UserID == userId && a.ProjectID == projectId);
             }
             catch (Exception)
             {

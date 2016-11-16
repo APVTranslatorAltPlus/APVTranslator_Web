@@ -8,6 +8,8 @@
                 scope.getListTextSegment(projectId, fileId);
             }
         }
+        scope.projectName = 'project name';
+        scope.fileName = 'file name';
         scope.data = [];
         scope.columnDefs = [];
         scope.columnExcelDefs = [{ displayName: 'STT', cellTemplate: '<div style="text-align:center;">{{row.rowIndex}}</div>', width: 40, enableCellEdit: false },
@@ -52,9 +54,26 @@
             rowTemplate: rowTemplate(),
             columnDefs: 'columnDefs'
         };
+
+        scope.$on('ngGridEventEndCellEdit', function (evt) {
+            try {
+                var dataEdit = {};
+                var row = evt.targetScope.row.entity;
+                dataEdit.Id = row.Id;
+                dataEdit.TextSegment1 = row.TextSegment1;
+                dataEdit.TextSegment2 = row.TextSegment2;
+                scope.sendMessageSocket(dataEdit)
+            } catch (e) {
+                Utility.showMessage(scope, $mdDialog, "Can't sent edited to server!");
+            }
+            //console.log(evt.targetScope.row.entity);  the underlying data bound to the row
+            // Detect changes and send entity to server 
+        });
+
         function rowTemplate() {
             return '<div ng-dblclick="rowDblClick(row)" ng-style="{\'cursor\': row.cursor, \'z-index\': col.zIndex() }" ng-repeat="col in renderedColumns" ng-class="col.colIndex()" class="ngCell {{col.cellClass}}" ng-cell></div>';
         }
+
         scope.getListTextSegment = function (projectId, fileId) {
             cfpLoadingBar.start();
             $.ajax({
@@ -66,6 +85,7 @@
                 success: function (response) {
                     cfpLoadingBar.complete();
                     if (response.ControllerResult.IsSuccess) {
+                        scope.getSocket();
                         if (response.FileType == Enumeration.FileType.Excel) {
                             scope.columnDefs = scope.columnExcelDefs;
                         }
@@ -73,16 +93,41 @@
                             scope.columnDefs = scope.columnOtherDefs;
                         }
                         scope.data = JSON.parse(response.ControllerResult.Value)
+                        scope.projectName = response.ProjectName;
+                        scope.fileName = response.FileName;
                     }
                     else {
                         Utility.showMessage(scope, $mdDialog, response.ControllerResult.Message);
                     }
                 },
                 error: function (error) {
-                    debugger;
                     cfpLoadingBar.complete();
                     Utility.showMessage(scope, $mdDialog, error);
                 }
             });
+        }
+        scope.getSocket = function () {
+            ws = new WebSocket("ws://" + location.host + "/Handler/SocketHandler.ashx");
+            ws.onopen = function () {
+                console.log('connect to server');
+            };
+            ws.onmessage = function (evt) {
+                console.log(evt.data);
+            };
+            ws.onerror = function (evt) {
+                console.log(evt.message);
+            };
+            ws.onclose = function () {
+                Utility.showMessage(scope, $mdDialog, "Socket closed");
+            };
+        }
+
+        scope.sendMessageSocket = function (data) {
+            try {
+                var jsData = JSON.stringify(data);
+                ws.send(jsData);
+            } catch (e) {
+                Utility.showMessage(scope, $mdDialog, "Can't sent edited to server!");
+            }
         }
     }]);
