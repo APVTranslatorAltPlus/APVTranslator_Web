@@ -31,3 +31,7 @@
 .gridStyle {
     border: 1px solid rgb(212,212,212);
 }
+.green {
+    background-color: green;
+    color: white;
+}

@@ -10,6 +10,7 @@
         }
         scope.projectName = 'project name';
         scope.fileName = 'file name';
+        scope.colct = {};
         scope.data = [];
         scope.columnDefs = [];
         scope.columnExcelDefs = [{ displayName: 'STT', cellTemplate: '<div style="text-align:center;">{{row.rowIndex}}</div>', width: 40, enableCellEdit: false },
@@ -20,19 +21,47 @@
                          { field: 'Row', displayName: 'Row', enableCellEdit: false, minWidth: 100, width: 100, resizable: true },
                          { field: 'Col', displayName: 'Col', enableCellEdit: false, minWidth: 100, width: 100, resizable: true },
                          { field: 'SheetName', displayName: 'SheetName', enableCellEdit: false, minWidth: 100, width: 150, resizable: true }];
-        scope.columnOtherDefs = [{ displayName: 'STT', cellTemplate: '<div style="text-align:center;">{{row.rowIndex}}</div>', width: 40, enableCellEdit: false },
-                         { field: 'TextSegment1', displayName: 'Source Language', enableCellEdit: false, minWidth: 250, resizable: true },
-                         { field: 'TextSegment2', displayName: 'DestinationLanguage', enableCellEdit: true, minWidth: 250, resizable: true },
-                         { field: 'Suggestion', displayName: 'Suggestion', enableCellEdit: false, width: 250, minWidth: 200, resizable: true },
-                         { field: 'GoogleTranslate', displayName: 'GoogleTranslate', enableCellEdit: false, minWidth: 200, resizable: true }];
+        scope.columnOtherDefs = [{ displayName: 'STT', cellTemplate: '<div  ng-click="cellClick(row,col)" style="text-align:center;">{{row.rowIndex}}</div>', width: 40, enableCellEdit: false },
+                         {
+                             field: 'TextSegment1',
+                             cellTemplate: '<div  ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText">{{row.getProperty(col.field)}}</div></div>',
+                             displayName: 'Source Language',
+                             enableCellEdit: false,
+                             minWidth: 250,
+                             resizable: true
+                         },
+                         {
+                             field: 'TextSegment2',
+                             cellTemplate: '<div ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText">{{row.getProperty(col.field)}}</div></div>',
+                             displayName: 'DestinationLanguage',
+                             enableCellEdit: true,
+                             minWidth: 250,
+                             resizable: true
+                         },
+                         {
+                             field: 'Suggestion',
+                             cellTemplate: '<div ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText">{{row.getProperty(col.field)}}</div></div>',
+                             displayName: 'Suggestion',
+                             enableCellEdit: false,
+                             width: 250,
+                             minWidth: 200,
+                             resizable: true
+                         },
+                         {
+                             field: 'GoogleTranslate',
+                             cellTemplate: '<div ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText">{{row.getProperty(col.field)}}</div></div>',
+                             displayName: 'GoogleTranslate',
+                             enableCellEdit: false,
+                             minWidth: 200,
+                             resizable: true
+                         }];
         scope.gridOptions = {
             data: 'data',
-            enableCellSelection: false,
             enableColumnResize: true,
             enableCellEditOnFocus: true,
-            selectedItems: scope.gridSelections,
-
-            enableRowSelection: scope.enableRowSelection,
+            //selectedItems: scope.gridSelections,
+            enableCellSelection: true,
+            enableRowSelection: false,
             //afterSelectionChange: function (row, event) {
             //    if (scope.gridType == Enumeration.GridType.ListProject) {
             //        scope.currentProject = Utility.clone(scope.gridSelections[0]);
@@ -50,24 +79,37 @@
             //},
             enableFiltering: true,
             showFilter: true,
-            multiSelect: false,
             rowTemplate: rowTemplate(),
             columnDefs: 'columnDefs'
         };
 
+        scope.cellClick = function (row, col) {
+            try {
+                var dataEdit = {};
+                var rowData = row.entity;
+                dataEdit.Id = rowData.Id;
+                dataEdit.TextSegment1 = rowData.TextSegment1;
+                dataEdit.TextSegment2 = rowData.TextSegment2;
+                dataEdit.Field = col.field;
+                scope.sendMessageSocket(dataEdit)
+            } catch (e) {
+
+            }
+        }
+
         scope.$on('ngGridEventEndCellEdit', function (evt) {
             try {
                 var dataEdit = {};
-                var row = evt.targetScope.row.entity;
-                dataEdit.Id = row.Id;
-                dataEdit.TextSegment1 = row.TextSegment1;
-                dataEdit.TextSegment2 = row.TextSegment2;
+                var rowData = evt.targetScope.row.entity;
+                var col = evt.targetScope.col;
+                dataEdit.Id = rowData.Id;
+                dataEdit.TextSegment1 = rowData.TextSegment1;
+                dataEdit.TextSegment2 = rowData.TextSegment2;
+                dataEdit.Field = col.field;
                 scope.sendMessageSocket(dataEdit)
             } catch (e) {
                 Utility.showMessage(scope, $mdDialog, "Can't sent edited to server!");
             }
-            //console.log(evt.targetScope.row.entity);  the underlying data bound to the row
-            // Detect changes and send entity to server 
         });
 
         function rowTemplate() {
@@ -85,6 +127,7 @@
                 success: function (response) {
                     cfpLoadingBar.complete();
                     if (response.ControllerResult.IsSuccess) {
+                        scope.data = JSON.parse(response.ControllerResult.Value)
                         scope.getSocket();
                         if (response.FileType == Enumeration.FileType.Excel) {
                             scope.columnDefs = scope.columnExcelDefs;
@@ -92,7 +135,6 @@
                         else {
                             scope.columnDefs = scope.columnOtherDefs;
                         }
-                        scope.data = JSON.parse(response.ControllerResult.Value)
                         scope.projectName = response.ProjectName;
                         scope.fileName = response.FileName;
                     }
@@ -107,15 +149,30 @@
             });
         }
         scope.getSocket = function () {
-            ws = new WebSocket("ws://" + location.host + "/Handler/SocketHandler.ashx");
+            ws = new WebSocket("ws://" + location.host + "/Handler/SocketHandler.ashx" + "?projectId=" + projectId);
             ws.onopen = function () {
-                console.log('connect to server');
+                try {
+                    console.log('connect to server');
+                } catch (e) {
+
+                }
             };
             ws.onmessage = function (evt) {
-                console.log(evt.data);
+                try {
+                    console.log(evt.data);
+                    var data = JSON.parse(evt.data);
+                    var s = $('[Id=' + data.Id + '][Field=' + data.Field + ']');
+                    s.css("background-color", data.Color);
+                } catch (e) {
+
+                }
             };
             ws.onerror = function (evt) {
-                console.log(evt.message);
+                try {
+                    console.log(evt.message);
+                } catch (e) {
+
+                }
             };
             ws.onclose = function () {
                 Utility.showMessage(scope, $mdDialog, "Socket closed");
@@ -125,7 +182,13 @@
         scope.sendMessageSocket = function (data) {
             try {
                 var jsData = JSON.stringify(data);
-                ws.send(jsData);
+                if (ws.readyState == 1) {
+                    ws.send(jsData);
+                }
+                else {
+                    Utility.showMessage(scope, $mdDialog, "Connect to server had closed, please check your network!");
+                }
+
             } catch (e) {
                 Utility.showMessage(scope, $mdDialog, "Can't sent edited to server!");
             }

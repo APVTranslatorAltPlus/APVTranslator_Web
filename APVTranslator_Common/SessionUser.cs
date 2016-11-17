@@ -12,7 +12,12 @@ namespace APVTranslator_Common
     {
         public static int GetUserId()
         {
-            if (HttpContext.Current.Session["UserId"] != null)
+            if (HttpContext.Current.Session == null)
+            {
+                var identity = HttpContext.Current.User.Identity;
+                return Convert.ToInt32(IdentityExtensions.GetUserId(identity));
+            }
+            else if (HttpContext.Current.Session["UserId"] != null)
             {
                 return Convert.ToInt32(HttpContext.Current.Session["UserId"]);
             }

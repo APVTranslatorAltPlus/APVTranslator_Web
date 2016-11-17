@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using APVTranslator_Entity;
 using System.Threading;
 using APVTranslator_Common;
+using APVTranslators_Entity.Entity;
 
 namespace APVTranslator_Model.Models
 {
@@ -31,15 +32,15 @@ namespace APVTranslator_Model.Models
             }
         }
 
-        public Boolean SaveTextSegment(TextSegment textSegment)
+        public Boolean SaveTextSegment(TranslateMessage translateMessage)
         {
             try
             {
                 const string qry = "UPDATE [dbo].[TextSegment] SET [TextSegment2] = @TextSegment2 WHERE [Id] = @Id AND [TextSegment1] = @TextSegment1";
                 int rowEffect = this.Database.ExecuteSqlCommand(qry,
-                    new SqlParameter("@Id", textSegment.Id),
-                    new SqlParameter("@TextSegment1", textSegment.TextSegment1),
-                    new SqlParameter("@TextSegment2", textSegment.TextSegment2));
+                    new SqlParameter("@Id", translateMessage.Id),
+                    new SqlParameter("@TextSegment1", translateMessage.TextSegment1),
+                    new SqlParameter("@TextSegment2", translateMessage.TextSegment2));
                 if (rowEffect > 0)
                 {
                     return true;
