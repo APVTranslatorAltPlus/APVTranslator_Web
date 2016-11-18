@@ -161,7 +161,7 @@ namespace APVTranslator_Model.Models
                 {
                     this.Projects.Add(newProject);
                     this.SaveChanges();
-                    int newId = newProject.Id;
+                    int? newId = newProject.Id;
                     Debug.WriteLine("PROJECTID=" + newId);
                     foreach (var id in listMember)
                     {
@@ -181,8 +181,110 @@ namespace APVTranslator_Model.Models
                     return false;
                 }
             }
-
-
         }
+
+        public virtual Project GetProjectInfo(int projectId)
+        {
+            return this.Projects.Find(projectId);
+        }
+
+        public virtual List<AspNetUser> GetListProjectMember(int projectId)
+        {
+            //var L2EQuery = from p in this.ProjectMembers
+            //               join 
+            //               u in this.AspNetUsers
+            //               on p.UserID equals u.Id
+            //               where p.ProjectID == projectId 
+            //               select u;
+
+            //List<AspNetUser> listMember = L2EQuery.ToList();
+            ////foreach (var u in listMember)
+            ////{
+            ////    Debug.WriteLine("USEr"+u.ToString());
+
+            ////}
+            //Debug.WriteLine("USEr" + listMember[0].ToString());
+            //Debug.WriteLine(listMember);
+            //return listMember;
+            var projectIdParameter = new SqlParameter("@Id", projectId);
+            List<AspNetUser> listUsers = this.Database.SqlQuery<AspNetUser>("Proc_GetListProjectMember @Id", projectIdParameter).ToList();
+            Debug.WriteLine("User");
+            foreach (var u in listUsers)
+            {
+                Debug.WriteLine("User" + u.Email);
+            }
+
+            return listUsers;
+        }
+
+        public bool UpdateProject(Project project, IEnumerable<int> newlyInsertedIDList, IEnumerable<int> deletedIDList)
+        {
+            using (System.Data.Entity.DbContextTransaction dbTran = this.Database.BeginTransaction())
+            {
+                try
+                {
+                    foreach (var memberId in newlyInsertedIDList)
+                    {
+                        Debug.WriteLine("Insert = " + project.Id + "/" + memberId);
+                        var sql = @"INSERT INTO ProjectMembers VALUES({0}, {1}, 0)";
+                        this.Database.ExecuteSqlCommand(sql, project.Id, memberId);
+                    }
+
+
+                    foreach (var memberId in deletedIDList)
+                    {
+                        Debug.WriteLine(project.Id + "/" + memberId);
+                        var sql = @"DELETE FROM ProjectMembers WHERE  ProjectMembers.ProjectID = {0} AND ProjectMembers.UserID = {1}";
+                        this.Database.ExecuteSqlCommand(sql, project.Id, memberId);
+                    }
+
+                    this.Entry(project).State = System.Data.Entity.EntityState.Modified;
+                    this.SaveChanges();
+
+                    dbTran.Commit();
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    dbTran.Rollback();
+                    Debug.WriteLine("Error: " + e.Message);
+                    return false;
+                }
+            }
+        }
+
+        public bool DeleteProject(int projectId)
+        {
+            using (System.Data.Entity.DbContextTransaction dbTran = this.Database.BeginTransaction())
+            {
+                try
+                {
+
+                    //Delete all files of this project from DB
+                    var sql = @"DELETE FROM ProjectFiles WHERE  ProjectFiles.ProjectID = {0} ";
+                    this.Database.ExecuteSqlCommand(sql, projectId);
+
+                    //Delete all members of this project from DB
+                    var sql2 = @"DELETE FROM ProjectMembers WHERE ProjectID = {0} ";
+                    this.Database.ExecuteSqlCommand(sql2, projectId);
+
+                    //Delete this project
+                    var sql3 = @"DELETE FROM Projects WHERE Id = {0} ";
+                    this.Database.ExecuteSqlCommand(sql3, projectId);
+
+                    this.SaveChanges();
+
+                    dbTran.Commit();
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    dbTran.Rollback();
+                    Debug.WriteLine("Error: " + e.Message);
+                    return false;
+                }
+            }
+        }
+
     }
 }

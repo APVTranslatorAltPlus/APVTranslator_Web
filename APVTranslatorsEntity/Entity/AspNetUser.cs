@@ -10,8 +10,8 @@ namespace APVTranslator_Entity.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public AspNetUser()
         {
-            AspNetUserClaims = new HashSet<AspNetUserClaim>();
-            AspNetUserLogins = new HashSet<AspNetUserLogin>();
+            //AspNetUserClaims = new HashSet<AspNetUserClaim>();
+            //AspNetUserLogins = new HashSet<AspNetUserLogin>();
             AspNetRoles = new HashSet<AspNetRole>();
         }
 
@@ -42,11 +42,11 @@ namespace APVTranslator_Entity.Models
         [StringLength(256)]
         public string UserName { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AspNetUserClaim> AspNetUserClaims { get; set; }
+        //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        //public virtual ICollection<AspNetUserClaim> AspNetUserClaims { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AspNetUserLogin> AspNetUserLogins { get; set; }
+        //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        //public virtual ICollection<AspNetUserLogin> AspNetUserLogins { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetRole> AspNetRoles { get; set; }

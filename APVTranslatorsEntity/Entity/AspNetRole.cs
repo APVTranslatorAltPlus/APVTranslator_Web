@@ -13,7 +13,7 @@ namespace APVTranslator_Entity.Models
             AspNetUsers = new HashSet<AspNetUser>();
         }
 
-        public string Id { get; set; }
+        public int Id { get; set; }
 
         [Required]
         [StringLength(256)]

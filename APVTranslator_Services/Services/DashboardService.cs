@@ -138,7 +138,7 @@ namespace APVTranslator_Services.Services
                     dtDeadline = Convert.ToDateTime(deadline);
                 }
 
-                Project newProjectToDB = new Project(title, null, path, 0, null, null, createBy, dtStartDate, dtDeadline, translateLanguage, descriptions);
+                Project newProjectToDB = new Project(null,title, null, path, 0, null, null, createBy, dtStartDate, dtDeadline, translateLanguage, descriptions);
                 // Debug.WriteLine("Year: {0}, Month: {1}, Day: {2}", dt.Year, dt.Month, dt.Day);
                 //Debug.WriteLine("Title = " + newProjectToDB.Title);
                 //Debug.WriteLine("UseCompanyDB = " + newProjectToDB.UseCompanyDB);
@@ -195,6 +195,153 @@ namespace APVTranslator_Services.Services
                 sResult.Message = ex.Message;
             }
             return sResult;
+        }
+
+        public ServiceResult GetProjectInfo(int projectId)
+        {
+            ServiceResult sResult = new ServiceResult();
+            try
+            {
+                DashBoardModel dbModel = new DashBoardModel();
+                sResult.Value = dbModel.GetProjectInfo(projectId);
+            }
+            catch (Exception ex)
+            {
+                sResult.IsSuccess = false;
+                sResult.Message = ex.Message;
+            }
+            return sResult;
+        }
+
+        public ServiceResult GetListProjectMember(int projectId)
+        {
+            ServiceResult sResult = new ServiceResult();
+            try
+            {
+                DashBoardModel dbModel = new DashBoardModel();
+                sResult.Value = dbModel.GetListProjectMember(projectId);
+            }
+            catch (Exception ex)
+            {
+                sResult.IsSuccess = false;
+                sResult.Message = ex.Message;
+            }
+            return sResult;
+        }
+
+        public bool UpdateProject(object newProject, IEnumerable<int> newlyInsertedIDList, IEnumerable<int> deletedIDList)
+        {
+            //Debug.WriteLine("OK!");
+            //return true;
+            try
+            {
+                dynamic stuff = JObject.Parse(newProject.ToString());
+
+                int? Id = stuff.Id;
+                string title = stuff.Title;
+                int translateLanguage = stuff.TranslateLanguage;
+                string descriptions = stuff.Descriptions;
+                string path = stuff.Path;
+                List<string> IdList = new List<string>();
+                var user = HttpContext.Current.User;
+                string createBy = user.Identity.Name;
+
+                string startDate = null;
+                string deadline = null;
+                DateTime? dtDeadline = null;
+                DateTime? dtStartDate = null;
+
+                if (stuff.CreateAt != null && stuff.CreateAt != "")
+                {
+                    startDate = stuff.CreateAt;
+                    dtStartDate = Convert.ToDateTime(startDate);
+
+                }
+                if (stuff.Deadline != null && stuff.Deadline != "")
+                {
+                    deadline = stuff.Deadline;
+                    dtDeadline = Convert.ToDateTime(deadline);
+                }
+
+                Project projectToUpdate = new Project(Id,title, null, path, 0, null, null, createBy, dtStartDate, dtDeadline, translateLanguage, descriptions);
+
+                try
+                {
+                    DashBoardModel dbModel = new DashBoardModel();
+                    return dbModel.UpdateProject(projectToUpdate, newlyInsertedIDList, deletedIDList);
+                }
+                catch (System.Data.SqlClient.SqlException e)
+                {
+                    Debug.WriteLine("Error: " + e.ToString());
+                    return false;
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine("Error: " + ex.ToString());
+                    return false;
+                }
+
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("Error: " + e.ToString());
+                return false;
+            }
+
+        }
+
+        public bool DeleteProject(int projectId, string projectTitle)
+        {
+            try
+            {
+                DashBoardModel dbModel = new DashBoardModel();
+                var user = HttpContext.Current.User;
+
+                if (user.Identity.IsAuthenticated)
+                {
+                    ApplicationDbContext db = new ApplicationDbContext();
+                    List<Role> lstUserRoles = db.GetUserRoleId(SessionUser.GetUserId());
+                    if (lstUserRoles.Any(r => r.Id == (int)UserRoles.Admin) || dbModel.CheckUserPermissionToDelete(projectId))
+                    {
+                        if (dbModel.DeleteProject(projectId))
+                        {
+                            //Delete all files of this project from server
+
+                            var projectFolderPath = Utility.GetRootPath() + "Projects\\" + projectTitle;
+
+                            System.IO.DirectoryInfo di = new DirectoryInfo(projectFolderPath);
+                            try
+                            {
+                                foreach (FileInfo file in di.GetFiles())
+                                {
+                                    file.Delete();
+                                }
+                                foreach (DirectoryInfo dir in di.GetDirectories())
+                                {
+                                    dir.Delete(true);
+                                }
+                                Directory.Delete(projectFolderPath, true);
+                            }
+                            catch (Exception e)
+                            {
+                                Debug.WriteLine("DELETE FILES ERROR: " + e.ToString());
+                                return true;
+                            }
+                          
+                       
+                            return true;
+                        }
+                        return false;
+                    }
+                    return false;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Error: " + ex.ToString());
+                return false;
+            }
         }
     }
 }

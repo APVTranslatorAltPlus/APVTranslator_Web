@@ -9,14 +9,15 @@ namespace APVTranslator_Entity.Models
     {
         public int Id { get; set; }
 
+        public int UserId { get; set; }
+
         [Required]
         [StringLength(128)]
-        public string UserId { get; set; }
 
         public string ClaimType { get; set; }
 
         public string ClaimValue { get; set; }
 
-        public virtual AspNetUser AspNetUser { get; set; }
+        //public virtual AspNetUser AspNetUser { get; set; }
     }
 }
