@@ -59,8 +59,11 @@ namespace APVTranslator_Web.Socket
             {
                 foreach (var item in clients)
                 {
-                    string msgBack = JsonConvert.SerializeObject(translateMessage);
-                    item.Send(msgBack);
+                    if (item != this)
+                    {
+                        string msgBack = JsonConvert.SerializeObject(translateMessage);
+                        item.Send(msgBack);
+                    }
                 };
             }
             else

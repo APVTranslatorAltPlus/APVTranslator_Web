@@ -4,7 +4,7 @@
     flex: 1 1 auto;
     padding-left: 15px;
     padding-right: 15px;
-    padding-bottom:10px;
+    padding-bottom: 10px;
 }
 
 .translate-top {
@@ -21,7 +21,7 @@
 .translate-center {
     flex: 1 1 auto;
     display: flex;
-    flex-flow:column;
+    flex-flow: column;
 }
 
 .grid-translate {
@@ -31,7 +31,23 @@
 .gridStyle {
     border: 1px solid rgb(212,212,212);
 }
+
 .green {
     background-color: green;
     color: white;
+}
+
+.ngCell:hover .cellTooltip {
+    display: block;
+}
+
+.cellTooltip {
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: white;
+    border-radius: 3px;
+    /* z-index: 100; */
+    opacity: 0.80;
+    display: none;
 }
