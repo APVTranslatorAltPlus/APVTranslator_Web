@@ -7,11 +7,18 @@
 }
 <div class="translate-body" ng-controller="translateCtrl">
     <div class="translate-top">
-        <p>FileName.xlsx - (Project Name)</p>
+        <p ng-cloak>{{fileName}} - ({{projectName}})</p>
+        <md-button ng-click="testSend()">send</md-button>
     </div>
     <div class="translate-center">
         <div class="grid-translate gridStyle" ng-init="init()" ng-grid="gridOptions" />
     </div>
+    @section scripts{
+        <script>
+            var projectId = '@ViewBag.ProjectId';
+            var fileId = '@ViewBag.FileId';
+        </script>
+    }
 </div>
 
 
