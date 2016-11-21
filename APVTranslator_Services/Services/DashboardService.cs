@@ -328,8 +328,6 @@ namespace APVTranslator_Services.Services
                                 Debug.WriteLine("DELETE FILES ERROR: " + e.ToString());
                                 return true;
                             }
-                          
-                       
                             return true;
                         }
                         return false;
@@ -413,7 +411,6 @@ namespace APVTranslator_Services.Services
             {
                 try
                 {
-                    
                     DashBoardModel dbModel = new DashBoardModel();
                     return dbModel.SaveChangeMemberSetting(projectId, modifiedIsAMemberList, modifiedNotAMemberList);
                 }

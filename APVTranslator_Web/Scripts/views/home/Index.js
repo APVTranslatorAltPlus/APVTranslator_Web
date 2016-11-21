@@ -32,7 +32,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                              { field: 'Status', displayName: 'Status', minWidth: 100, cellTemplate: '<div class="ngCellText ng-scope ngCellElement">{{row.entity.Progress<100?"Translating":"Translated"}}</div>', enableCellEdit: false, resizable: true },
                              { field: 'Progress', displayName: 'Progress', minWidth: 100, cellTemplate: '<div class="ngCellText ng-scope ngCellElement">{{row.entity.Progress*100}}%</div>', width: 80, enableCellEdit: false, resizable: true },
                              { field: 'Path', displayName: 'Path', enableCellEdit: false, resizable: true, minWidth: 220 },
-                             { field: 'LanguageDescription', displayName: 'TranslateLanguage', enableCellEdit: false, resizable: true, minWidth: 220 },
+                             { field: 'TranslateLanguageID', displayName: 'TranslateLanguage', enableCellEdit: false, resizable: true, minWidth: 220, cellTemplate: '<div class="ngCellText ng-scope ngCellElement">{{row.entity.TranslateLanguageID == 1?"Japanese To Vietnamese":"Vietnamese To Japanese"}}</div>' },
                              { field: 'CreateAt', displayName: 'CreateAt', enableCellEdit: false, type: 'date', cellFilter: 'date:\'hh:mm dd/MM/yyyy\'', resizable: true, minWidth: 150 },
                              { field: 'CreateBy', displayName: 'CreateBy', minWidth: 200, enableCellEdit: false, resizable: true },
                              { field: 'DeadLine', displayName: 'DeadLine', enableCellEdit: false, cellFilter: 'date:\'mm:hh dd/MM/yyyy\'', resizable: true, minWidth: 150 }];
@@ -233,7 +233,6 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                 cfpLoadingBar.start();
                 var data = {};
                 data.projectId = scope.currentFileProject.ProjectID;
-                alert(data.projectId)
                 data.projectName = scope.currentProject.Title;
                 data.fileId = scope.currentFileProject.FileID;
                 data.fileName = scope.currentFileProject.FileName;
@@ -502,7 +501,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                             //angular.element("#errorMess").text("");
                         }
                         else {
-                            alert(2);
+                            alert(23);
                             //   Utility.showMessage(scope, $mdDialog, response.GetListFileProjectResult.Message);
                         }
                     }).error(function (err) {
@@ -568,7 +567,6 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
             projectObject["Title"] = angular.element('#projectName').val();
             var translateLanguage = document.getElementById("translateLanguage");
             var translateLanguageValue = translateLanguage.options[translateLanguage.selectedIndex].value;
-
             projectObject["TranslateLanguage"] = translateLanguageValue;
             projectObject["Path"] = "APVTranslator_Projects/" + angular.element('#projectName').val();
             projectObject["UseCompanyDB"] = 0;
@@ -882,11 +880,9 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                              var selectedValue = $(this).prop('selectedIndex');
                              $.each(listProjectMembers, function (i, item) {
                                  if (item.UserID == tableRowUserID) {
-                                     if (selectedValue == 1) {
-                                         item.ProjectRole = 1;
-                                     } else {
-                                         item.ProjectRole = 0;
-                                     }
+
+                                     item.ProjectRole = selectedValue;
+
                                      if (scope.modifiedIsAMemberList.length == 0) {
                                          scope.modifiedIsAMemberList.push(item);
                                      }
@@ -911,11 +907,9 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                              var selectedValue = $(this).prop('selectedIndex');
                              $.each(listProjectMembers, function (i, item) {
                                  if (item.UserID == tableRowUserID) {
-                                     if (selectedValue == 1) {
-                                         item.ProjectRole = 1;
-                                     } else {
-                                         item.ProjectRole = 0;
-                                     }
+
+                                     item.ProjectRole = selectedValue;
+
                                      if (scope.modifiedNotAMemberList.length == 0) {
                                          scope.modifiedNotAMemberList.push(item);
                                      }
@@ -960,7 +954,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                                          scope.modifiedIsAMemberList.push(item);
                                      }
                                      console.log(scope.modifiedIsAMemberList);
-                                     //   return false;
+                                     return false;
                                  }
 
                              });
@@ -994,7 +988,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                                          scope.modifiedNotAMemberList.push(item);
                                      }
                                      console.log(scope.modifiedNotAMemberList);
-                                     //  return false;
+                                     return false;
                                  }
                              });
                          });
@@ -1034,7 +1028,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
             }
         }
 
-        scope.saveChanges = function () {
+        scope.saveChangesSetting = function () {
 
             if (scope.selectedTab == "#dictionaries") {
                 scope.saveChangeDictionarySetting();
