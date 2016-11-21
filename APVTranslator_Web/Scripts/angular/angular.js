@@ -8290,10 +8290,13 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
             this.$$element.removeAttr(attrName);
           } else {
             if (SIMPLE_ATTR_NAME.test(attrName)) {
-              this.$$element.attr(attrName, value);
+                this.$$element.attr(attrName, value);
+                //add event reset attribute 
+                $rootScope.$broadcast('affterSetAttr');
             } else {
               setSpecialAttr(this.$$element[0], attrName, value);
             }
+            
           }
         }
 
