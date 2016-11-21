@@ -6,7 +6,6 @@ using System.Web;
 using System.IO;
 using APVTranslator_Model.Models;
 using APVTranslator_Common;
-using System.Diagnostics;
 
 namespace APVTranslator_Web.Handler
 {
@@ -39,9 +38,8 @@ namespace APVTranslator_Web.Handler
                         //check again projectID and projectName
                         DashBoardModel dbm = new DashBoardModel();
                         string rootPath = Utility.GetRootPath();
-                        string importPath = rootPath + "Projects\\" + projectName + "\\Imports";
-                        string exportPath = rootPath + "Projects\\" + projectName + "\\Exports";
-                        Debug.WriteLine("PATH = " + importPath);
+                        string importPath = rootPath + Contanst.rootProject + "\\" + projectName + "\\Imports";
+                        string exportPath = rootPath + Contanst.rootProject + "\\" + projectName + "\\Exports";
                         if (!Directory.Exists(importPath))
                         {
                             Directory.CreateDirectory(importPath);
@@ -62,7 +60,7 @@ namespace APVTranslator_Web.Handler
                                     lstFile.Add(file);
                                 }
                             }
-                            catch (Exception)
+                            catch (Exception ex)
                             {
                                 continue;
                             }

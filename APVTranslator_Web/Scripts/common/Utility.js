@@ -23,15 +23,19 @@ Utility.getStringDate = function (stringDate, format) {
 
 Utility.showMessage = function (scope, $mdDialog, mes, title) {
     var _title = "APV Translator";
+    var _mes="Check network connect!"
     if (title != null) {
         _title = title;
+    }
+    if (mes) {
+        _mes = mes;
     }
     $mdDialog.show(
       $mdDialog.alert()
         .parent(angular.element(document.body))
         .clickOutsideToClose(true)
         .title(_title)
-        .textContent(mes)
+        .textContent(_mes)
         .ariaLabel('Alert Dialog')
         .ok('OK')
     );

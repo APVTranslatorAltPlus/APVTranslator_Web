@@ -17,7 +17,6 @@ namespace APVTranslator_Controllers.Controllers
     {
         DashBoardModel db = new DashBoardModel();
 
-        [Authorize(Roles = "Admin")]
         public ActionResult Index()
         {
             return View();
