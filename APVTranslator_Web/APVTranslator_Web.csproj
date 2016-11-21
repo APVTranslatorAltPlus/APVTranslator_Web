@@ -298,6 +298,7 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\common\Contants.js" />
     <Content Include="Scripts\common\Enumeration.js" />
+    <Content Include="Scripts\jquery.tabletojson.min.js" />
     <Content Include="Scripts\layouts\_Layout.js" />
     <Content Include="Scripts\common\Utility.js" />
     <Content Include="Scripts\i18n\angular-locale_af-na.js" />

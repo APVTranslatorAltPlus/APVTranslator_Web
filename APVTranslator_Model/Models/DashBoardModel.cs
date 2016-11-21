@@ -9,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Diagnostics;
+using Newtonsoft.Json.Linq;
+
 namespace APVTranslator_Model.Models
 {
     public class DashBoardModel : TranslatorModel
@@ -286,5 +288,147 @@ namespace APVTranslator_Model.Models
             }
         }
 
+        public virtual List<Project> Proc_GetListProjectDBReference(int projectId)
+        {
+            var projectIdParameter = new SqlParameter("@Id", projectId);
+            List<Project> listProjects = this.Database.SqlQuery<Project>("Proc_GetListProjectDBReference @Id", projectIdParameter).ToList();
+
+            return listProjects;
+        }
+
+        public bool SaveChangeDictionarySetting(object updateProject, IEnumerable<int> newlyInsertedIDList, IEnumerable<int> deletedIDList)
+        {
+            using (System.Data.Entity.DbContextTransaction dbTran = this.Database.BeginTransaction())
+            {
+                try
+                {
+
+                    dynamic stuff = JObject.Parse(updateProject.ToString());
+
+                    int Id = stuff.Id;
+                    int UseCompanyDB = stuff.UseCompanyDB;
+                    int TranslateLanguageID = stuff.TranslateLanguage;
+                    Debug.WriteLine("Id = " + Id);
+                    Debug.WriteLine("UseCompanyDB = " + UseCompanyDB);
+                    Debug.WriteLine("TranslateLanguageID = " + TranslateLanguageID);
+                    foreach (var referId in newlyInsertedIDList)
+                    {
+                        var sql = @"INSERT INTO ReferenceDB VALUES({0}, {1})";
+                        this.Database.ExecuteSqlCommand(sql, Id, referId);
+                    }
+
+
+                    foreach (var referId in deletedIDList)
+                    {
+                        var sql = @"DELETE FROM ReferenceDB WHERE ReferenceDB.ID = {0} AND ReferenceDB.ProjectReferID = {1}";
+                        this.Database.ExecuteSqlCommand(sql, Id, referId);
+                    }
+
+                    var sql2 = @"UPDATE Projects SET Projects.UseCompanyDB = {0},Projects.TranslateLanguageID = {1} WHERE Projects.Id = {2}";
+                    this.Database.ExecuteSqlCommand(sql2, UseCompanyDB, TranslateLanguageID, Id);
+
+                    this.SaveChanges();
+
+                    dbTran.Commit();
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    dbTran.Rollback();
+                    Debug.WriteLine("Error2: " + e.Message);
+                    return false;
+                }
+            }
+        }
+
+        public virtual List<MemberSettingViewModel> Proc_GetInfoForMemberSetting(int projectId)
+        {
+
+            var projectIdParameter = new SqlParameter("@Id", projectId);
+            List<MemberSettingViewModel> listUsers = this.Database.SqlQuery<MemberSettingViewModel>("Proc_GetInfoForMemberSetting @Id", projectIdParameter).ToList();
+
+            return listUsers;
+        }
+
+        public virtual bool SaveChangeMemberSetting(int projectId, string modifiedIsAMemberList, string modifiedNotAMemberList)
+        {
+            using (System.Data.Entity.DbContextTransaction dbTran = this.Database.BeginTransaction())
+            {
+                try
+                {
+
+                    //Save changes to user who was already a member of project
+                    List<MemberSettingViewModel> isAMemberViewList = new List<MemberSettingViewModel>();
+
+                    JArray a = JArray.Parse(modifiedIsAMemberList);
+
+                    foreach (JObject o in a.Children<JObject>())
+                    {
+                        var memberView = new MemberSettingViewModel();
+                        dynamic stuff = JObject.Parse(o.ToString());
+                        memberView.UserID = stuff.UserID;
+                        memberView.UserName = stuff.UserName;
+                        memberView.ProjectRole = stuff.ProjectRole;
+                        memberView.isAMember = stuff.isAMember;
+                        isAMemberViewList.Add(memberView);
+                    }
+
+                    foreach (var memberView in isAMemberViewList)
+                    {
+                        //If member is removed from project then delete from database
+                        if (memberView.isAMember == 0)
+                        {
+                            var sql = @"DELETE FROM ProjectMembers WHERE ProjectID = {0} AND UserID = {1}";
+                            this.Database.ExecuteSqlCommand(sql, projectId, memberView.UserID);
+                        }
+                        //If member is modified but remains in project then update database
+                        else
+                        {
+                            var sql2 = @"UPDATE ProjectMembers SET ProjectRole = {0} WHERE ProjectID = {1} AND UserID = {2}";
+                            this.Database.ExecuteSqlCommand(sql2, memberView.ProjectRole, projectId, memberView.UserID);
+                        }
+                    }
+
+                    // Save changes to user who was not a member of project
+                    List<MemberSettingViewModel> notAMemberViewList = new List<MemberSettingViewModel>();
+
+                    JArray b = JArray.Parse(modifiedNotAMemberList);
+
+                    foreach (JObject o in b.Children<JObject>())
+                    {
+                        var memberView = new MemberSettingViewModel();
+                        dynamic stuff = JObject.Parse(o.ToString());
+                        memberView.UserID = stuff.UserID;
+                        memberView.UserName = stuff.UserName;
+                        memberView.ProjectRole = stuff.ProjectRole;
+                        memberView.isAMember = stuff.isAMember;
+                        notAMemberViewList.Add(memberView);
+                    }
+
+                    foreach (var memberView in notAMemberViewList)
+                    {
+                        //If member is added to project then insert to database
+                        if (memberView.isAMember == 1)
+                        {
+                            var sql3 = @"INSERT INTO ProjectMembers VALUES({0}, {1},{2})";
+                            this.Database.ExecuteSqlCommand(sql3, projectId, memberView.UserID,memberView.ProjectRole);
+                        }
+                    }
+
+                    this.SaveChanges();
+
+                    dbTran.Commit();
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    dbTran.Rollback();
+                    Debug.WriteLine("Error2: " + e.Message);
+                    return false;
+                }
+            }
+
+
+        }
     }
 }
