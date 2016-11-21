@@ -497,3 +497,9 @@ md-dialog-actions{
     left: 0;
     z-index: 3;
 }
+.ngCellElement{
+    height:inherit;
+}
+.ngCellElement div{
+    height:inherit;
+}

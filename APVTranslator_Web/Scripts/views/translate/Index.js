@@ -10,6 +10,8 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                 scope.getListTextSegment(projectId, fileId);
             }
         }
+        scope.time;
+        scope.isTranslateGrid = true;
         scope.clientsEdit = [];
         scope.ws = null;
         scope.projectName = 'project name';
@@ -36,7 +38,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                          },
                          {
                              field: 'TextSegment2',
-                             cellTemplate: '<div ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
+                             cellTemplate: '<div Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
                              displayName: 'DestinationLanguage',
                              enableCellEdit: true,
                              editableCellTemplate: '<input type="text" ng-class="\'colt\' + col.index" ng-input="COL_FIELD" ng-model="COL_FIELD" />',
@@ -64,7 +66,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
         scope.gridOptions = {
             data: 'data',
             enableColumnResize: true,
-            enableCellEditOnFocus: true,
+            enableCellEditOnFocus: 'tesst',
             enableCellSelection: true,
             enableRowSelection: false,
             //afterSelectionChange: function (row, event) {
@@ -85,8 +87,41 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
             enableFiltering: true,
             showFilter: true,
             rowTemplate: rowTemplate(),
-            columnDefs: 'columnDefs'
+            columnDefs: 'columnDefs',
         };
+
+        scope.$on('affterSetAttr', function () {
+            if (scope.time) clearTimeout(scope.time);
+            scope.time = setTimeout(function () {
+                console.log('b:' + scope.time);
+                if (scope.clientsEdit && scope.clientsEdit.length > 0) {
+                    var clients = scope.clientsEdit;
+                    var allCell = $('[Id][Field]');
+                    var parentCell = allCell.closest('.ngCell');
+                    var toolTip = allCell.next();
+                    toolTip.text('');
+                    toolTip.css("background-color", 'inherit');
+                    parentCell.attr("isreadonly", "0");
+                    parentCell.css("border", "none");
+                    for (var i = 0; i < clients.length; i++) {
+                        var cell = $('[Id=' + clients[i].Id + '][Field=' + clients[i].Field + ']')
+                        var parentCell = cell.closest('.ngCell');
+                        var toolTip = cell.next();
+                        toolTip.text(clients[i]['UserName']);
+                        toolTip.css("background-color", clients[i].Color);
+                        parentCell.attr("isreadonly", "1");
+                        parentCell.css("border", "2px solid " + clients[i].Color);
+                    }
+                }
+            }, 400);
+        })
+
+        scope.timer = function () {
+            if (!scope.lockTimer) {
+                scope.lockTimer = true;
+                setTimeout(scope.rebuildCell, 1000)
+            }
+        }
 
         scope.cellClick = function (row, col) {
             try {
@@ -117,9 +152,9 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
             }
         });
 
-        scope.$on('ngGridEventStartCellEdit', function (evt) {
-            debugger;
-        })
+        //scope.$on('ngGridEventStartCellEdit', function (evt) {
+        //    debugger;
+        //})
 
         function rowTemplate() {
             return '<div ng-dblclick="rowDblClick(row)" ng-style="{\'cursor\': row.cursor, \'z-index\': col.zIndex() }" ng-repeat="col in renderedColumns" ng-class="col.colIndex()" class="ngCell {{col.cellClass}}" ng-cell></div>';
@@ -177,7 +212,6 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                 var data = JSON.parse(evt.data);
                 var arrClient = scope.grep(scope.clientsEdit, data, "UserId");
                 if (arrClient.length == 0) {
-                    var dataClient = Utility.clone(data);
                     scope.clientsEdit.push(data);
                     var cell = $('[Id=' + data.Id + '][Field=' + data.Field + ']')
                     var parentCell = cell.closest('.ngCell');
@@ -251,95 +285,4 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
             });
             return arrResult;
         }
-    }]);
-
-
-
-apvApp.directive('ngCellHasFocus', ['$domUtilityService',
-    function (domUtilityService) {
-        var focusOnInputElement = function ($scope, elm) {
-            var parent = elm.closest('.ngCell');
-            var lockEdit = parent.attr('isreadonly');
-            if (lockEdit == '1') {
-                $scope.enableCellEditOnFocus = false;
-            }
-            else {
-                $scope.enableCellEditOnFocus = true;
-            }
-        };
-
-        return function ($scope, elm) {
-            var isFocused = false;
-            var isCellEditableOnMouseDown = false;
-
-            $scope.editCell = function () {
-                if (!$scope.enableCellEditOnFocus) {
-                    setTimeout(function () {
-                        focusOnInputElement($scope, elm);
-                    }, 0);
-                }
-            };
-
-            function mousedown(evt) {
-                if ($scope.enableCellEditOnFocus) {
-                    isCellEditableOnMouseDown = true;
-                } else {
-                    elm.focus();
-                }
-                return true;
-            }
-
-            function myClick(evt) {
-                if ($scope.enableCellEditOnFocus) {
-                    evt.preventDefault();
-                    isCellEditableOnMouseDown = false;
-                    focusOnInputElement($scope, elm);
-                }
-            }
-
-            elm.bind('mousedown', mousedown);
-
-            elm.bind('click', myClick);
-            function focus(evt) {
-                isFocused = true;
-                if ($scope.enableCellEditOnFocus && !isCellEditableOnMouseDown) {
-                    focusOnInputElement($scope, elm);
-                }
-                return true;
-            }
-
-            elm.bind('focus', focus);
-
-            function blur() {
-                isFocused = false;
-                return true;
-            }
-
-            elm.bind('blur', blur);
-
-            function keydown(evt) {
-                if (!$scope.enableCellEditOnFocus) {
-                    if (isFocused && evt.keyCode !== 37 && evt.keyCode !== 38 && evt.keyCode !== 39 && evt.keyCode !== 40 && evt.keyCode !== 9 && !evt.shiftKey && evt.keyCode !== 13) {
-                        focusOnInputElement($scope, elm);
-                    }
-                    if (isFocused && evt.shiftKey && (evt.keyCode >= 65 && evt.keyCode <= 90)) {
-                        focusOnInputElement($scope, elm);
-                    }
-                    if (evt.keyCode === 27) {
-                        elm.focus();
-                    }
-                }
-                return true;
-            }
-
-            elm.bind('keydown', keydown);
-
-            elm.on('$destroy', function () {
-                elm.off('mousedown', mousedown);
-                elm.off('click', myClick);
-                elm.off('focus', focus);
-                elm.off('blur', blur);
-                elm.off('keydown', keydown);
-            });
-        };
     }]);
