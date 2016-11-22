@@ -16,6 +16,7 @@ using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
 using System.Web;
+using System.Web.Script.Serialization;
 
 namespace APVTranslator_Services.Services
 {
@@ -327,8 +328,6 @@ namespace APVTranslator_Services.Services
                                 Debug.WriteLine("DELETE FILES ERROR: " + e.ToString());
                                 return true;
                             }
-                          
-                       
                             return true;
                         }
                         return false;
@@ -343,5 +342,96 @@ namespace APVTranslator_Services.Services
                 return false;
             }
         }
+
+        public ServiceResult GetListProjectDBReference(int projectId)
+        {
+            ServiceResult sResult = new ServiceResult();
+            try
+            {
+                DashBoardModel dbModel = new DashBoardModel();
+                sResult.Value = dbModel.Proc_GetListProjectDBReference(projectId);
+            }
+            catch (Exception ex)
+            {
+                sResult.IsSuccess = false;
+                sResult.Message = ex.Message;
+            }
+            return sResult;
+        }
+
+        public bool SaveChangeDictionarySetting(object updateProject, IEnumerable<int> newlyInsertedIDList, IEnumerable<int> deletedIDList)
+        {
+            try
+            {
+                try
+                {
+                    DashBoardModel dbModel = new DashBoardModel();
+                    return dbModel.SaveChangeDictionarySetting(updateProject, newlyInsertedIDList, deletedIDList);
+                }
+                catch (System.Data.SqlClient.SqlException e)
+                {
+                    Debug.WriteLine("Error: " + e.ToString());
+                    return false;
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine("Error: " + ex.ToString());
+                    return false;
+                }
+
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("Error: " + e.ToString());
+                return false;
+            }
+
+        }
+
+        public ServiceResult GetInfoForMemberSetting(int projectId)
+        {
+            ServiceResult sResult = new ServiceResult();
+            try
+            {
+                DashBoardModel dbModel = new DashBoardModel();
+                sResult.Value = dbModel.Proc_GetInfoForMemberSetting(projectId);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+                sResult.IsSuccess = false;
+                sResult.Message = ex.Message;
+            }
+            return sResult;
+        }
+
+        public bool SaveChangeMemberSetting(int projectId, string modifiedIsAMemberList, string modifiedNotAMemberList)
+        {
+            try
+            {
+                try
+                {
+                    DashBoardModel dbModel = new DashBoardModel();
+                    return dbModel.SaveChangeMemberSetting(projectId, modifiedIsAMemberList, modifiedNotAMemberList);
+                }
+                catch (System.Data.SqlClient.SqlException e)
+                {
+                    Debug.WriteLine("Error: " + e.ToString());
+                    return false;
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine("Error: " + ex.ToString());
+                    return false;
+                }
+
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("Error: " + e.ToString());
+                return false;
+            }
+        }
+
     }
 }
