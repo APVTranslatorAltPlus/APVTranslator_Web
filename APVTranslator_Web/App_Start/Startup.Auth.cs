@@ -60,10 +60,17 @@ namespace APVTranslator_Web
             //   appId: "208292519604929",
             //   appSecret: "f0149db31b28ec085f59b2927cfec9ac");
 
+            //real server
+            //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+            //{
+            //    ClientId = "184146087568-a30ntlrnkn6fdtn6q13rpbkkn8kitbdr.apps.googleusercontent.com",
+            //    ClientSecret = "Dyafhc4NYrDd8JKxiUCQeO83"
+            //});
+            //local test
             app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
             {
-                ClientId = "184146087568-n8oiehaso0nijaeflm2mnd0qkf9652f7.apps.googleusercontent.com",
-                ClientSecret = "Qox0AuyFco7-vBtsxglT8Jvd"
+                ClientId = "184146087568-23421gppd0h8ocu9vt70tg8du2uda9si.apps.googleusercontent.com",
+                ClientSecret = "OEbzhDuu7CeizCiybv_701Bh"
             });
         }
     }

@@ -19,15 +19,79 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
         scope.colct = {};
         scope.data = [];
         scope.columnDefs = [];
-        scope.columnExcelDefs = [{ displayName: 'STT', cellTemplate: '<div style="text-align:center;">{{row.rowIndex}}</div>', width: 40, enableCellEdit: false },
-                         { field: 'TextSegment1', displayName: 'Source Language', enableCellEdit: false, minWidth: 250, resizable: true },
-                         { field: 'TextSegment2', displayName: 'DestinationLanguage', enableCellEdit: true, minWidth: 250, resizable: true },
-                         { field: 'Suggestion', displayName: 'Suggestion', enableCellEdit: false, width: 250, minWidth: 200, resizable: true },
-                         { field: 'GoogleTranslate', displayName: 'GoogleTranslate', enableCellEdit: false, minWidth: 200, resizable: true },
-                         { field: 'Row', displayName: 'Row', enableCellEdit: false, minWidth: 100, width: 100, resizable: true },
-                         { field: 'Col', displayName: 'Col', enableCellEdit: false, minWidth: 100, width: 100, resizable: true },
-                         { field: 'SheetName', displayName: 'SheetName', enableCellEdit: false, minWidth: 100, width: 150, resizable: true }];
-        scope.columnOtherDefs = [{ displayName: 'STT', cellTemplate: '<div  ng-click="cellClick(row,col)" style="text-align:center;">{{row.rowIndex}}</div>', width: 40, enableCellEdit: false },
+        scope.columnExcelDefs = [{
+                            displayName: 'STT',
+                            cellTemplate: '<div ng-click="cellClick(row,col)" style="text-align:center;">{{row.rowIndex}}</div>',
+                            width: 40,
+                            enableCellEdit: false
+                        },
+                         {
+                             field: 'TextSegment1',
+                             displayName: 'Source Language',
+                             cellTemplate: '<div ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
+                             enableCellEdit: false,
+                             minWidth: 250,
+                             resizable: true
+                         },
+
+                         {
+                             field: 'TextSegment2',
+                             displayName: 'DestinationLanguage',
+                             cellTemplate: '<div Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
+                             enableCellEdit: true, 
+                             minWidth: 250,
+                             resizable: true
+                         },
+                         {
+                             field: 'Suggestion',
+                             displayName: 'Suggestion',
+                             enableCellEdit: false,
+                             cellTemplate: '<div ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
+                             width: 250,
+                             minWidth: 200,
+                             resizable: true
+                         },
+                         {
+                             field: 'GoogleTranslate',
+                             displayName: 'GoogleTranslate',
+                             cellTemplate: '<div ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
+                             enableCellEdit: false, 
+                             minWidth: 200, 
+                             resizable: true
+                         },
+                         {
+                             field: 'Row',
+                             displayName: 'Row',
+                             enableCellEdit: false,
+                             cellTemplate: '<div ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
+                             minWidth: 100,
+                             width: 100,
+                             resizable: true
+                         },
+                         {
+                             field: 'Col',
+                             displayName: 'Col',
+                             enableCellEdit: false,
+                             cellTemplate: '<div ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
+                             minWidth: 100,
+                             width: 100,
+                             resizable: true
+                         },
+                         {
+                             field: 'SheetName',
+                             displayName: 'SheetName',
+                             cellTemplate: '<div ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
+                             enableCellEdit: false,
+                             minWidth: 100,
+                             width: 150,
+                             resizable: true
+                         }];
+        scope.columnOtherDefs = [{
+                            displayName: 'STT',
+                            cellTemplate: '<div  ng-click="cellClick(row,col)" style="text-align:center;">{{row.rowIndex}}</div>',
+                            width: 40,
+                            enableCellEdit: false
+                        },
                          {
                              field: 'TextSegment1',
                              cellTemplate: '<div  ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
