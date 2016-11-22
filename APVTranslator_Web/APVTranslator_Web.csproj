@@ -243,6 +243,7 @@
     <Content Include="Content\angular-material\angular-material.layouts.ie_fixes.css" />
     <Content Include="Content\angular-material\angular-material.layouts.min.css" />
     <Content Include="Content\angular-material\angular-material.min.css" />
+    <Content Include="Content\angular-material\icon_woff.woff2" />
     <Content Include="Content\angular-material\material-design-icons.css" />
     <Content Include="Content\angular-material\ng-grid.css" />
     <Content Include="Content\angular-material\ng-grid.min.css" />
@@ -252,7 +253,9 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Images\error.jpg" />
     <Content Include="Content\Images\logo-incompany.png" />
+    <Content Include="Content\Images\success.png" />
     <Content Include="Content\layouts\_Layout.css" />
     <Content Include="Content\layouts\_TranslateLayout.css" />
     <Content Include="Content\material.min.css" />
@@ -597,7 +600,6 @@
     <Content Include="Scripts\i18n\angular-locale_zh.js" />
     <Content Include="Scripts\i18n\angular-locale_zu-za.js" />
     <Content Include="Scripts\i18n\angular-locale_zu.js" />
-    <Content Include="Content\angular-material\icon_woff.woff2" />
     <Content Include="Handler\UploadHandler.ashx" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
