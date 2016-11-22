@@ -7,16 +7,16 @@
 
         <ul class="nav navbar-nav navbar-right">
             <li>
-                @Html.ActionLink("Xin chào " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" , @class = "onHoverChangeColor" })
+                @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" , @class = "onHoverChangeColor" })
             </li>
-            <li><a href="javascript:document.getElementById('logoutForm').submit()" class="onHoverChangeColor">Đăng xuất</a></li>
+            <li><a href="javascript:document.getElementById('logoutForm').submit()" class="onHoverChangeColor">Logout</a></li>
         </ul>
     }
 }
 else
 {
     <ul class="nav navbar-nav navbar-right">
-        <li>@Html.ActionLink("Đăng ký", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" , @class = "onHoverChangeColor" })</li>
-        <li>@Html.ActionLink("Đăng nhập", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" , @class = "onHoverChangeColor" })</li>
+       @* <li>@Html.ActionLink("Đăng ký", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" , @class = "onHoverChangeColor" })</li>*@
+        <li>@Html.ActionLink("Login", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" , @class = "onHoverChangeColor" })</li>
     </ul>
 }
