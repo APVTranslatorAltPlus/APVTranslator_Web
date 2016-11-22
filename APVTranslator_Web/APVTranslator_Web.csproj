@@ -235,6 +235,7 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\angular-bootstrap-datetimepicker\datetimepicker.css" />
     <Content Include="Content\angular-custom.css" />
     <Content Include="Content\angular-material\angular-material.css" />
     <Content Include="Content\angular-material\angular-material.layout-attributes.css" />
@@ -249,6 +250,8 @@
     <Content Include="Content\angular-material\ng-grid.min.css" />
     <Content Include="Content\angular-loading-bar\loading-bar.css" />
     <Content Include="Content\angular-loading-bar\loading-bar.min.css" />
+    <Content Include="Content\angular-tag-input\ng-tags-input.bootstrap.min.css" />
+    <Content Include="Content\angular-tag-input\ng-tags-input.min.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
