@@ -20,11 +20,11 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
         scope.data = [];
         scope.columnDefs = [];
         scope.columnExcelDefs = [{
-                            displayName: 'STT',
-                            cellTemplate: '<div ng-click="cellClick(row,col)" style="text-align:center;">{{row.rowIndex}}</div>',
-                            width: 40,
-                            enableCellEdit: false
-                        },
+            displayName: 'STT',
+            cellTemplate: '<div ng-click="cellClick(row,col)" style="text-align:center;">{{row.rowIndex}}</div>',
+            width: 40,
+            enableCellEdit: false
+        },
                          {
                              field: 'TextSegment1',
                              displayName: 'Source Language',
@@ -38,7 +38,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                              field: 'TextSegment2',
                              displayName: 'DestinationLanguage',
                              cellTemplate: '<div Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
-                             enableCellEdit: true, 
+                             enableCellEdit: true,
                              minWidth: 250,
                              resizable: true
                          },
@@ -55,8 +55,8 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                              field: 'GoogleTranslate',
                              displayName: 'GoogleTranslate',
                              cellTemplate: '<div ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
-                             enableCellEdit: false, 
-                             minWidth: 200, 
+                             enableCellEdit: false,
+                             minWidth: 200,
                              resizable: true
                          },
                          {
@@ -87,11 +87,11 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                              resizable: true
                          }];
         scope.columnOtherDefs = [{
-                            displayName: 'STT',
-                            cellTemplate: '<div  ng-click="cellClick(row,col)" style="text-align:center;">{{row.rowIndex}}</div>',
-                            width: 40,
-                            enableCellEdit: false
-                        },
+            displayName: 'STT',
+            cellTemplate: '<div  ng-click="cellClick(row,col)" style="text-align:center;">{{row.rowIndex}}</div>',
+            width: 40,
+            enableCellEdit: false
+        },
                          {
                              field: 'TextSegment1',
                              cellTemplate: '<div  ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
@@ -157,7 +157,6 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
         scope.$on('affterSetAttr', function () {
             if (scope.time) clearTimeout(scope.time);
             scope.time = setTimeout(function () {
-                console.log('b:' + scope.time);
                 if (scope.clientsEdit && scope.clientsEdit.length > 0) {
                     var clients = scope.clientsEdit;
                     var allCell = $('[Id][Field]');
@@ -312,7 +311,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                     arrRecord[0][data.Field] = data[data.Field];
                 }
             } catch (e) {
-
+                Utility.showMessage(scope, $mdDialog, "Error when recive message from server!");
             }
         };
 
@@ -348,5 +347,13 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                 return (e[field] == data[field]);
             });
             return arrResult;
+        }
+
+        scope.dowload_exportFile = function () {
+            try {
+                window.location.replace(Utility.getBaseUrl() + "Handler/DownloadHandler.ashx?projectId=" + projectId + "&fileId=" + fileId);
+            } catch (e) {
+                Utility.showMessage(scope, $mdDialog, "Can't dowload export file!");
+            }
         }
     }]);

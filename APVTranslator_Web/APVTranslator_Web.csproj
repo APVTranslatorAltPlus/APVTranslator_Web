@@ -224,6 +224,10 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Handler\Class\ExportFile.cs" />
+    <Compile Include="Handler\DownloadHandler.ashx.cs">
+      <DependentUpon>DownloadHandler.ashx</DependentUpon>
+    </Compile>
     <Compile Include="Handler\SocketHandler.ashx.cs">
       <DependentUpon>SocketHandler.ashx</DependentUpon>
     </Compile>
@@ -605,6 +609,7 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Handler\SocketHandler.ashx" />
+    <Content Include="Handler\DownloadHandler.ashx" />
     <None Include="Properties\PublishProfiles\apv.pubxml" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.1.1.js" />

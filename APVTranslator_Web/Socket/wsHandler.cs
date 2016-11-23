@@ -21,7 +21,7 @@ namespace APVTranslator_Web.Socket
         private string userName;
         public override void OnOpen()
         {
-            this.Send("Welcome!" + this.WebSocketContext.User.Identity.Name);
+            //this.Send("Welcome!" + this.WebSocketContext.User.Identity.Name);
             this.userId = SessionUser.GetUserId();
             this.userName = this.WebSocketContext.User.Identity.Name;
             this.userColor = GetColor();
