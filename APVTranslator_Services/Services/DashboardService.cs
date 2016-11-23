@@ -36,9 +36,9 @@ namespace APVTranslator_Services.Services
                 var user = HttpContext.Current.User;
                 if (user.Identity.IsAuthenticated)
                 {
-                    var userId = SessionUser.GetUserId();
+                   // var userId = SessionUser.GetUserId();
                     DashBoardModel dbModel = new DashBoardModel();
-                    sResult.Value = dbModel.Proc_GetListProject(userId);
+                    sResult.Value = dbModel.Proc_GetListProject(int.Parse(user.Identity.GetUserId()));
                 }
             }
             catch (Exception ex)
