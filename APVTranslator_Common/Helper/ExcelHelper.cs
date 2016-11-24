@@ -271,7 +271,7 @@ namespace APVTranslator_Common.Helpers
                                     List<String> lstResult = new List<string>();
                                     if (isURL)
                                     {
-                                        if (!String.IsNullOrEmpty(textValue))
+                                        if (!String.IsNullOrEmpty(textValue.Trim()))
                                         {
                                             lstResult.Add(textValue.Trim());
                                         }
@@ -283,7 +283,7 @@ namespace APVTranslator_Common.Helpers
                                         foreach (var item in segment)
                                         {
                                             string sValue = item.Trim();
-                                            if (!String.IsNullOrEmpty(sValue))
+                                            if (!String.IsNullOrEmpty(sValue.Trim()))
                                             {
                                                 lstSegment.Add(sValue);
                                             }

@@ -1,8 +1,10 @@
 ﻿using APVTranslator_Common;
+using APVTranslator_Entity.Models;
 using APVTranslator_Model.Models;
 using APVTranslator_Web.Handler.Class;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 
@@ -24,13 +26,18 @@ namespace APVTranslator_Web.Handler
                 if (user.Identity.IsAuthenticated && projectId != null && fileId != null && GetUserPermission(SessionUser.GetUserId(), Convert.ToInt32(projectId)))
                 {
 
-                    ExportFile ef = new ExportFile(Convert.ToInt32(projectId), Convert.ToInt32(fileId));
-                    if (ef.BuildExportFile())
+                    TranslateModel translateModel = new TranslateModel();
+                    Project project = translateModel.GetProject(Convert.ToInt32(projectId));
+                    ProjectFile file = translateModel.GetFile(Convert.ToInt32(fileId));
+                    if (project != null && file != null)
                     {
                         context.Response.Clear();
                         context.Response.ContentType = "application/octet-stream";
-                        context.Response.AddHeader("Content-Disposition", "attachment; filename=" + ef.fileName);
-                        context.Response.WriteFile(ef.translatedFile);
+                        context.Response.AddHeader("Content-Disposition", "attachment; filename=" + file.FileName);
+                        string exportPath = Utility.GetRootPath() + Contanst.rootProject + "\\" + project.Title + "\\Exports\\" + file.FileName;
+                        var fileExt = Path.GetExtension(file.FileName);
+                        string translatedFile = exportPath.Replace(fileExt, $"_Export{fileExt}");
+                        context.Response.WriteFile(translatedFile);
                         context.Response.End();
                     }
                     else

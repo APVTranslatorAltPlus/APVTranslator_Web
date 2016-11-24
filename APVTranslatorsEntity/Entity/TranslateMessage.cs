@@ -9,6 +9,8 @@ namespace APVTranslators_Entity.Entity
 {
     public class TranslateMessage
     {
+        public Guid ClientId { get; set; }
+
         public int UserId { get; set; }
 
         public string UserName { get; set; }
@@ -26,5 +28,7 @@ namespace APVTranslators_Entity.Entity
         public String Clients { get; set; }
 
         public DateTime SendTime { get; set; }
+
+        public Boolean IsClose { get; set; } = false;
     }
 }

@@ -124,11 +124,65 @@ namespace APVTranslator_Web.Handler.Class
                             break;
                         case ".doc":
                         case ".docx":
-
+                            using (var word = new WordHelper(translatedFile))
+                            {
+                                List<TextSegment> lstTextSegment = translateModel.GetTextSegment(this._projectId, this._fileId);
+                                lstTextSegment = lstTextSegment.OrderByDescending(x => x.TextSegment1.Length).ToList();
+                                int count = lstTextSegment.Count == 0 ? 1 : lstTextSegment.Count;
+                                foreach (TextSegment itTextSegment in lstTextSegment)
+                                {
+                                    //try
+                                    //{
+                                    //    loading.UpdateProcessStatus(i * 100 / count);
+                                    //}
+                                    //catch (Exception)
+                                    //{
+                                    //    continue;
+                                    //}
+                                    //finally
+                                    //{
+                                    if (!string.IsNullOrEmpty(itTextSegment.TextSegment2))
+                                    {
+                                        if ((TextSegmentType)itTextSegment.Type == TextSegmentType.TEXT)
+                                        {
+                                            word.ReplaceText(itTextSegment.TextSegment1, itTextSegment.TextSegment2); // Replace all text segment in words
+                                        }
+                                        else
+                                        {
+                                            word.ReplaceObject(itTextSegment.TextSegment1, itTextSegment.TextSegment2);
+                                        }
+                                    }
+                                    //}
+                                }
+                                word.Save();
+                            }
                             break;
                         case ".ppt":
                         case ".pptx":
-
+                            using (var powerpoint = new PowerPointHelper(translatedFile))
+                            {
+                                List<TextSegment> lstTextSegment = translateModel.GetTextSegment(this._projectId, this._fileId);
+                                lstTextSegment = lstTextSegment.OrderByDescending(x => x.TextSegment1.Length).ToList();
+                                int count = lstTextSegment.Count == 0 ? 1 : lstTextSegment.Count;
+                                foreach (TextSegment itTextSegment in lstTextSegment)
+                                {
+                                    //try
+                                    //{
+                                    //    loading.UpdateProcessStatus(i * 100 / count);
+                                    //}
+                                    //catch (Exception)
+                                    //{
+                                    //    continue;
+                                    //}
+                                    //finally
+                                    //{
+                                    if (!string.IsNullOrEmpty(itTextSegment.TextSegment2))
+                                    {
+                                        powerpoint.ReplaceObject(itTextSegment.TextSegment1, itTextSegment.TextSegment2);
+                                    }
+                                }
+                                powerpoint.Save();
+                            }
                             break;
                         case ".pdf":
 

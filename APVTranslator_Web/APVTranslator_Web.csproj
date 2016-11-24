@@ -311,6 +311,7 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\common\Contants.js" />
     <Content Include="Scripts\common\Enumeration.js" />
+    <Content Include="Scripts\common\Overrides.js" />
     <Content Include="Scripts\jquery.tabletojson.min.js" />
     <Content Include="Scripts\layouts\_Layout.js" />
     <Content Include="Scripts\common\Utility.js" />

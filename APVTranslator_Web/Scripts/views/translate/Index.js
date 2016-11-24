@@ -10,7 +10,9 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                 scope.getListTextSegment(projectId, fileId);
             }
         }
-        scope.time;
+        scope.currentRow = null;
+        scope.currentCol = null;
+        scope.currentCellValue = '';
         scope.isTranslateGrid = true;
         scope.clientsEdit = [];
         scope.ws = null;
@@ -94,15 +96,15 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
         },
                          {
                              field: 'TextSegment1',
-                             cellTemplate: '<div  ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
+                             cellTemplate: '<div ng-right-click="rightClickCell(row,col)" context="context1" ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
                              displayName: 'Source Language',
-                             enableCellEdit: false,
+                             enableCellEdit: true,
                              minWidth: 250,
                              resizable: true
                          },
                          {
                              field: 'TextSegment2',
-                             cellTemplate: '<div Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
+                             cellTemplate: '<div ng-right-click="rightClickCell(row,col)" context="context2" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
                              displayName: 'DestinationLanguage',
                              enableCellEdit: true,
                              editableCellTemplate: '<input type="text" ng-class="\'colt\' + col.index" ng-input="COL_FIELD" ng-model="COL_FIELD" />',
@@ -111,7 +113,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                          },
                          {
                              field: 'Suggestion',
-                             cellTemplate: '<div ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
+                             cellTemplate: '<div ng-right-click="rightClickCell(row,col)" context="context2" ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
                              displayName: 'Suggestion',
                              enableCellEdit: false,
                              width: 250,
@@ -120,12 +122,22 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                          },
                          {
                              field: 'GoogleTranslate',
-                             cellTemplate: '<div ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
+                             cellTemplate: '<div ng-right-click="rightClickCell(row,col)" context="context2" ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
                              displayName: 'GoogleTranslate',
                              enableCellEdit: false,
                              minWidth: 200,
                              resizable: true
                          }];
+
+        scope.rightClickCell = function (row, col) {
+            try {
+                scope.currentRow = row;
+                scope.currentCol = col;
+                scope.currentCellValue = row.getProperty(col.field)
+            } catch (e) {
+                Utility.showMessage(scope, $mdDialog, "Right click error!");
+            }
+        }
 
         scope.gridOptions = {
             data: 'data',
@@ -196,7 +208,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                 dataEdit.Field = col.field;
                 scope.sendMessageSocket(dataEdit)
             } catch (e) {
-
+                Utility.showMessage(scope, $mdDialog, "cell click error!");
             }
         }
 
@@ -273,42 +285,72 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
             try {
                 console.log(evt.data);
                 var data = JSON.parse(evt.data);
-                var arrClient = scope.grep(scope.clientsEdit, data, "UserId");
-                if (arrClient.length == 0) {
-                    scope.clientsEdit.push(data);
-                    var cell = $('[Id=' + data.Id + '][Field=' + data.Field + ']')
-                    var parentCell = cell.closest('.ngCell');
-                    var toolTip = cell.next();
-                    toolTip.text(data['UserName']);
-                    toolTip.css("background-color", data.Color);
-                    parentCell.attr("isreadonly", "1");
-                    parentCell.css("border", "2px solid " + data.Color);
+                if (!data['IsClose']) {
+                    var arrClient = scope.grep(scope.clientsEdit, data, "UserId");
+                    if (arrClient.length == 0) {
+                        scope.clientsEdit.push(data);
+                        var cell = $('[Id=' + data.Id + '][Field=' + data.Field + ']')
+                        var parentCell = cell.closest('.ngCell');
+                        var toolTip = cell.next();
+                        toolTip.text(data['UserName']);
+                        toolTip.css("background-color", data.Color);
+                        parentCell.attr("isreadonly", "1");
+                        parentCell.css("border", "2px solid " + data.Color);
+                    }
+                    else if (arrClient.length == 1) {
+                        //clear old Cell
+                        var cell = $('[Id=' + arrClient[0].Id + '][Field=' + arrClient[0].Field + ']')
+                        var parentCell = cell.closest('.ngCell');
+                        var toolTip = cell.next();
+                        toolTip.text('');
+                        parentCell.css("border", "none");
+                        parentCell.attr("isreadonly", "0");
+                        //set new cell
+                        var indexOldCell = scope.clientsEdit.indexOf(arrClient[0]);
+                        scope.clientsEdit[indexOldCell] = data;
+                        var cell = $('[Id=' + data.Id + '][Field=' + data.Field + ']');
+                        var parentCell = cell.closest('.ngCell');
+                        var toolTip = cell.next();
+                        toolTip.css("background-color", data.Color);
+                        toolTip.text(data['UserName']);
+                        parentCell.attr("isreadonly", "1");
+                        parentCell.css("border", "2px solid " + data.Color);
+                    }
+                    var arrRecord = scope.grep(angularScope.data, data, "Id")
+                    if (arrRecord.length == 0) {
+                        //not found
+                    }
+                    else if (arrRecord.length == 1) {
+                        arrRecord[0][data.Field] = data[data.Field];
+                    }
                 }
-                else if (arrClient.length == 1) {
-                    //clear old Cell
-                    var cell = $('[Id=' + arrClient[0].Id + '][Field=' + arrClient[0].Field + ']')
-                    var parentCell = cell.closest('.ngCell');
-                    var toolTip = cell.next();
-                    toolTip.text('');
-                    parentCell.css("border", "none");
-                    parentCell.attr("isreadonly", "0");
-                    //set new cell
-                    var indexOldCell = scope.clientsEdit.indexOf(arrClient[0]);
-                    scope.clientsEdit[indexOldCell] = data;
-                    var cell = $('[Id=' + data.Id + '][Field=' + data.Field + ']');
-                    var parentCell = cell.closest('.ngCell');
-                    var toolTip = cell.next();
-                    toolTip.css("background-color", data.Color);
-                    toolTip.text(data['UserName']);
-                    parentCell.attr("isreadonly", "1");
-                    parentCell.css("border", "2px solid " + data.Color);
-                }
-                var arrRecord = scope.grep(angularScope.data, data, "Id")
-                if (arrRecord.length == 0) {
-                    //not found
-                }
-                else if (arrRecord.length == 1) {
-                    arrRecord[0][data.Field] = data[data.Field];
+                else {
+                    //khi một client closed
+                    var arrClient = scope.grep(scope.clientsEdit, data, "ClientId");
+                    if (arrClient.length >= 1) {
+                        scope.clientsEdit.remove(arrClient[0]);
+
+                        var allCell = $('[Id][Field]');
+                        var parentCell = allCell.closest('.ngCell');
+                        var toolTip = allCell.next();
+                        toolTip.text('');
+                        toolTip.css("background-color", 'inherit');
+                        parentCell.attr("isreadonly", "0");
+                        parentCell.css("border", "none");
+
+                        if (scope.clientsEdit && scope.clientsEdit.length > 0) {
+                            var clients = scope.clientsEdit;         
+                            for (var i = 0; i < clients.length; i++) {
+                                var cell = $('[Id=' + clients[i].Id + '][Field=' + clients[i].Field + ']')
+                                var parentCell = cell.closest('.ngCell');
+                                var toolTip = cell.next();
+                                toolTip.text(clients[i]['UserName']);
+                                toolTip.css("background-color", clients[i].Color);
+                                parentCell.attr("isreadonly", "1");
+                                parentCell.css("border", "2px solid " + clients[i].Color);
+                            }
+                        }
+                    }
                 }
             } catch (e) {
                 Utility.showMessage(scope, $mdDialog, "Error when recive message from server!");
@@ -351,9 +393,165 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
 
         scope.dowload_exportFile = function () {
             try {
-                window.location.replace(Utility.getBaseUrl() + "Handler/DownloadHandler.ashx?projectId=" + projectId + "&fileId=" + fileId);
+                cfpLoadingBar.start();
+                $.ajax({
+                    type: "POST",
+                    url: Utility.getBaseUrl() + 'Translate/BuildExportFile',
+                    data: JSON.stringify({ 'projectId': projectId, 'fileId': fileId }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        cfpLoadingBar.complete();
+                        if (response.IsSuccess) {
+                            var bResult = JSON.parse(response.Value)
+                            window.location.replace(Utility.getBaseUrl() + "Handler/DownloadHandler.ashx?projectId=" + projectId + "&fileId=" + fileId);
+                        }
+                        else {
+                            Utility.showMessage(scope, $mdDialog, response.ControllerResult.Message);
+                        }
+                    },
+                    error: function (error) {
+                        cfpLoadingBar.complete();
+                        Utility.showMessage(scope, $mdDialog, error);
+                    }
+                });
             } catch (e) {
                 Utility.showMessage(scope, $mdDialog, "Can't dowload export file!");
             }
         }
+
+        scope.copy = function () {
+            try {
+                scope.copyTextToClipboard(this.currentCellValue);
+            } catch (e) {
+                Utility.showMessage(scope, $mdDialog, "Can't copy to keyboard!");
+            }
+        }
+
+        scope.copyToDes = function () {
+            try {
+                if (scope.clientsEdit && scope.clientsEdit.length > 0) {
+                    var arrResult = $.grep(scope.clientsEdit, function (e) {
+                        return (e['Field'] == "TextSegment2" && e['UserId'] == userId && e['Id'] == angularScope.currentRow.entity.Id);
+                    });
+                    if (arrResult.length == 0) {
+                        var arrRecord = scope.grep(this.data, this.currentRow.entity, "Id")
+                        if (arrRecord.length == 0) {
+                            //not found
+                        }
+                        else if (arrRecord.length == 1) {
+                            arrRecord[0]['TextSegment2'] = this.currentRow.entity['TextSegment1'];
+                            var dataEdit = {};
+                            dataEdit.Id = this.currentRow.entity['Id'];
+                            dataEdit.TextSegment1 = this.currentRow.entity['TextSegment1'];
+                            dataEdit.TextSegment2 = arrRecord[0]['TextSegment2'];
+                            dataEdit.Field = 'TextSegment2';
+                            scope.sendMessageSocket(dataEdit)
+                        }
+                    }
+                    else if (arrResult.length >= 1 && arrResult[0]['Field'] == 'TextSegment2') {
+                        Utility.showMessage(scope, $mdDialog, "DestinationLanguage has everyone editing!");
+                    }
+                }
+                else {
+                    var arrRecord = scope.grep(this.data, this.currentRow.entity, "Id")
+                    if (arrRecord.length == 0) {
+                        //not found
+                    }
+                    else if (arrRecord.length == 1) {
+                        arrRecord[0]['TextSegment2'] = this.currentRow.entity['TextSegment1'];
+                        var dataEdit = {};
+                        dataEdit.Id = this.currentRow.entity['Id'];
+                        dataEdit.TextSegment1 = this.currentRow.entity['TextSegment1'];
+                        dataEdit.TextSegment2 = arrRecord[0]['TextSegment2'];
+                        dataEdit.Field = 'TextSegment2';
+                        scope.sendMessageSocket(dataEdit)
+                    }
+                }
+            } catch (e) {
+                Utility.showMessage(scope, $mdDialog, "Can't copy to DestinationLanguage!");
+            }
+        }
+
+        scope.copyTextToClipboard = function (text) {
+            var textArea = document.createElement("textarea");
+            textArea.style.position = 'fixed';
+            textArea.style.top = 0;
+            textArea.style.left = 0;
+            textArea.style.width = '2em';
+            textArea.style.height = '2em';
+            textArea.style.padding = 0;
+            textArea.style.border = 'none';
+            textArea.style.outline = 'none';
+            textArea.style.boxShadow = 'none';
+            textArea.style.background = 'transparent';
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            var successful = document.execCommand('copy');
+            document.body.removeChild(textArea);
+        }
     }]);
+apvApp.directive('context', [
+    function () {
+        return {
+            restrict: 'A',
+            scope: '@&',
+            compile: function compile(tElement, tAttrs, transclude) {
+                return {
+                    post: function postLink(scope, iElement, iAttrs, controller) {
+                        var ul = $('#' + iAttrs.context),
+                          last = null;
+
+                        ul.css({
+                            'display': 'none'
+                        });
+                        $(iElement).bind('contextmenu', function (event) {
+                            event.preventDefault();
+                            scope.cellValue = 'd';
+                            ul.css({
+                                position: "fixed",
+                                display: "block",
+                                left: event.clientX + 'px',
+                                top: event.clientY + 'px'
+                            });
+                            last = event.timeStamp;
+                        });
+                        //$(iElement).click(function(event) {
+                        //  ul.css({
+                        //    position: "fixed",
+                        //    display: "block",
+                        //    left: event.clientX + 'px',
+                        //    top: event.clientY + 'px'
+                        //  });
+                        //  last = event.timeStamp;
+                        //});
+
+                        $(document).click(function (event) {
+                            var target = $(event.target);
+                            if (!target.is(".popover") && !target.parents().is(".popover")) {
+                                if (last === event.timeStamp)
+                                    return;
+                                ul.css({
+                                    'display': 'none'
+                                });
+                            }
+                        });
+                    }
+                };
+            }
+        };
+    }
+]);
+
+apvApp.directive('ngRightClick', function ($parse) {
+    return function (scope, element, attrs) {
+        var fn = $parse(attrs.ngRightClick);
+        element.bind('contextmenu', function (event) {
+            scope.$apply(function () {
+                event.preventDefault();
+                fn(scope, { $event: event });
+            });
+        });
+    };
+});
