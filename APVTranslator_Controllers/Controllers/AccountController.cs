@@ -278,6 +278,7 @@ namespace APVTranslator_Controllers.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ExternalLogin(string provider, string returnUrl)
         {
+            ControllerContext.HttpContext.Session.RemoveAll();
             // Request a redirect to the external login provider
             return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
         }
@@ -472,6 +473,7 @@ namespace APVTranslator_Controllers.Controllers
 
             public override void ExecuteResult(ControllerContext context)
             {
+                //context.RequestContext.HttpContext.Response.SuppressFormsAuthenticationRedirect = true;
                 var properties = new AuthenticationProperties { RedirectUri = RedirectUri };
                 if (UserId != null)
                 {
