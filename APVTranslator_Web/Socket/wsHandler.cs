@@ -16,17 +16,31 @@ namespace APVTranslator_Web.Socket
     public class wsHandler : WebSocketHandler
     {
         private static WebSocketCollection clients = new WebSocketCollection();
+        private Guid clientId;
         private int userId;
         private Color userColor = new Color();
         private string userName;
+        public string lastMessage;
         public override void OnOpen()
         {
-            this.Send("Welcome!" + this.WebSocketContext.User.Identity.Name);
+            //this.Send("Welcome!" + this.WebSocketContext.User.Identity.Name);
             this.userId = SessionUser.GetUserId();
+            this.clientId = Guid.NewGuid();
             this.userName = this.WebSocketContext.User.Identity.Name;
             this.userColor = GetColor();
             //this.id = Convert.ToInt32(Cypher.Decrypt(this.WebSocketContext.QueryString["id"]));
             clients.Add(this);
+            foreach (var item in clients)
+            {
+                if (item != this)
+                {
+                    string msgBack = ((APVTranslator_Web.Socket.wsHandler)item).lastMessage;
+                    if (!string.IsNullOrEmpty(msgBack))
+                    {
+                        this.Send(msgBack);
+                    }
+                }
+            };
         }
 
         public override void OnMessage(string message)
@@ -51,17 +65,20 @@ namespace APVTranslator_Web.Socket
         {
             Boolean bReult = false;
             await Task.Run(() => bReult = translateModel.SaveTextSegment(translateMessage));
+            translateMessage.ClientId = this.clientId;
             translateMessage.SendTime = DateTime.Now;
             translateMessage.UserId = this.userId;
             translateMessage.UserName = this.userName;
             translateMessage.Color = this.userColor.Name;
+            string jsonMessage = JsonConvert.SerializeObject(translateMessage);
+            this.lastMessage = jsonMessage;
             if (bReult)
             {
                 foreach (var item in clients)
                 {
                     if (item != this)
                     {
-                        string msgBack = JsonConvert.SerializeObject(translateMessage);
+                        string msgBack = jsonMessage;
                         item.Send(msgBack);
                     }
                 };
@@ -75,6 +92,22 @@ namespace APVTranslator_Web.Socket
 
         public override void OnClose()
         {
+            if (clients.Any(a => a == this))
+            {
+                clients.Remove(this);
+                TranslateMessage translateMessage = new TranslateMessage();
+                translateMessage.ClientId = this.clientId;
+                translateMessage.SendTime = DateTime.Now;
+                translateMessage.UserId = this.userId;
+                translateMessage.UserName = this.userName;
+                translateMessage.Color = this.userColor.Name;
+                translateMessage.IsClose = true;
+                foreach (var client in clients)
+                {
+                    string msgBack = JsonConvert.SerializeObject(translateMessage);
+                    client.Send(msgBack);
+                }
+            }
             base.OnClose();
         }
 

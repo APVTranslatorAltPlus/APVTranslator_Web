@@ -15,7 +15,7 @@ namespace APVTranslator_Web.Handler
 
         public void ProcessRequest(HttpContext context)
         {
-            if (context.IsWebSocketRequest || context.IsWebSocketRequestUpgrading)
+            if ((context.IsWebSocketRequest || context.IsWebSocketRequestUpgrading) && HttpContext.Current.User.Identity.IsAuthenticated)
             {
                 context.AcceptWebSocketRequest(new wsHandler());
             }
