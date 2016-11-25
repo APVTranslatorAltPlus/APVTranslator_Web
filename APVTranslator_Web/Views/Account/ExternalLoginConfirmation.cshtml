@@ -3,34 +3,35 @@
     ViewBag.Title = "Register";
 }
 
-<div style="color:#086962;position:center;margin-left:30%;font-size:30px">
-    <h3> <u>One more step to register with APVTranslator</u></h3>
-</div>
 
 
-@using (Html.BeginForm("ExternalLoginConfirmation", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+@using (Html.BeginForm("ExternalLoginConfirmation", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-vertical", role = "form" }))
 {
     @Html.AntiForgeryToken()
 
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    <p class="text-info" style="font-size:20px;margin-left:10%;">
+    <div style="color:#086962;position:center;margin-left:45%;font-size:30px">
+        <h3> <u>One more step to register with APVTranslator</u></h3>
+    </div>
+
+    <p class="text-info" style="font-size:20px;margin-left:20%; text-align:center">
         You've successfully authenticated with <strong>@ViewBag.LoginProvider</strong>.
         Please enter a user name for this site below and click the Register button to finish
-        logging in.
+        registration.
     </p>
 
-    <div style="background-color:#CCCCFF; width:800px;height:150px;position:absolute;margin-left:20%;border-radius:25px; border: 2px solid #73AD21">
+    <div style="background-color:#CCCCFF; width:800px;height:150px;margin-left:25%;position:absolute;border-radius:25px; border: 2px solid #73AD21">
         <div class="form-group">
             @*@Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })*@
             <p style="margin-left:220px;color:#73AD21;position:absolute;margin-top:40px;"><b>Email:</b> </p>
-            <div class="col-md-10" style="position:absolute;margin-left:280px;margin-top:33px;">
-                @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+            <div class="" style="position:absolute;margin-left:280px;margin-top:33px;">
+                @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @style = "width:300px;" ,@readonly = "readonly" })
                 @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
             </div>
         </div>
         <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" style="width:100px;position:absolute;margin-left:220px;margin-top:70px;" class="btn btn-success" value="Register" />
+            <div class="">
+                <input type="submit" style="width:100px;position:absolute;margin-left:40%;margin-top:70px;" class="btn btn-success" value="Register" />
             </div>
         </div>
     </div>
