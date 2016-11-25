@@ -10,6 +10,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                 scope.getListTextSegment(projectId, fileId);
             }
         }
+        scope.oldTextSegment1 = null;
         scope.currentRow = null;
         scope.currentCol = null;
         scope.currentCellValue = '';
@@ -212,24 +213,38 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
             }
         }
 
+        scope.$on('ngGridEventStartCellEdit', function (evt) {
+            try {
+                if (evt.targetScope.col.field == "TextSegment1") {
+                    scope.oldTextSegment1 = evt.targetScope.row.getProperty('TextSegment1');
+                }
+            } catch (e) {
+                Utility.showMessage(scope, $mdDialog, "Can't start edit cell!");
+            }
+        })
+
         scope.$on('ngGridEventEndCellEdit', function (evt) {
             try {
-                var dataEdit = {};
-                var rowData = evt.targetScope.row.entity;
-                var col = evt.targetScope.col;
-                dataEdit.Id = rowData.Id;
-                dataEdit.TextSegment1 = rowData.TextSegment1;
-                dataEdit.TextSegment2 = rowData.TextSegment2;
-                dataEdit.Field = col.field;
-                scope.sendMessageSocket(dataEdit)
+                if (evt.targetScope.col.field == "TextSegment1") {
+                    var arr = scope.grep(scope.data, evt.targetScope.row.entity, "Id");
+                    if (arr.length >= 1) {
+                        arr[0]["TextSegment1"] = scope.oldTextSegment1;
+                    }
+                }
+                else {
+                    var dataEdit = {};
+                    var rowData = evt.targetScope.row.entity;
+                    var col = evt.targetScope.col;
+                    dataEdit.Id = rowData.Id;
+                    dataEdit.TextSegment1 = rowData.TextSegment1;
+                    dataEdit.TextSegment2 = rowData.TextSegment2;
+                    dataEdit.Field = col.field;
+                    scope.sendMessageSocket(dataEdit)
+                }
             } catch (e) {
                 Utility.showMessage(scope, $mdDialog, "Can't sent edited to server!");
             }
         });
-
-        //scope.$on('ngGridEventStartCellEdit', function (evt) {
-        //    debugger;
-        //})
 
         function rowTemplate() {
             return '<div ng-dblclick="rowDblClick(row)" ng-style="{\'cursor\': row.cursor, \'z-index\': col.zIndex() }" ng-repeat="col in renderedColumns" ng-class="col.colIndex()" class="ngCell {{col.cellClass}}" ng-cell></div>';
@@ -284,70 +299,72 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
         scope.onmessage = function (evt) {
             try {
                 console.log(evt.data);
-                var data = JSON.parse(evt.data);
-                if (!data['IsClose']) {
-                    var arrClient = scope.grep(scope.clientsEdit, data, "UserId");
-                    if (arrClient.length == 0) {
-                        scope.clientsEdit.push(data);
-                        var cell = $('[Id=' + data.Id + '][Field=' + data.Field + ']')
-                        var parentCell = cell.closest('.ngCell');
-                        var toolTip = cell.next();
-                        toolTip.text(data['UserName']);
-                        toolTip.css("background-color", data.Color);
-                        parentCell.attr("isreadonly", "1");
-                        parentCell.css("border", "2px solid " + data.Color);
+                if (evt.data && evt.data != '') {
+                    var data = JSON.parse(evt.data);
+                    if (!data['IsClose']) {
+                        var arrClient = scope.grep(scope.clientsEdit, data, "UserId");
+                        if (arrClient.length == 0) {
+                            scope.clientsEdit.push(data);
+                            var cell = $('[Id=' + data.Id + '][Field=' + data.Field + ']')
+                            var parentCell = cell.closest('.ngCell');
+                            var toolTip = cell.next();
+                            toolTip.text(data['UserName']);
+                            toolTip.css("background-color", data.Color);
+                            parentCell.attr("isreadonly", "1");
+                            parentCell.css("border", "2px solid " + data.Color);
+                        }
+                        else if (arrClient.length == 1) {
+                            //clear old Cell
+                            var cell = $('[Id=' + arrClient[0].Id + '][Field=' + arrClient[0].Field + ']')
+                            var parentCell = cell.closest('.ngCell');
+                            var toolTip = cell.next();
+                            toolTip.text('');
+                            parentCell.css("border", "none");
+                            parentCell.attr("isreadonly", "0");
+                            //set new cell
+                            var indexOldCell = scope.clientsEdit.indexOf(arrClient[0]);
+                            scope.clientsEdit[indexOldCell] = data;
+                            var cell = $('[Id=' + data.Id + '][Field=' + data.Field + ']');
+                            var parentCell = cell.closest('.ngCell');
+                            var toolTip = cell.next();
+                            toolTip.css("background-color", data.Color);
+                            toolTip.text(data['UserName']);
+                            parentCell.attr("isreadonly", "1");
+                            parentCell.css("border", "2px solid " + data.Color);
+                        }
+                        var arrRecord = scope.grep(angularScope.data, data, "Id")
+                        if (arrRecord.length == 0) {
+                            //not found
+                        }
+                        else if (arrRecord.length == 1) {
+                            arrRecord[0][data.Field] = data[data.Field];
+                        }
                     }
-                    else if (arrClient.length == 1) {
-                        //clear old Cell
-                        var cell = $('[Id=' + arrClient[0].Id + '][Field=' + arrClient[0].Field + ']')
-                        var parentCell = cell.closest('.ngCell');
-                        var toolTip = cell.next();
-                        toolTip.text('');
-                        parentCell.css("border", "none");
-                        parentCell.attr("isreadonly", "0");
-                        //set new cell
-                        var indexOldCell = scope.clientsEdit.indexOf(arrClient[0]);
-                        scope.clientsEdit[indexOldCell] = data;
-                        var cell = $('[Id=' + data.Id + '][Field=' + data.Field + ']');
-                        var parentCell = cell.closest('.ngCell');
-                        var toolTip = cell.next();
-                        toolTip.css("background-color", data.Color);
-                        toolTip.text(data['UserName']);
-                        parentCell.attr("isreadonly", "1");
-                        parentCell.css("border", "2px solid " + data.Color);
-                    }
-                    var arrRecord = scope.grep(angularScope.data, data, "Id")
-                    if (arrRecord.length == 0) {
-                        //not found
-                    }
-                    else if (arrRecord.length == 1) {
-                        arrRecord[0][data.Field] = data[data.Field];
-                    }
-                }
-                else {
-                    //khi một client closed
-                    var arrClient = scope.grep(scope.clientsEdit, data, "ClientId");
-                    if (arrClient.length >= 1) {
-                        scope.clientsEdit.remove(arrClient[0]);
+                    else {
+                        //khi một client closed
+                        var arrClient = scope.grep(scope.clientsEdit, data, "ClientId");
+                        if (arrClient.length >= 1) {
+                            scope.clientsEdit.remove(arrClient[0]);
 
-                        var allCell = $('[Id][Field]');
-                        var parentCell = allCell.closest('.ngCell');
-                        var toolTip = allCell.next();
-                        toolTip.text('');
-                        toolTip.css("background-color", 'inherit');
-                        parentCell.attr("isreadonly", "0");
-                        parentCell.css("border", "none");
+                            var allCell = $('[Id][Field]');
+                            var parentCell = allCell.closest('.ngCell');
+                            var toolTip = allCell.next();
+                            toolTip.text('');
+                            toolTip.css("background-color", 'inherit');
+                            parentCell.attr("isreadonly", "0");
+                            parentCell.css("border", "none");
 
-                        if (scope.clientsEdit && scope.clientsEdit.length > 0) {
-                            var clients = scope.clientsEdit;         
-                            for (var i = 0; i < clients.length; i++) {
-                                var cell = $('[Id=' + clients[i].Id + '][Field=' + clients[i].Field + ']')
-                                var parentCell = cell.closest('.ngCell');
-                                var toolTip = cell.next();
-                                toolTip.text(clients[i]['UserName']);
-                                toolTip.css("background-color", clients[i].Color);
-                                parentCell.attr("isreadonly", "1");
-                                parentCell.css("border", "2px solid " + clients[i].Color);
+                            if (scope.clientsEdit && scope.clientsEdit.length > 0) {
+                                var clients = scope.clientsEdit;
+                                for (var i = 0; i < clients.length; i++) {
+                                    var cell = $('[Id=' + clients[i].Id + '][Field=' + clients[i].Field + ']')
+                                    var parentCell = cell.closest('.ngCell');
+                                    var toolTip = cell.next();
+                                    toolTip.text(clients[i]['UserName']);
+                                    toolTip.css("background-color", clients[i].Color);
+                                    parentCell.attr("isreadonly", "1");
+                                    parentCell.css("border", "2px solid " + clients[i].Color);
+                                }
                             }
                         }
                     }

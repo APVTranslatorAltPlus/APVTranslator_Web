@@ -20,6 +20,7 @@ namespace APVTranslator_Web.Socket
         private int userId;
         private Color userColor = new Color();
         private string userName;
+        public string lastMessage;
         public override void OnOpen()
         {
             //this.Send("Welcome!" + this.WebSocketContext.User.Identity.Name);
@@ -29,6 +30,17 @@ namespace APVTranslator_Web.Socket
             this.userColor = GetColor();
             //this.id = Convert.ToInt32(Cypher.Decrypt(this.WebSocketContext.QueryString["id"]));
             clients.Add(this);
+            foreach (var item in clients)
+            {
+                if (item != this)
+                {
+                    string msgBack = ((APVTranslator_Web.Socket.wsHandler)item).lastMessage;
+                    if (!string.IsNullOrEmpty(msgBack))
+                    {
+                        this.Send(msgBack);
+                    }
+                }
+            };
         }
 
         public override void OnMessage(string message)
@@ -58,13 +70,15 @@ namespace APVTranslator_Web.Socket
             translateMessage.UserId = this.userId;
             translateMessage.UserName = this.userName;
             translateMessage.Color = this.userColor.Name;
+            string jsonMessage = JsonConvert.SerializeObject(translateMessage);
+            this.lastMessage = jsonMessage;
             if (bReult)
             {
                 foreach (var item in clients)
                 {
                     if (item != this)
                     {
-                        string msgBack = JsonConvert.SerializeObject(translateMessage);
+                        string msgBack = jsonMessage;
                         item.Send(msgBack);
                     }
                 };

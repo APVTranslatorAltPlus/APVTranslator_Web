@@ -255,8 +255,8 @@ namespace APVTranslator_Controllers.Controllers
                                 {
                                     try
                                     {
-                                        List<TextSegment> lstTextSegment = translateModel.GetTextSegment(projectId, fileId);
-                                        List<TextSegment> lstTextSegmentNoExists = new List<TextSegment>();
+                                        List<TextSegment> lstTextSegment = translateModel.GetTextSegment(projectId, fileId);                                      
+                                        List <TextSegment> lstTextSegmentNoExists = new List<TextSegment>();
                                         foreach (var item in lstTextSegment)
                                         {
                                             var textSegment = lstTextSegment.Where(a => !String.IsNullOrEmpty(a.TextSegment2) && a.TextSegment1 == item.TextSegment1 && String.IsNullOrEmpty(item.TextSegment2)).FirstOrDefault();
