@@ -28,20 +28,20 @@
 }
 
 .main-index {
-    width:99.5%;
+    width: 99.5%;
 }
 
 .grid-center {
     height: inherit;
     width: 75%;
     display: flex;
-    flex-flow:row;
+    flex-flow: row;
 }
 
 .detail-title {
     position: relative;
     padding: 10px;
-    padding-bottom:0;
+    padding-bottom: 0;
     text-align: center;
     font-size: large;
     text-decoration: underline;
@@ -69,7 +69,7 @@
     }
 
 .splitter {
-    width:0.5%;
+    width: 0.5%;
     background-color: #086962;
 }
 
@@ -106,7 +106,7 @@
     border-radius: 4px;
 }
 
-/*.ngCell {
+.ngCell {
     display: table-cell;
     height: auto !important;
     overflow: auto;
@@ -120,6 +120,9 @@
     word-wrap: break-word;
     text-wrap: normal;
     overflow-wrap: break-word;
+    float: none;
+    vertical-align: middle;
+    height: auto !important;
 }
 
 .ngCellText {
@@ -129,16 +132,17 @@
     word-wrap: break-word;
     text-wrap: normal;
     overflow-wrap: break-word;
-}*/
-
+}
 
 
 .gridStyle {
     z-index: 2;
 }
-md-toolbar{
-    z-index:0!important;
+
+md-toolbar {
+    z-index: 0 !important;
 }
-.ngTopPanel{
-      z-index:0!important;
+
+.ngTopPanel {
+    z-index: 0 !important;
 }

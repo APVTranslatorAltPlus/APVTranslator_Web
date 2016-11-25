@@ -30,7 +30,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                              displayName: 'Source Language',
                              cellTemplate: '<div ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
                              enableCellEdit: false,
-                             minWidth: 250,
+                             width: 250,
                              resizable: true
                          },
 
@@ -39,7 +39,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                              displayName: 'DestinationLanguage',
                              cellTemplate: '<div Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
                              enableCellEdit: true, 
-                             minWidth: 250,
+                             width: 250,
                              resizable: true
                          },
                          {
@@ -56,7 +56,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                              displayName: 'GoogleTranslate',
                              cellTemplate: '<div ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
                              enableCellEdit: false, 
-                             minWidth: 200, 
+                             width: 200,
                              resizable: true
                          },
                          {
@@ -152,6 +152,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
             showFilter: true,
             rowTemplate: rowTemplate(),
             columnDefs: 'columnDefs',
+            rowHeight: 80
         };
 
         scope.$on('affterSetAttr', function () {
