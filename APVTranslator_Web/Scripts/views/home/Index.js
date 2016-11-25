@@ -227,7 +227,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
             Utility.showConfirm(scope, $mdDialog, 'Do you want delete the file "' + fileName + '"?', scope.deleteFile)
         }
 
-        scope.confirmDeleteFile = function () {
+        scope.deleteFile = function () {
             try {
                 debugger;
                 cfpLoadingBar.start();
