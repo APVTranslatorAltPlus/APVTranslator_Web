@@ -36,16 +36,26 @@ namespace APVTranslator_Model.Models
         {
             try
             {
-                const string qry = "UPDATE [dbo].[TextSegment] SET [TextSegment2] = @TextSegment2 WHERE [Id] = @Id AND [TextSegment1] = @TextSegment1";
-                int rowEffect = this.Database.ExecuteSqlCommand(qry,
-                    new SqlParameter("@Id", translateMessage.Id),
-                    new SqlParameter("@TextSegment1", translateMessage.TextSegment1),
-                    new SqlParameter("@TextSegment2", translateMessage.TextSegment2));
-                if (rowEffect > 0)
+                if (translateMessage.Field == "TextSegment2")
+                {
+                    const string qry = "UPDATE [dbo].[TextSegment] SET [TextSegment2] = @TextSegment2 WHERE [Id] = @Id AND [TextSegment1] = @TextSegment1";
+                    int rowEffect = this.Database.ExecuteSqlCommand(qry,
+                        new SqlParameter("@Id", translateMessage.Id),
+                        new SqlParameter("@TextSegment1", translateMessage.TextSegment1),
+                        new SqlParameter("@TextSegment2", translateMessage.TextSegment2));
+                    if (rowEffect > 0)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
                 {
                     return true;
                 }
-                return false;
             }
             catch (Exception)
             {

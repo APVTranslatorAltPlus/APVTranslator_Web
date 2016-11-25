@@ -27,6 +27,7 @@ namespace APVTranslator_Controllers.Controllers
             {
                 ViewBag.ProjectId = Request.QueryString["projectId"];
                 ViewBag.FileId = Request.QueryString["fileId"];
+                ViewBag.UserId = SessionUser.GetUserId();
                 return View();
             }
             else
@@ -201,6 +202,195 @@ namespace APVTranslator_Controllers.Controllers
                 sResult.ControllerResult.Message = ex.Message;
             }
             return Json(sResult);
+        }
+        [HttpPost]
+        public ActionResult BuildExportFile(int projectId, int fileId)
+        {
+            ControllerResult cResult = new ControllerResult();
+            try
+            {
+                if (User.Identity.IsAuthenticated && GetUserPermission(SessionUser.GetUserId(), projectId))
+                {
+                    TranslateModel translateModel = new TranslateModel();
+                    Project project = translateModel.GetProject(projectId);
+                    ProjectFile file = translateModel.GetFile(fileId);
+                    if (project != null && file != null)
+                    {
+                        string rootPath = Utility.GetRootPath();
+                        string importPath = rootPath + Contanst.rootProject + "\\" + project.Title + "\\Imports";
+                        string exportPath = rootPath + Contanst.rootProject + "\\" + project.Title + "\\Exports";
+                        if (Directory.Exists(exportPath))
+                        {
+                            Directory.CreateDirectory(exportPath);
+                        }
+                        string filePath = importPath + "\\" + file.FileName;
+                        if (!System.IO.File.Exists(filePath))
+                        {
+                            throw new Exception("File don't exits!");
+                        }
+                        exportPath = exportPath + "\\" + file.FileName;
+                        var fileExt = Path.GetExtension(file.FileName);
+                        if (fileExt == null)
+                        {
+                            throw new Exception("Extension file error");
+                        }
+                        string translatedFile = exportPath.Replace(fileExt, $"_Export{fileExt}");
+                        string fileNameExport = Path.GetFileName(translatedFile);
+                        try
+                        {
+                            System.IO.File.Copy(filePath, translatedFile, true);
+                        }
+                        catch (Exception)
+                        {
+                            Random r = new Random();
+                            translatedFile = filePath.Replace(fileExt, $"_r" + r.Next(100, 999) + "_vn" + fileExt);
+                            fileNameExport = Path.GetFileName(translatedFile);
+                            System.IO.File.Copy(filePath, translatedFile, true);
+                        }
+                        switch (fileExt)
+                        {
+                            case ".xls":
+                            case ".xlsx":
+                                using (var excel = new ExcelHelper(translatedFile, false))
+                                {
+                                    try
+                                    {
+                                        List<TextSegment> lstTextSegment = translateModel.GetTextSegment(projectId, fileId);                                      
+                                        List <TextSegment> lstTextSegmentNoExists = new List<TextSegment>();
+                                        foreach (var item in lstTextSegment)
+                                        {
+                                            var textSegment = lstTextSegment.Where(a => !String.IsNullOrEmpty(a.TextSegment2) && a.TextSegment1 == item.TextSegment1 && String.IsNullOrEmpty(item.TextSegment2)).FirstOrDefault();
+                                            if (textSegment != null)
+                                            {
+                                                lstTextSegmentNoExists.Add(new TextSegment() { TextSegment1 = item.TextSegment1, TextSegment2 = textSegment.TextSegment2, Type = item.Type, Row = item.Row, Col = item.Col, SheetName = item.SheetName, IsSheetName = item.IsSheetName, SheetIndex = item.SheetIndex });
+                                            }
+                                            else
+                                            {
+                                                lstTextSegmentNoExists.Add(new TextSegment() { TextSegment1 = item.TextSegment1, TextSegment2 = item.TextSegment2, Type = item.Type, Row = item.Row, Col = item.Col, SheetName = item.SheetName, IsSheetName = item.IsSheetName, SheetIndex = item.SheetIndex });
+                                            }
+                                        }
+                                        lstTextSegmentNoExists = lstTextSegmentNoExists.OrderByDescending(x => x.TextSegment1.Length).ToList();
+                                        int count = lstTextSegmentNoExists.Count == 0 ? 1 : lstTextSegmentNoExists.Count;
+                                        foreach (TextSegment itTextSegment in lstTextSegmentNoExists)
+                                        {
+                                            //try
+                                            //{
+                                            //    loading.UpdateProcessStatus(i * 100 / count);
+                                            //}
+                                            //catch (Exception)
+                                            //{
+                                            //    continue;
+                                            //}
+                                            //finally
+                                            //{
+                                            if (!string.IsNullOrEmpty(itTextSegment.TextSegment2))
+                                            {
+                                                if ((TextSegmentType)itTextSegment.Type == TextSegmentType.TEXT)
+                                                {
+                                                    excel.ReplaceText(itTextSegment.TextSegment1, itTextSegment.TextSegment2, Convert.ToInt32(itTextSegment.Row), Convert.ToInt32(itTextSegment.Col), itTextSegment.SheetName, Convert.ToBoolean(itTextSegment.IsSheetName), Convert.ToInt32(itTextSegment.SheetIndex)); // Replace all text segment in words
+                                                }
+                                                else
+                                                {
+                                                    excel.ReplaceObject(itTextSegment.TextSegment1, itTextSegment.TextSegment2);
+                                                }
+                                            }
+                                        }
+                                        excel.Save();
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        throw ex;
+                                    }
+                                }
+                                break;
+                            case ".doc":
+                            case ".docx":
+                                using (var word = new WordHelper(translatedFile))
+                                {
+                                    List<TextSegment> lstTextSegment = translateModel.GetTextSegment(projectId, fileId);
+                                    lstTextSegment = lstTextSegment.OrderByDescending(x => x.TextSegment1.Length).ToList();
+                                    int count = lstTextSegment.Count == 0 ? 1 : lstTextSegment.Count;
+                                    foreach (TextSegment itTextSegment in lstTextSegment)
+                                    {
+                                        //try
+                                        //{
+                                        //    loading.UpdateProcessStatus(i * 100 / count);
+                                        //}
+                                        //catch (Exception)
+                                        //{
+                                        //    continue;
+                                        //}
+                                        //finally
+                                        //{
+                                        if (!string.IsNullOrEmpty(itTextSegment.TextSegment2))
+                                        {
+                                            if ((TextSegmentType)itTextSegment.Type == TextSegmentType.TEXT)
+                                            {
+                                                word.ReplaceText(itTextSegment.TextSegment1, itTextSegment.TextSegment2); // Replace all text segment in words
+                                            }
+                                            else
+                                            {
+                                                word.ReplaceObject(itTextSegment.TextSegment1, itTextSegment.TextSegment2);
+                                            }
+                                        }
+                                        //}
+                                    }
+                                    word.Save();
+                                }
+                                break;
+                            case ".ppt":
+                            case ".pptx":
+                                using (var powerpoint = new PowerPointHelper(translatedFile))
+                                {
+                                    List<TextSegment> lstTextSegment = translateModel.GetTextSegment(projectId, fileId);
+                                    lstTextSegment = lstTextSegment.OrderByDescending(x => x.TextSegment1.Length).ToList();
+                                    int count = lstTextSegment.Count == 0 ? 1 : lstTextSegment.Count;
+                                    foreach (TextSegment itTextSegment in lstTextSegment)
+                                    {
+                                        //try
+                                        //{
+                                        //    loading.UpdateProcessStatus(i * 100 / count);
+                                        //}
+                                        //catch (Exception)
+                                        //{
+                                        //    continue;
+                                        //}
+                                        //finally
+                                        //{
+                                        if (!string.IsNullOrEmpty(itTextSegment.TextSegment2))
+                                        {
+                                            powerpoint.ReplaceObject(itTextSegment.TextSegment1, itTextSegment.TextSegment2);
+                                        }
+                                    }
+                                    powerpoint.Save();
+                                }
+                                break;
+                            case ".pdf":
+
+                                break;
+                            default:
+                                break;
+                        }
+                        cResult.IsSuccess = true;
+                    }
+                    else
+                    {
+                        cResult.IsSuccess = false;
+                        cResult.Message = "Project or file had deleted or don't exits!";
+                    }
+                }
+                else
+                {
+                    cResult.IsSuccess = false;
+                    cResult.Message = "User don't has permissions!";
+                }
+            }
+            catch (Exception)
+            {
+                cResult.IsSuccess = false;
+                cResult.Message = "Build export file error!";
+            }
+            return Json(cResult);
         }
 
         private bool GetUserPermission(int userId, int projectId)

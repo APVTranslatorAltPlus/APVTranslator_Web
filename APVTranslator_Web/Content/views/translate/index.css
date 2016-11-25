@@ -51,31 +51,12 @@
     opacity: 0.75;
     display: none;
 }
-
-/*.ngCell {
-    display: table-cell;
-    height: auto !important;
-    overflow: auto;
-    position: static;
-      white-space: normal !important;
+.dowload-file{
+    position:absolute;
+    right: 10px;
+    bottom: 40px;
+    font-size:48px;
 }
-
-.ngRow {
-    display: table-row;
-    height: auto !important;
-    position: static;
-    word-wrap: break-word;
-    text-wrap: normal;
-    overflow-wrap: break-word;
-      white-space: normal !important;
-}*/
-
-.ngCellText {
-     height: auto !important;
-    text-overflow: inherit;
-    overflow-wrap: break-word;
-        white-space: normal !important;
-}
-.wrap-text {
-    white-space: normal !important;
+.tooltip{
+    font-size:16px;
 }

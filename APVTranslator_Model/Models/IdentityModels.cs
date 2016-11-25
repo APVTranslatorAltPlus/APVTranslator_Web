@@ -82,7 +82,7 @@ namespace APVTranslator_Model.Models
         {
             try
             {
-                if (HttpContext.Current.Session["UserRoles"] != null)
+                if (HttpContext.Current.Session != null && HttpContext.Current.Session["UserRoles"] != null)
                 {
                     return (List<Role>)HttpContext.Current.Session["UserRoles"];
                 }
@@ -93,7 +93,10 @@ namespace APVTranslator_Model.Models
                                     .SelectMany(u => u.Roles)
                                     .Join(this.Roles, ur => ur.RoleId, r => r.Id, (ur, r) => r)
                                     .ToList();
-                    HttpContext.Current.Session["UserRoles"] = roles;
+                    if (HttpContext.Current.Session != null)
+                    {
+                        HttpContext.Current.Session["UserRoles"] = roles;
+                    }
                     return roles;
                 }
             }
