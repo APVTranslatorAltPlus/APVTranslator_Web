@@ -52,5 +52,8 @@ namespace APVTranslator_Services.Services
         [OperationContract]
         [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped)]
         bool SaveChangeMemberSetting(int projectId, string modifiedIsAMemberList, string modifiedNotAMemberList);
+        [OperationContract]
+        [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped)]
+        ServiceResult GetTextSearch(string textSearch);
     }
 }

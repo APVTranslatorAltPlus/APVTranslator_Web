@@ -433,5 +433,22 @@ namespace APVTranslator_Services.Services
             }
         }
 
+        public ServiceResult GetTextSearch(string textSearch)
+        {
+            ServiceResult sResult = new ServiceResult();
+            try
+            {
+                DashBoardModel dbModel = new DashBoardModel();
+                sResult.Value = dbModel.Proc_GetTextSearch(textSearch);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+                sResult.IsSuccess = false;
+                sResult.Message = ex.Message;
+            }
+            return sResult;
+        }
+
     }
 }

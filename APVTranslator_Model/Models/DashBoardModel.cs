@@ -430,5 +430,13 @@ namespace APVTranslator_Model.Models
 
 
         }
+        public virtual List<SearchViewModel> Proc_GetTextSearch(string textSearch)
+        {
+
+            var textSearchParameter = new SqlParameter("@sTextSearch", textSearch);
+            List<SearchViewModel> textSearchResult = this.Database.SqlQuery<SearchViewModel>("Proc_GetTextSearch @sTextSearch", textSearchParameter).ToList();
+            Debug.WriteLine(textSearchResult.ToString());
+            return textSearchResult;
+        }
     }
 }

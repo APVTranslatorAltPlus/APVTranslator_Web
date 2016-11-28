@@ -3,8 +3,8 @@
 //        cfpLoadingBarProvider.includeSpinner = true;
 //    })
 
-apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFileProject', 'cfpLoadingBar', '$mdDialog', 'deleteFileProject', 'serCreateNewProject', 'serGetListUser', 'cfpLoadingBar', 'serGetProjectInfo', 'serGetListProjectMember', 'serUpdateProject', 'serDeleteProject', 'serGetListProjectDBReference', 'serSaveChangeDictionarySetting', 'serGetInfoForMemberSetting', 'serSaveChangeMemberSetting',
-    function (scope, http, serListProject, serListFileProject, cfpLoadingBar, $mdDialog, deleteFileProject, serCreateNewProject, serGetListUser, cfpLoadingBar, serGetProjectInfo, serGetListProjectMember, serUpdateProject, serDeleteProject, serGetListProjectDBReference, serSaveChangeDictionarySetting, serGetInfoForMemberSetting, serSaveChangeMemberSetting) {
+apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFileProject', 'cfpLoadingBar', '$mdDialog', 'deleteFileProject', 'serCreateNewProject', 'serGetListUser', 'cfpLoadingBar', 'serGetProjectInfo', 'serGetListProjectMember', 'serUpdateProject', 'serDeleteProject', 'serGetListProjectDBReference', 'serSaveChangeDictionarySetting', 'serGetInfoForMemberSetting', 'serSaveChangeMemberSetting', 'serGetTextSearch',
+    function (scope, http, serListProject, serListFileProject, cfpLoadingBar, $mdDialog, deleteFileProject, serCreateNewProject, serGetListUser, cfpLoadingBar, serGetProjectInfo, serGetListProjectMember, serUpdateProject, serDeleteProject, serGetListProjectDBReference, serSaveChangeDictionarySetting, serGetInfoForMemberSetting, serSaveChangeMemberSetting, serGetTextSearch) {
         scope.init = function () {
             scope.loadListProject();
         }
@@ -1042,6 +1042,65 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
             scope.settingMember();
             scope.settingDictionary();
         }
+        scope.callRestService = function () {
+            //$http({ method: 'GET', url: '/someUrl' }).
+            //  success(function (data, status, headers, config) {
+            //      $scope.results.push(data);  //retrieve results and add to existing results
+            //  })
+            alert(10);
+        }
+        scope.isTextSearchBox2 = false;
+
+        scope.myFunct = function (keyEvent) {
+           
+            if (keyEvent.which === 13)
+            {
+                $('#textSearchTable-body').empty();
+                document.getElementById("noTextFound").style.display = "none";
+                var textSearch ;
+                if ($('#searchModal').hasClass('in')) {
+                    textSearch = angular.element('#textSearchBox2').val().trim();
+                } else {
+                    textSearch = angular.element('#textSearchBox').val().trim();
+                    angular.element('#textSearchBox2').val("");
+                }
+             
+                serGetTextSearch.data(textSearch)
+               .success(function (response) {
+
+                   if (response.GetTextSearchResult && response.GetTextSearchResult.IsSuccess) {
+                       var textSearchResult = JSON.parse(response.GetTextSearchResult.Value);
+                       var trHTML = '';
+                       $.each(textSearchResult, function (i, item) {
+
+                               trHTML += '<tr><td>' + i + '</td><td>' + item.TextSegment1 + '</td>'
+                             + '<td>'+ item.TextSegment2+' </td>'
+                              +'<td>'+ item.Dictionary+' </td>'
+                               +'<td>'+ item.Title+' </td>'
+                           }
+
+                       );
+                       $('#textSearch-table').append(trHTML);
+                        
+                       if (textSearchResult.length == 0) {
+                           document.getElementById("noTextFound").innerHTML = "Sorry no result found!!!";
+                           document.getElementById("noTextFound").style.display = "inline";
+                       }
+                       if (!$('#myModal').hasClass('in')) {
+                           $('#searchModal').modal('show');
+
+                       }
+                       console.log(response.GetTextSearchResult);
+                   } else {
+                       angular.element('#noTextFound').val("No result found!!!");
+                   }
+               }).error(function (err) {
+                   console.log(err);
+                   cfpLoadingBar.complete();
+               });
+            }
+        }
+
     }])
 apvApp.service('serListProject', function ($http) {
     this.data = function () {
@@ -1114,6 +1173,11 @@ apvApp.service('serGetInfoForMemberSetting', function ($http) {
 apvApp.service('serSaveChangeMemberSetting', function ($http) {
     this.data = function (projectId, modifiedIsAMemberList, modifiedNotAMemberList) {
         return $http.post(Utility.getBaseUrl() + 'Services/DashboardService.svc/SaveChangeMemberSetting', { 'projectId': projectId, 'modifiedIsAMemberList': modifiedIsAMemberList, 'modifiedNotAMemberList': modifiedNotAMemberList });
+    };
+});
+apvApp.service('serGetTextSearch', function ($http) {
+    this.data = function (textSearch) {
+        return $http.post(Utility.getBaseUrl() + 'Services/DashboardService.svc/GetTextSearch', { 'textSearch': textSearch});
     };
 });
 

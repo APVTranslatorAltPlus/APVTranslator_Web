@@ -71,6 +71,18 @@
                         </md-button>
                         <input type="file" id="file" accept=".xlsx,.xls,.doc,.docx.,.ppt,.pptx" style="display:none" value="upload" multiple />
                         <span flex></span>
+                        <div id="custom-search-input" style="width:300px;height:40px;">
+                            <div class="input-group" style="width:300px;height:40px;">
+                                <input type="text" id="textSearchBox" style="height: 30px;" class="form-control input-lg" placeholder="Search..." ng-keypress="myFunct($event)" />
+                                <span class="input-group-btn" style="vertical-align: top !important;">
+                                    <button class="btn btn-info btn-lg" type="button"  disabled="disabled">
+                                        <i class="glyphicon glyphicon-search"></i>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                       
+                        <div class="a-divider" ng-show="fileProjectSelection"></div>
                         <md-button class="md-raised md-warn" aria-label="Back" ng-show="checked" ng-click="loadListProject()">
                             <md-icon class="material-icons">undo</md-icon>
                             <md-tooltip md-direction="bottom">
@@ -342,6 +354,40 @@
 
 <div id="checkboxValue" style="display:none"></div>
 
+@*Search Modal*@
+<div class="modal" tabindex="-1" role="dialog" id="searchModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="width:100%">
+            <div class="modal-body" style="width:100%">
+                <div id="custom-search-input" style="width:300px;height:40px;">
+                    <div class="input-group" style="width:300px;height:40px;">
+                        <input type="text" id="textSearchBox2" style="height: 30px;" class="form-control input-lg" placeholder="Search..." onkeypress="angular.element(document.getElementById('Homecontroller')).scope().myFunct(event);" />
+                        <span class="input-group-btn" style="vertical-align: top !important;">
+                            <button class="btn btn-info btn-lg" type="button" disabled="disabled">
+                                <i class="glyphicon glyphicon-search"></i>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <table class="table" id="textSearch-table">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Source Language</th>
+                            <th>Destination Language</th>
+                            <th>Dictionary</th>
+                            <th>Project Name</th>
+
+                        </tr>
+                    </thead>
+                    <tbody id="textSearchTable-body"></tbody>
+                </table>
+                <div id="noTextFound" style="display:none;color:red">aaa</div>
+            </div>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 <style>
     @@media screen and (min-width: 768px) {
 
