@@ -229,7 +229,6 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
 
         scope.deleteFile = function () {
             try {
-                debugger;
                 cfpLoadingBar.start();
                 var data = {};
                 data.projectId = scope.currentFileProject.ProjectID;

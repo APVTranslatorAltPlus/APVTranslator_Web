@@ -31,7 +31,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                          {
                              field: 'TextSegment1',
                              displayName: 'Source Language',
-                             cellTemplate: '<div ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
+                             cellTemplate: '<div ng-right-click="rightClickCell(row,col)" context="context1" ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
                              enableCellEdit: false,
                              minWidth: 250,
                              resizable: true
@@ -40,7 +40,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                          {
                              field: 'TextSegment2',
                              displayName: 'DestinationLanguage',
-                             cellTemplate: '<div Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
+                             cellTemplate: '<div ng-right-click="rightClickCell(row,col)" context="context2" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
                              enableCellEdit: true,
                              minWidth: 250,
                              resizable: true
@@ -49,7 +49,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                              field: 'Suggestion',
                              displayName: 'Suggestion',
                              enableCellEdit: false,
-                             cellTemplate: '<div ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
+                             cellTemplate: '<div ng-right-click="rightClickCell(row,col)" context="context2" ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
                              width: 250,
                              minWidth: 200,
                              resizable: true
@@ -57,7 +57,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                          {
                              field: 'GoogleTranslate',
                              displayName: 'GoogleTranslate',
-                             cellTemplate: '<div ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
+                             cellTemplate: '<div ng-right-click="rightClickCell(row,col)" context="context1" ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
                              enableCellEdit: false,
                              minWidth: 200,
                              resizable: true
@@ -66,7 +66,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                              field: 'Row',
                              displayName: 'Row',
                              enableCellEdit: false,
-                             cellTemplate: '<div ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
+                             cellTemplate: '<div ng-right-click="rightClickCell(row,col)" context="context2" ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
                              minWidth: 100,
                              width: 100,
                              resizable: true
@@ -203,12 +203,27 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
             try {
                 var dataEdit = {};
                 var rowData = row.entity;
+                if (col.field == "GoogleTranslate") {
+                    try {
+                        Utility.translateText(rowData['TextSegment1'], 'auto', 'ja', rowData, function (obj, translatedText) {
+                            obj['GoogleTranslate'] = translatedText;
+                        });
+                    } catch (e) {
+                        Utility.showMessage(scope, $mdDialog, 'Translate some text error!');
+                    }
+                }
                 dataEdit.Id = rowData.Id;
                 dataEdit.TextSegment1 = rowData.TextSegment1;
                 dataEdit.TextSegment2 = rowData.TextSegment2;
                 dataEdit.Field = col.field;
-                scope.sendMessageSocket(dataEdit)
-            } catch (e) {
+                if (rowData.Row && rowData.Col && rowData.SheetName) {
+                    dataEdit.Row = rowData.Row;
+                    dataEdit.Col = rowData.Col;
+                    dataEdit.SheetName = rowData.SheetName;
+                }
+                scope.sendMessageSocket(dataEdit);
+            }
+            catch (e) {
                 Utility.showMessage(scope, $mdDialog, "cell click error!");
             }
         }
@@ -271,6 +286,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                         }
                         scope.projectName = response.ProjectName;
                         scope.fileName = response.FileName;
+
                     }
                     else {
                         Utility.showMessage(scope, $mdDialog, response.ControllerResult.Message);
@@ -282,6 +298,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                 }
             });
         }
+
         scope.getSocket = function () {
             ws = new WebSocket("ws://" + location.host + "/Handler/SocketHandler.ashx" + "?projectId=" + projectId);
             scope.onopen = function () {
@@ -457,7 +474,10 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                             //not found
                         }
                         else if (arrRecord.length == 1) {
-                            arrRecord[0]['TextSegment2'] = this.currentRow.entity['TextSegment1'];
+                            var text = this.currentRow.entity[this.currentCol.field];
+                            if (text && text != '') {
+                                arrRecord[0]['TextSegment2'] = text;
+                            }
                             var dataEdit = {};
                             dataEdit.Id = this.currentRow.entity['Id'];
                             dataEdit.TextSegment1 = this.currentRow.entity['TextSegment1'];
@@ -476,7 +496,10 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                         //not found
                     }
                     else if (arrRecord.length == 1) {
-                        arrRecord[0]['TextSegment2'] = this.currentRow.entity['TextSegment1'];
+                        var text = this.currentRow.entity[this.currentCol.field];
+                        if (text && text != '') {
+                            arrRecord[0]['TextSegment2'] = text;
+                        }
                         var dataEdit = {};
                         dataEdit.Id = this.currentRow.entity['Id'];
                         dataEdit.TextSegment1 = this.currentRow.entity['TextSegment1'];
@@ -572,3 +595,4 @@ apvApp.directive('ngRightClick', function ($parse) {
         });
     };
 });
+
