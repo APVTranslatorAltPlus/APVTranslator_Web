@@ -178,3 +178,9 @@ md-toolbar {
 #custom-search-input .glyphicon-search{
     font-size: 23px;
 }
+
+button:active, .button:active, button:focus, .button:focus, button:hover, .button:hover{
+    border:none !important;
+    outline:none !important;
+    border-left: solid 1px #ccc !important;
+}

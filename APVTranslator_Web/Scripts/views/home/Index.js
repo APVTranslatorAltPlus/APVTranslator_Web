@@ -64,9 +64,10 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
             rowTemplate: rowTemplate(),
             columnDefs: 'columnDefs'
         };
-
+        scope.showSearchBoxDivider = false;
         scope.rowDblClick = function (row) {
             try {
+                scope.showSearchBoxDivider = true;
                 if (scope.gridType == Enumeration.GridType.ListProject) {
                     scope.loadListFileProject(row.entity.Id);
                 }
@@ -106,6 +107,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
         scope.loadListProject = function () {
             cfpLoadingBar.start();
             scope.enableRowSelection = true;
+            scope.showSearchBoxDivider = false;
             serListProject.data()
             .success(function (response) {
                 if (response.GetListProjectResult && response.GetListProjectResult.IsSuccess) {
@@ -1055,50 +1057,54 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
            
             if (keyEvent.which === 13)
             {
-                $('#textSearchTable-body').empty();
-                document.getElementById("noTextFound").style.display = "none";
-                var textSearch ;
-                if ($('#searchModal').hasClass('in')) {
-                    textSearch = angular.element('#textSearchBox2').val().trim();
-                } else {
-                    textSearch = angular.element('#textSearchBox').val().trim();
-                    angular.element('#textSearchBox2').val("");
-                }
-             
-                serGetTextSearch.data(textSearch)
-               .success(function (response) {
-
-                   if (response.GetTextSearchResult && response.GetTextSearchResult.IsSuccess) {
-                       var textSearchResult = JSON.parse(response.GetTextSearchResult.Value);
-                       var trHTML = '';
-                       $.each(textSearchResult, function (i, item) {
-
-                               trHTML += '<tr><td>' + i + '</td><td>' + item.TextSegment1 + '</td>'
-                             + '<td>'+ item.TextSegment2+' </td>'
-                              +'<td>'+ item.Dictionary+' </td>'
-                               +'<td>'+ item.Title+' </td>'
-                           }
-
-                       );
-                       $('#textSearch-table').append(trHTML);
-                        
-                       if (textSearchResult.length == 0) {
-                           document.getElementById("noTextFound").innerHTML = "Sorry no result found!!!";
-                           document.getElementById("noTextFound").style.display = "inline";
-                       }
-                       if (!$('#myModal').hasClass('in')) {
-                           $('#searchModal').modal('show');
-
-                       }
-                       console.log(response.GetTextSearchResult);
-                   } else {
-                       angular.element('#noTextFound').val("No result found!!!");
-                   }
-               }).error(function (err) {
-                   console.log(err);
-                   cfpLoadingBar.complete();
-               });
+                scope.searchText();
             }
+        }
+
+        scope.searchText = function () {
+            $('#textSearchTable-body').empty();
+            document.getElementById("noTextFound").style.display = "none";
+            var textSearch;
+            if ($('#searchModal').hasClass('in')) {
+                textSearch = angular.element('#textSearchBox2').val().trim();
+            } else {
+                textSearch = angular.element('#textSearchBox').val().trim();
+                angular.element('#textSearchBox2').val("");
+            }
+
+            serGetTextSearch.data(textSearch)
+           .success(function (response) {
+
+               if (response.GetTextSearchResult && response.GetTextSearchResult.IsSuccess) {
+                   var textSearchResult = JSON.parse(response.GetTextSearchResult.Value);
+                   var trHTML = '';
+                   $.each(textSearchResult, function (i, item) {
+
+                       trHTML += '<tr><td>' + i + '</td><td>' + item.TextSegment1 + '</td>'
+                     + '<td>' + item.TextSegment2 + ' </td>'
+                      + '<td>' + item.Dictionary + ' </td>'
+                       + '<td>' + item.Title + ' </td>'
+                   }
+
+                   );
+                   $('#textSearch-table').append(trHTML);
+
+                   if (textSearchResult.length == 0) {
+                       document.getElementById("noTextFound").innerHTML = "Sorry no result found!!!";
+                       document.getElementById("noTextFound").style.display = "inline";
+                   }
+                   if (!$('#myModal').hasClass('in')) {
+                       $('#searchModal').modal('show');
+
+                   }
+                   console.log(response.GetTextSearchResult);
+               } else {
+                   angular.element('#noTextFound').val("No result found!!!");
+               }
+           }).error(function (err) {
+               console.log(err);
+               cfpLoadingBar.complete();
+           });
         }
 
     }])
