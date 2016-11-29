@@ -664,6 +664,7 @@
     <Content Include="Scripts\views\translate\Index.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Services\DashboardService.svc" />
+    <Content Include="Services\TranslateService.svc" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />

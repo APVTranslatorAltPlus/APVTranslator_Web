@@ -28,6 +28,15 @@ namespace APVTranslator_Controllers.Controllers
                 ViewBag.ProjectId = Request.QueryString["projectId"];
                 ViewBag.FileId = Request.QueryString["fileId"];
                 ViewBag.UserId = SessionUser.GetUserId();
+                TranslateModel translateModel = new TranslateModel();
+                if (ViewBag.ProjectId != null)
+                {
+                    TranslatorLanguage oTranslatorLanguage = translateModel.GetTranslateLanguage(Convert.ToInt32(ViewBag.ProjectId));
+                    if (oTranslatorLanguage != null)
+                    {
+                        ViewBag.LanguagePair = oTranslatorLanguage.LanguagePair;
+                    }
+                }
                 return View();
             }
             else
@@ -59,7 +68,18 @@ namespace APVTranslator_Controllers.Controllers
                                 sResult.FileType = (int)FileTypes.EXCEL;
                                 if (file.IsLoadText == true)
                                 {
-                                    List<TextSegment> lstTextSegment = translateModel.GetTextSegment(projectId, fileId);
+                                    List<TextSegment> lstPureTextSegment = translateModel.GetTextSegment(projectId, fileId);
+                                    List<TextSegment> lstTextSegment = new List<TextSegment>();
+                                    foreach (var textSegment in lstPureTextSegment)
+                                    {
+                                        int iRow = textSegment.Row != null ? Convert.ToInt32(textSegment.Row) : -1;
+                                        int iCol = textSegment.Col != null ? Convert.ToInt32(textSegment.Col) : -1;
+                                        if (!(lstTextSegment.Any(a => a.TextSegment1 == textSegment.TextSegment1) && iRow != -1 && iCol != -1))                      //&& iRow != -1 && iCol != -1
+                                        {
+                                            lstTextSegment.Add(textSegment);
+                                        }
+                                    }
+
                                     sResult.ControllerResult.Value = lstTextSegment;
                                 }
                                 else if (System.IO.File.Exists(importFile))
@@ -89,7 +109,17 @@ namespace APVTranslator_Controllers.Controllers
                                         var insertedObj = translateModel.BatchInsert(lstTextObjects, fileId, projectId, (int)FileTypes.EXCEL, (int)TextSegmentType.OBJECT);
                                     }
                                     translateModel.UpdateStatusFileTranslate(projectId, fileId, true);
-                                    List<TextSegment> lstSegments = translateModel.GetTextSegment(projectId, fileId);
+                                    List<TextSegment> lstPureTextSegment = translateModel.GetTextSegment(projectId, fileId);
+                                    List<TextSegment> lstSegments = new List<TextSegment>();
+                                    foreach (var textSegment in lstPureTextSegment)
+                                    {
+                                        int iRow = textSegment.Row != null ? Convert.ToInt32(textSegment.Row) : -1;
+                                        int iCol = textSegment.Col != null ? Convert.ToInt32(textSegment.Col) : -1;
+                                        if (!(lstSegments.Any(a => a.TextSegment1 == textSegment.TextSegment1) && iRow != -1 && iCol != -1))                     //&& iRow != -1 && iCol != -1
+                                        {
+                                            lstSegments.Add(textSegment);
+                                        }
+                                    }
                                     sResult.ControllerResult.Value = lstSegments;
                                 }
                                 else
@@ -255,8 +285,8 @@ namespace APVTranslator_Controllers.Controllers
                                 {
                                     try
                                     {
-                                        List<TextSegment> lstTextSegment = translateModel.GetTextSegment(projectId, fileId);                                      
-                                        List <TextSegment> lstTextSegmentNoExists = new List<TextSegment>();
+                                        List<TextSegment> lstTextSegment = translateModel.GetTextSegment(projectId, fileId);
+                                        List<TextSegment> lstTextSegmentNoExists = new List<TextSegment>();
                                         foreach (var item in lstTextSegment)
                                         {
                                             var textSegment = lstTextSegment.Where(a => !String.IsNullOrEmpty(a.TextSegment2) && a.TextSegment1 == item.TextSegment1 && String.IsNullOrEmpty(item.TextSegment2)).FirstOrDefault();

@@ -33,7 +33,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                              displayName: 'Source Language',
                              cellTemplate: '<div ng-right-click="rightClickCell(row,col)" context="context1" ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
                              enableCellEdit: false,
-                             minWidth: 250,
+                             minWidth: 300,
                              resizable: true
                          },
 
@@ -100,7 +100,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                              cellTemplate: '<div ng-right-click="rightClickCell(row,col)" context="context1" ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
                              displayName: 'Source Language',
                              enableCellEdit: true,
-                             minWidth: 250,
+                             minWidth: 300,
                              resizable: true
                          },
                          {
@@ -123,7 +123,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                          },
                          {
                              field: 'GoogleTranslate',
-                             cellTemplate: '<div ng-right-click="rightClickCell(row,col)" context="context2" ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
+                             cellTemplate: '<div ng-right-click="rightClickCell(row,col)" context="context1" ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
                              displayName: 'GoogleTranslate',
                              enableCellEdit: false,
                              minWidth: 200,
@@ -186,7 +186,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                         toolTip.text(clients[i]['UserName']);
                         toolTip.css("background-color", clients[i].Color);
                         parentCell.attr("isreadonly", "1");
-                        parentCell.css("border", "2px solid " + clients[i].Color);
+                        parentCell.css("cssText", "border: 2px solid " + clients[i].Color + " !important");
                     }
                 }
             }, 400);
@@ -205,7 +205,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                 var rowData = row.entity;
                 if (col.field == "GoogleTranslate") {
                     try {
-                        Utility.translateText(rowData['TextSegment1'], 'auto', 'ja', rowData, function (obj, translatedText) {
+                        Utility.translateText(rowData['TextSegment1'], 'auto', targetLang, rowData, function (obj, translatedText) {
                             obj['GoogleTranslate'] = translatedText;
                         });
                     } catch (e) {
@@ -286,7 +286,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                         }
                         scope.projectName = response.ProjectName;
                         scope.fileName = response.FileName;
-
+                        setTimeout(function () { scope.getSugestion(scope.data) }, 0);
                     }
                     else {
                         Utility.showMessage(scope, $mdDialog, response.ControllerResult.Message);
@@ -297,6 +297,84 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                     Utility.showMessage(scope, $mdDialog, error);
                 }
             });
+        }
+
+        scope.getSugestion = function (data) {
+            try {
+                if (data) {
+                    var textSegmentCount = 0;
+                    var arrTextSegment = [];
+                    for (var i = 0; i < data.length; i++) {
+                        if ((data[i]['Suggestion'] == undefined || data[i]['Suggestion'] == '')) {
+                            if (textSegmentCount == 10) {
+                                $.ajax({
+                                    type: "POST",
+                                    url: Utility.getBaseUrl() + 'Services/TranslateService.svc/GetSugestion',
+                                    data: JSON.stringify({ 'listTexsegment': JSON.stringify(arrTextSegment) }),
+                                    contentType: "application/json; charset=utf-8",
+                                    dataType: "json",
+                                    success: function (response) {
+                                        if (response && response.GetSugestionResult.IsSuccess) {
+                                            var data = JSON.parse(response.GetSugestionResult.Value);
+                                            for (var i = 0; i < data.length; i++) {
+                                                var objs = angularScope.grep(angularScope.data, data[i], "Id");
+                                                if (objs.length > 0 && data[i]['Suggestion'] != '' && data[i]['Suggestion'] != undefined) {
+                                                    objs[0]['Suggestion'] = data[i]['Suggestion'];
+                                                }
+                                            }
+                                        }
+                                        else {
+                                            Utility.showMessage(scope, $mdDialog, response.GetSugestionResult.Message);
+                                        }
+                                    },
+                                    error: function (error) {
+                                        cfpLoadingBar.complete();
+                                        Utility.showMessage(scope, $mdDialog, error);
+                                    }
+                                });
+                                textSegmentCount = 0;
+                                arrTextSegment = [];
+                            }
+                            else if (textSegmentCount < 10) {
+                                textSegmentCount++;
+                                arrTextSegment.push(data[i])
+                            }
+                            if (i == data.length - 1 && textSegmentCount > 0) {
+                                $.ajax({
+                                    type: "POST",
+                                    url: Utility.getBaseUrl() + 'Services/TranslateService.svc/GetSugestion',
+                                    data: JSON.stringify({ 'listTexsegment': JSON.stringify(arrTextSegment) }),
+                                    contentType: "application/json; charset=utf-8",
+                                    dataType: "json",
+                                    success: function (response) {
+                                        if (response && response.GetSugestionResult.IsSuccess) {
+                                            var data = JSON.parse(response.GetSugestionResult.Value);
+                                            for (var i = 0; i < data.length; i++) {
+                                                var objs = angularScope.grep(angularScope.data, data[i], "Id");
+                                                if (objs.length > 0 && data[i]['Suggestion'] != '' && data[i]['Suggestion'] != undefined) {
+                                                    objs[0]['Suggestion'] = data[i]['Suggestion'];
+                                                }
+                                            }
+                                        }
+                                        else {
+                                            Utility.showMessage(scope, $mdDialog, response.GetSugestionResult.Message);
+                                        }
+                                    },
+                                    error: function (error) {
+                                        cfpLoadingBar.complete();
+                                        Utility.showMessage(scope, $mdDialog, error);
+                                    }
+                                });
+                                textSegmentCount = 0;
+                                arrTextSegment = [];
+                            }
+                        }
+                        //data[i]['Suggestion'] = 'đấy là gợi ý đó';
+                    }
+                }
+            } catch (e) {
+
+            }
         }
 
         scope.getSocket = function () {
@@ -328,7 +406,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                             toolTip.text(data['UserName']);
                             toolTip.css("background-color", data.Color);
                             parentCell.attr("isreadonly", "1");
-                            parentCell.css("border", "2px solid " + data.Color);
+                            parentCell.css("cssText", "border: 2px solid " + data.Color + " !important");
                         }
                         else if (arrClient.length == 1) {
                             //clear old Cell
@@ -347,7 +425,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                             toolTip.css("background-color", data.Color);
                             toolTip.text(data['UserName']);
                             parentCell.attr("isreadonly", "1");
-                            parentCell.css("border", "2px solid " + data.Color);
+                            parentCell.css("cssText", "border: 2px solid " + data.Color + " !important");
                         }
                         var arrRecord = scope.grep(angularScope.data, data, "Id")
                         if (arrRecord.length == 0) {
@@ -380,7 +458,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                                     toolTip.text(clients[i]['UserName']);
                                     toolTip.css("background-color", clients[i].Color);
                                     parentCell.attr("isreadonly", "1");
-                                    parentCell.css("border", "2px solid " + clients[i].Color);
+                                    parentCell.css("cssText", "border: 2px solid " + clients[i].Color + " !important");
                                 }
                             }
                         }
@@ -441,7 +519,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                             window.location.replace(Utility.getBaseUrl() + "Handler/DownloadHandler.ashx?projectId=" + projectId + "&fileId=" + fileId);
                         }
                         else {
-                            Utility.showMessage(scope, $mdDialog, response.ControllerResult.Message);
+                            Utility.showMessage(scope, $mdDialog, response.Message);
                         }
                     },
                     error: function (error) {
@@ -512,7 +590,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                 Utility.showMessage(scope, $mdDialog, "Can't copy to DestinationLanguage!");
             }
         }
-
+        //xem lại 
         scope.copyTextToClipboard = function (text) {
             var textArea = document.createElement("textarea");
             textArea.style.position = 'fixed';

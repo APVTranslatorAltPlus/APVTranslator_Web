@@ -497,9 +497,15 @@ md-dialog-actions{
     left: 0;
     z-index: 3;
 }
-.ngCellElement{
-    height:inherit;
+
+.ngCellElement {
+    height: inherit;
 }
-.ngCellElement div{
-    height:inherit;
+
+    .ngCellElement div {
+        height: inherit;
+    }
+
+.ngGrid .ngCell {
+    border:0.5px solid #ccc !important;
 }

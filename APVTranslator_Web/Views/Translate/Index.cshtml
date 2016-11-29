@@ -35,9 +35,14 @@
         <script>
             var projectId = '@ViewBag.ProjectId';
             var fileId = '@ViewBag.FileId';
-            var userId = '@ViewBag.UserId'
+            var userId = '@ViewBag.UserId';
+            var languagePair = '@ViewBag.LanguagePair';
+            var arrLang = languagePair.split('|');
+            var targetLang = null;
+            if (arrLang.length == 2) {
+                targetLang = arrLang[1];
+            }
         </script>
     }
 </div>
-
 
