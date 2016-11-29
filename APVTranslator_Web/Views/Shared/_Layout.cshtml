@@ -30,6 +30,9 @@
         .onHoverChangeColor:hover{
    background-color:#c56767 !important;
 }
+        .onHoverChangeColor:{
+   background-color:#c56767 !important;
+}
     </style>
 </head>
 <body ng-app="apvApp">
@@ -45,7 +48,8 @@
             </div>
             <div class="navbar-collapse collapse ">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Dashboard", "Index", "Home", new { @class = "onHoverChangeColor" })</li>
+              @*      <li>@Html.ActionLink("Dashboard", "Index", "Home", new { @class = "onHoverChangeColor" })</li>*@
+                    <li ><a  class="onHoverChangeColor" onclick="angular.element(document.getElementById('Homecontroller')).scope().loadListProject();">Dashboard</a></li>
                   @*  <li>@Html.ActionLink("Help", "About", "Home", new { @class = "onHoverChangeColor" })</li>*@
                   
                 </ul>
