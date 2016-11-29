@@ -107,68 +107,70 @@ namespace APVTranslator_Services.Services
             return sResult;
         }
 
-
         public bool CreateNewProject(object newProject, IEnumerable<int> listMember)
         {
             try
             {
-                dynamic stuff = JObject.Parse(newProject.ToString());
-
-                string title = stuff.Title;
-                int translateLanguage = stuff.TranslateLanguage;
-                string descriptions = stuff.Descriptions;
-                string path = stuff.Path;
-                List<string> IdList = new List<string>();
-                var user = HttpContext.Current.User;
-                string createBy = user.Identity.Name;
-
-                string startDate = null;
-                string deadline = null;
-                DateTime? dtDeadline = null;
-                DateTime? dtStartDate = null;
-
-                if (stuff.CreateAt != null && stuff.CreateAt != "")
+                if (HttpContext.Current.User.Identity.IsAuthenticated)
                 {
-                    startDate = stuff.CreateAt;
-                    dtStartDate = Convert.ToDateTime(startDate);
+                    dynamic stuff = JObject.Parse(newProject.ToString());
 
-                }
-                if (stuff.Deadline != null && stuff.Deadline != "")
-                {
-                    deadline = stuff.Deadline;
-                    dtDeadline = Convert.ToDateTime(deadline);
-                }
+                    string title = stuff.Title;
+                    int translateLanguage = stuff.TranslateLanguage;
+                    string descriptions = stuff.Descriptions;
+                    string path = stuff.Path;
+                    List<string> IdList = new List<string>();
+                    var user = HttpContext.Current.User;
+                    string createBy = user.Identity.Name;
 
-                Project newProjectToDB = new Project(null,title, null, path, 0, null, null, createBy, dtStartDate, dtDeadline, translateLanguage, descriptions);
-                // Debug.WriteLine("Year: {0}, Month: {1}, Day: {2}", dt.Year, dt.Month, dt.Day);
-                //Debug.WriteLine("Title = " + newProjectToDB.Title);
-                //Debug.WriteLine("UseCompanyDB = " + newProjectToDB.UseCompanyDB);
-                //Debug.WriteLine("Path = " + newProjectToDB.Path);
-                //Debug.WriteLine("ProjectTypeID = " + newProjectToDB.ProjectTypeID);
-                //Debug.WriteLine("Status = " + newProjectToDB.Status);
-                //Debug.WriteLine("Progress = " + newProjectToDB.Progress);
-                //Debug.WriteLine("CreateBy = " + newProjectToDB.CreateBy);
-                //Debug.WriteLine("StartDate = " + newProjectToDB.CreateAt);
-                //Debug.WriteLine("Deadline = " + newProjectToDB.DeadLine);
-                //Debug.WriteLine("TranslateLanguage = " + newProjectToDB.TranslateLanguageID);
-                //Debug.WriteLine("Description = " + newProjectToDB.Descriptions);
+                    string startDate = null;
+                    string deadline = null;
+                    DateTime? dtDeadline = null;
+                    DateTime? dtStartDate = null;
 
-                try
-                {
-                    DashBoardModel dbModel = new DashBoardModel();
-                    return dbModel.CreateNewProject(newProjectToDB, listMember);
-                }
-                catch (System.Data.SqlClient.SqlException e)
-                {
-                    Debug.WriteLine("Error: " + e.ToString());
-                    return false;
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine("Error: " + ex.ToString());
-                    return false;
-                }
+                    if (stuff.CreateAt != null && stuff.CreateAt != "")
+                    {
+                        startDate = stuff.CreateAt;
+                        dtStartDate = Convert.ToDateTime(startDate);
 
+                    }
+                    if (stuff.Deadline != null && stuff.Deadline != "")
+                    {
+                        deadline = stuff.Deadline;
+                        dtDeadline = Convert.ToDateTime(deadline);
+                    }
+
+                    Project newProjectToDB = new Project(null, title, null, path, 0, null, null, createBy, dtStartDate, dtDeadline, translateLanguage, descriptions);
+                    // Debug.WriteLine("Year: {0}, Month: {1}, Day: {2}", dt.Year, dt.Month, dt.Day);
+                    //Debug.WriteLine("Title = " + newProjectToDB.Title);
+                    //Debug.WriteLine("UseCompanyDB = " + newProjectToDB.UseCompanyDB);
+                    //Debug.WriteLine("Path = " + newProjectToDB.Path);
+                    //Debug.WriteLine("ProjectTypeID = " + newProjectToDB.ProjectTypeID);
+                    //Debug.WriteLine("Status = " + newProjectToDB.Status);
+                    //Debug.WriteLine("Progress = " + newProjectToDB.Progress);
+                    //Debug.WriteLine("CreateBy = " + newProjectToDB.CreateBy);
+                    //Debug.WriteLine("StartDate = " + newProjectToDB.CreateAt);
+                    //Debug.WriteLine("Deadline = " + newProjectToDB.DeadLine);
+                    //Debug.WriteLine("TranslateLanguage = " + newProjectToDB.TranslateLanguageID);
+                    //Debug.WriteLine("Description = " + newProjectToDB.Descriptions);
+
+                    try
+                    {
+                        DashBoardModel dbModel = new DashBoardModel();
+                        return dbModel.CreateNewProject(newProjectToDB, listMember);
+                    }
+                    catch (System.Data.SqlClient.SqlException e)
+                    {
+                        Debug.WriteLine("Error: " + e.ToString());
+                        return false;
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine("Error: " + ex.ToString());
+                        return false;
+                    }
+                }
+                return false;
             }
             catch (Exception e)
             {
@@ -203,8 +205,11 @@ namespace APVTranslator_Services.Services
             ServiceResult sResult = new ServiceResult();
             try
             {
-                DashBoardModel dbModel = new DashBoardModel();
-                sResult.Value = dbModel.GetProjectInfo(projectId);
+                if (HttpContext.Current.User.Identity.IsAuthenticated)
+                {
+                    DashBoardModel dbModel = new DashBoardModel();
+                    sResult.Value = dbModel.GetProjectInfo(projectId);
+                }
             }
             catch (Exception ex)
             {
@@ -219,8 +224,11 @@ namespace APVTranslator_Services.Services
             ServiceResult sResult = new ServiceResult();
             try
             {
-                DashBoardModel dbModel = new DashBoardModel();
-                sResult.Value = dbModel.GetListProjectMember(projectId);
+                if (HttpContext.Current.User.Identity.IsAuthenticated)
+                {
+                    DashBoardModel dbModel = new DashBoardModel();
+                    sResult.Value = dbModel.GetListProjectMember(projectId);
+                }
             }
             catch (Exception ex)
             {
@@ -236,52 +244,56 @@ namespace APVTranslator_Services.Services
             //return true;
             try
             {
-                dynamic stuff = JObject.Parse(newProject.ToString());
-
-                int? Id = stuff.Id;
-                string title = stuff.Title;
-                int translateLanguage = stuff.TranslateLanguage;
-                string descriptions = stuff.Descriptions;
-                string path = stuff.Path;
-                List<string> IdList = new List<string>();
-                var user = HttpContext.Current.User;
-                string createBy = user.Identity.Name;
-
-                string startDate = null;
-                string deadline = null;
-                DateTime? dtDeadline = null;
-                DateTime? dtStartDate = null;
-
-                if (stuff.CreateAt != null && stuff.CreateAt != "")
+                if (HttpContext.Current.User.Identity.IsAuthenticated)
                 {
-                    startDate = stuff.CreateAt;
-                    dtStartDate = Convert.ToDateTime(startDate);
+                    dynamic stuff = JObject.Parse(newProject.ToString());
+
+                    int? Id = stuff.Id;
+                    string title = stuff.Title;
+                    int translateLanguage = stuff.TranslateLanguage;
+                    string descriptions = stuff.Descriptions;
+                    string path = stuff.Path;
+                    List<string> IdList = new List<string>();
+                    var user = HttpContext.Current.User;
+                    string createBy = user.Identity.Name;
+
+                    string startDate = null;
+                    string deadline = null;
+                    DateTime? dtDeadline = null;
+                    DateTime? dtStartDate = null;
+
+                    if (stuff.CreateAt != null && stuff.CreateAt != "")
+                    {
+                        startDate = stuff.CreateAt;
+                        dtStartDate = Convert.ToDateTime(startDate);
+
+                    }
+                    if (stuff.Deadline != null && stuff.Deadline != "")
+                    {
+                        deadline = stuff.Deadline;
+                        dtDeadline = Convert.ToDateTime(deadline);
+                    }
+
+                    Project projectToUpdate = new Project(Id, title, null, path, 0, null, null, createBy, dtStartDate, dtDeadline, translateLanguage, descriptions);
+
+                    try
+                    {
+                        DashBoardModel dbModel = new DashBoardModel();
+                        return dbModel.UpdateProject(projectToUpdate, newlyInsertedIDList, deletedIDList);
+                    }
+                    catch (System.Data.SqlClient.SqlException e)
+                    {
+                        Debug.WriteLine("Error: " + e.ToString());
+                        return false;
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine("Error: " + ex.ToString());
+                        return false;
+                    }
 
                 }
-                if (stuff.Deadline != null && stuff.Deadline != "")
-                {
-                    deadline = stuff.Deadline;
-                    dtDeadline = Convert.ToDateTime(deadline);
-                }
-
-                Project projectToUpdate = new Project(Id,title, null, path, 0, null, null, createBy, dtStartDate, dtDeadline, translateLanguage, descriptions);
-
-                try
-                {
-                    DashBoardModel dbModel = new DashBoardModel();
-                    return dbModel.UpdateProject(projectToUpdate, newlyInsertedIDList, deletedIDList);
-                }
-                catch (System.Data.SqlClient.SqlException e)
-                {
-                    Debug.WriteLine("Error: " + e.ToString());
-                    return false;
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine("Error: " + ex.ToString());
-                    return false;
-                }
-
+                return false;
             }
             catch (Exception e)
             {
@@ -348,8 +360,11 @@ namespace APVTranslator_Services.Services
             ServiceResult sResult = new ServiceResult();
             try
             {
-                DashBoardModel dbModel = new DashBoardModel();
-                sResult.Value = dbModel.Proc_GetListProjectDBReference(projectId);
+                if (HttpContext.Current.User.Identity.IsAuthenticated)
+                {
+                    DashBoardModel dbModel = new DashBoardModel();
+                    sResult.Value = dbModel.Proc_GetListProjectDBReference(projectId);
+                }
             }
             catch (Exception ex)
             {
@@ -365,8 +380,11 @@ namespace APVTranslator_Services.Services
             {
                 try
                 {
-                    DashBoardModel dbModel = new DashBoardModel();
-                    return dbModel.SaveChangeDictionarySetting(updateProject, newlyInsertedIDList, deletedIDList);
+                    if (HttpContext.Current.User.Identity.IsAuthenticated)
+                    {
+                        DashBoardModel dbModel = new DashBoardModel();
+                        return dbModel.SaveChangeDictionarySetting(updateProject, newlyInsertedIDList, deletedIDList);
+                    }
                 }
                 catch (System.Data.SqlClient.SqlException e)
                 {
@@ -378,7 +396,7 @@ namespace APVTranslator_Services.Services
                     Debug.WriteLine("Error: " + ex.ToString());
                     return false;
                 }
-
+                return false;
             }
             catch (Exception e)
             {
@@ -393,8 +411,11 @@ namespace APVTranslator_Services.Services
             ServiceResult sResult = new ServiceResult();
             try
             {
-                DashBoardModel dbModel = new DashBoardModel();
-                sResult.Value = dbModel.Proc_GetInfoForMemberSetting(projectId);
+                if (HttpContext.Current.User.Identity.IsAuthenticated)
+                {
+                    DashBoardModel dbModel = new DashBoardModel();
+                    sResult.Value = dbModel.Proc_GetInfoForMemberSetting(projectId);
+                }
             }
             catch (Exception ex)
             {
@@ -411,8 +432,11 @@ namespace APVTranslator_Services.Services
             {
                 try
                 {
-                    DashBoardModel dbModel = new DashBoardModel();
-                    return dbModel.SaveChangeMemberSetting(projectId, modifiedIsAMemberList, modifiedNotAMemberList);
+                    if (HttpContext.Current.User.Identity.IsAuthenticated)
+                    {
+                        DashBoardModel dbModel = new DashBoardModel();
+                        return dbModel.SaveChangeMemberSetting(projectId, modifiedIsAMemberList, modifiedNotAMemberList);
+                    }
                 }
                 catch (System.Data.SqlClient.SqlException e)
                 {
@@ -424,7 +448,7 @@ namespace APVTranslator_Services.Services
                     Debug.WriteLine("Error: " + ex.ToString());
                     return false;
                 }
-
+                return false;
             }
             catch (Exception e)
             {
@@ -438,8 +462,11 @@ namespace APVTranslator_Services.Services
             ServiceResult sResult = new ServiceResult();
             try
             {
-                DashBoardModel dbModel = new DashBoardModel();
-                sResult.Value = dbModel.Proc_GetTextSearch(textSearch);
+                if (HttpContext.Current.User.Identity.IsAuthenticated)
+                {
+                    DashBoardModel dbModel = new DashBoardModel();
+                    sResult.Value = dbModel.Proc_GetTextSearch(textSearch);
+                }
             }
             catch (Exception ex)
             {
