@@ -71,6 +71,9 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                 if (scope.gridType == Enumeration.GridType.ListProject) {
                     scope.loadListFileProject(row.entity.Id);
                 }
+                if(scope.gridType == Enumeration.GridType.ListFileProject){
+                    scope.translateFile();
+                }
             } catch (e) {
                 Utility.showMessage(scope, $mdDialog, e.message);
             }
