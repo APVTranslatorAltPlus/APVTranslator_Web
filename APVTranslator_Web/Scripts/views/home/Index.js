@@ -499,7 +499,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                                 angular.element('#deadline').val(moment(project.DeadLine).format('YYYY-MM-DD HH:MM:SS'));
                             }
                             document.getElementById("projectName").disabled = "disabled";
-
+                            document.getElementById("descriptions").value = project.Descriptions;
                             //scope.IdList = [];
                             //scope.dateRangeStart = '';
                             //scope.dateRangeEnd = '';
