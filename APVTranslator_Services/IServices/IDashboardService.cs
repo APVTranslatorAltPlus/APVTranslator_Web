@@ -24,7 +24,7 @@ namespace APVTranslator_Services.Services
         ServiceResult DeleteFileProject(int projectId, string projectName, int fileId, string fileName);
         [OperationContract]
         [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped)]
-        bool CreateNewProject(object newProject, IEnumerable<int> listMember);
+        ServiceResult CreateNewProject(object newProject, IEnumerable<int> listMember);
         [OperationContract]
         [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped)]
         ServiceResult GetListUser();
@@ -36,22 +36,22 @@ namespace APVTranslator_Services.Services
         ServiceResult GetListProjectMember(int projectId);
         [OperationContract]
         [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped)]
-        bool UpdateProject(object project, IEnumerable<int> newlyInsertedIDList, IEnumerable<int> deletedIDList);
+        ServiceResult UpdateProject(object project, IEnumerable<int> newlyInsertedIDList, IEnumerable<int> deletedIDList);
         [OperationContract]
         [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped)]
-        bool DeleteProject(int projectId, string projectTitle);
+        ServiceResult DeleteProject(int projectId, string projectTitle);
         [OperationContract]
         [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped)]
         ServiceResult GetListProjectDBReference(int projectId);
         [OperationContract]
         [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped)]
-        bool SaveChangeDictionarySetting(object project, IEnumerable<int> newlyInsertedIDList, IEnumerable<int> deletedIDList);
+        ServiceResult SaveChangeDictionarySetting(object project, IEnumerable<int> newlyInsertedIDList, IEnumerable<int> deletedIDList);
         [OperationContract]
         [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped)]
         ServiceResult GetInfoForMemberSetting(int projectId);
         [OperationContract]
         [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped)]
-        bool SaveChangeMemberSetting(int projectId, string modifiedIsAMemberList, string modifiedNotAMemberList);
+        ServiceResult SaveChangeMemberSetting(int projectId, string modifiedIsAMemberList, string modifiedNotAMemberList);
         [OperationContract]
         [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped)]
         ServiceResult GetTextSearch(string textSearch);

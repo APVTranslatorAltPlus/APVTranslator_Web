@@ -73,7 +73,7 @@
                         <span flex></span>
                         <div id="custom-search-input" style="width:300px;height:36px;">
                             <div class="input-group" style="width:300px;height:36px;">
-                                <input type="text" id="textSearchBox" style="height: 30px;" class="form-control input-lg" placeholder="Search..." ng-keypress="myFunct($event)" />
+                                <input type="text" onfocus="if(this.value != '') {this.value=''}"  id="textSearchBox" style="height: 30px;" class="form-control input-lg" placeholder="Search..." ng-keypress="myFunct($event)" />
                                 <span class="input-group-btn" style="vertical-align: top !important;bottom:2px;">
                                     <button class="btn btn-info btn-lg" type="button" ng-click="searchText()">
                                         <i class="glyphicon glyphicon-search"></i>
@@ -157,9 +157,9 @@
             </div>
 
             @*Modal*@
-            <div class="modal fade" tabindex="-1" role="dialog" id="createNewProjectModal" style="left:10%;">
+            <div class="modal fade" tabindex="-1" role="dialog" id="createNewProjectModal" @*style="left:10%;"*@>
                 <div class="modal-dialog" role="document">
-                    <div class="modal-content" style="width:80%">
+                    <div class="modal-content" @*style="width:80%"*@>
                         <div class="modal-header" style="background-color:rgb(69,179,157);border-radius:3px;">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                             <h4 class="modal-title" id="modalTitle" style="color:white">Create New Project</h4>
@@ -187,20 +187,20 @@
                                 @*    <hr>*@
                                 @*   <tt>option = {{data2.selectedOption.Email}}</tt><br />*@
                             </div>
-                            <tags-input id="tagList" display-property="Email" key-property="Id" ng-model="tags" placeholder="Add new member here" add-from-autocomplete-only="true" style="height:100px;">
+                            <tags-input id="tagList" display-property="Email" key-property="Id" ng-model="tags" placeholder="Add new member here" add-from-autocomplete-only="true">
                                 <auto-complete source="loadTags($query)"></auto-complete>
                             </tags-input>
 
                             <div class="form-group">
                                 <label for="descriptions">Descriptions:</label>
-                                <textarea class="form-control" rows="5" id="descriptions" style="max-width:900px!important"></textarea>
+                                <textarea class="form-control" rows="5" id="descriptions" style="max-width:100%!important;height:100px;"></textarea>
                             </div>
 
                             <div class="dropdown form-group">
                                 <label>Create At:</label>
                                 <a class="dropdown-toggle" id="dropdownStart" role="button" data-toggle="dropdown">
                                     <div class="input-group date">
-                                        <input type="text" id="startDate" data-date-time-input="YYYY-MM-DD HH:MM:SS" class="form-control" data-ng-model="dateRangeStart" style="max-width:900px!important">
+                                        <input type="text" id="startDate" data-date-time-input="YYYY-MM-DD HH:MM:SS" class="form-control" data-ng-model="dateRangeStart" style="max-width:100%!important">
                                         <span class="input-group-addon" style="color:#3f4a54"><i class="glyphicon glyphicon-calendar"></i></span>
                                     </div>
                                 </a>
@@ -216,7 +216,7 @@
                                 <label>Deadline:</label>
                                 <a class="dropdown-toggle" id="dropdownEnd" role="button" data-toggle="dropdown">
                                     <div class="input-group date">
-                                        <input type="text" id="deadline" data-date-time-input="YYYY-MM-DD HH:MM:SS" class="form-control" data-ng-model="dateRangeEnd" style="max-width:900px!important">
+                                        <input type="text" id="deadline" data-date-time-input="YYYY-MM-DD HH:MM:SS" class="form-control" data-ng-model="dateRangeEnd" style="max-width:100%!important">
                                         <span class="input-group-addon" style="color:#3f4a54"><i class="glyphicon glyphicon-calendar"></i></span>
                                     </div>
                                 </a>
@@ -359,7 +359,7 @@
                 <h4 class="modal-title" id="modalTitle" style="color:white;display:inline;">Search Result</h4>
                 <div id="custom-search-input" style="width:300px;height:40px;float:right;position:absolute;right:8px;top:8px;">
                     <div class="input-group" style="width:300px;height:40px;">
-                        <input type="text" id="textSearchBox2" style="height: 30px;top:2px;" class="form-control input-lg" placeholder="Search..." onkeypress="angular.element(document.getElementById('Homecontroller')).scope().myFunct(event);" />
+                        <input type="text" id="textSearchBox2" onfocus="if(this.value != '') {this.value=''}" style="height: 30px;top:2px;" class="form-control input-lg" placeholder="Search..." onkeypress="angular.element(document.getElementById('Homecontroller')).scope().myFunct(event);" />
                         <span class="input-group-btn" style="vertical-align: top !important;bottom:2px;">
                             <button class="btn btn-info btn-lg" type="button" onclick="angular.element(document.getElementById('Homecontroller')).scope().searchText();">
                                 <i class="glyphicon glyphicon-search"></i>
@@ -370,7 +370,7 @@
             </div>
             <div class="modal-body" style="width:100%">
                 
-                <table class="table" id="textSearch-table">
+                <table class="table table-striped" id="textSearch-table">
                     <thead>
                         <tr>
                             <th>STT</th>
@@ -393,7 +393,7 @@
     @@media screen and (min-width: 768px) {
 
         #createNewProjectModal .modal-dialog {
-            width: 900px;
+            /*width: 900px;*/
         }
     }
 
