@@ -231,7 +231,9 @@ namespace APVTranslator_Controllers.Controllers
                 sResult.ControllerResult.IsSuccess = false;
                 sResult.ControllerResult.Message = ex.Message;
             }
-            return Json(sResult);
+            var jsonResult = Json(sResult, JsonRequestBehavior.AllowGet);
+            jsonResult.MaxJsonLength = Int32.MaxValue;
+            return jsonResult;
         }
         [HttpPost]
         public ActionResult BuildExportFile(int projectId, int fileId)

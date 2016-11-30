@@ -500,12 +500,15 @@ md-dialog-actions{
 
 .ngCellElement {
     height: inherit;
+    overflow-y: auto;
+    overflow-x:hidden;
 }
 
     .ngCellElement div {
-        height: inherit;
+        height: auto;
+        min-height:30px;
     }
 
 .ngGrid .ngCell {
-    border:0.5px solid #ccc !important;
+    border: 0.5px solid #ccc !important;
 }
