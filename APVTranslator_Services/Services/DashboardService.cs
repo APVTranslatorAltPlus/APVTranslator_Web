@@ -107,8 +107,9 @@ namespace APVTranslator_Services.Services
             return sResult;
         }
 
-        public bool CreateNewProject(object newProject, IEnumerable<int> listMember)
+        public ServiceResult CreateNewProject(object newProject, IEnumerable<int> listMember)
         {
+            ServiceResult sResult = new ServiceResult();
             try
             {
                 if (HttpContext.Current.User.Identity.IsAuthenticated)
@@ -154,29 +155,15 @@ namespace APVTranslator_Services.Services
                     //Debug.WriteLine("TranslateLanguage = " + newProjectToDB.TranslateLanguageID);
                     //Debug.WriteLine("Description = " + newProjectToDB.Descriptions);
 
-                    try
-                    {
-                        DashBoardModel dbModel = new DashBoardModel();
-                        return dbModel.CreateNewProject(newProjectToDB, listMember);
-                    }
-                    catch (System.Data.SqlClient.SqlException e)
-                    {
-                        Debug.WriteLine("Error: " + e.ToString());
-                        return false;
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.WriteLine("Error: " + ex.ToString());
-                        return false;
-                    }
+                    DashBoardModel dbModel = new DashBoardModel();
+                    sResult.Value = dbModel.CreateNewProject(newProjectToDB, listMember);
                 }
-                return false;
             }
             catch (Exception e)
             {
                 Debug.WriteLine("Error: " + e.ToString());
-                return false;
             }
+            return sResult;
 
         }
 
@@ -238,10 +225,9 @@ namespace APVTranslator_Services.Services
             return sResult;
         }
 
-        public bool UpdateProject(object newProject, IEnumerable<int> newlyInsertedIDList, IEnumerable<int> deletedIDList)
+        public ServiceResult UpdateProject(object newProject, IEnumerable<int> newlyInsertedIDList, IEnumerable<int> deletedIDList)
         {
-            //Debug.WriteLine("OK!");
-            //return true;
+            ServiceResult sResult = new ServiceResult();
             try
             {
                 if (HttpContext.Current.User.Identity.IsAuthenticated)
@@ -276,35 +262,24 @@ namespace APVTranslator_Services.Services
 
                     Project projectToUpdate = new Project(Id, title, null, path, 0, null, null, createBy, dtStartDate, dtDeadline, translateLanguage, descriptions);
 
-                    try
-                    {
-                        DashBoardModel dbModel = new DashBoardModel();
-                        return dbModel.UpdateProject(projectToUpdate, newlyInsertedIDList, deletedIDList);
-                    }
-                    catch (System.Data.SqlClient.SqlException e)
-                    {
-                        Debug.WriteLine("Error: " + e.ToString());
-                        return false;
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.WriteLine("Error: " + ex.ToString());
-                        return false;
-                    }
+                    DashBoardModel dbModel = new DashBoardModel();
+                    sResult.Value = dbModel.UpdateProject(projectToUpdate, newlyInsertedIDList, deletedIDList);
 
                 }
-                return false;
             }
             catch (Exception e)
             {
                 Debug.WriteLine("Error: " + e.ToString());
-                return false;
+                sResult.IsSuccess = false;
+                sResult.Message = e.ToString();
             }
+            return sResult;
 
         }
 
-        public bool DeleteProject(int projectId, string projectTitle)
+        public ServiceResult DeleteProject(int projectId, string projectTitle)
         {
+            ServiceResult sResult = new ServiceResult();
             try
             {
                 DashBoardModel dbModel = new DashBoardModel();
@@ -319,7 +294,7 @@ namespace APVTranslator_Services.Services
                         if (dbModel.DeleteProject(projectId))
                         {
                             //Delete all files of this project from server
-
+                            sResult.Value = true;
                             var projectFolderPath = Utility.GetRootPath() + "Projects\\" + projectTitle;
 
                             System.IO.DirectoryInfo di = new DirectoryInfo(projectFolderPath);
@@ -338,21 +313,20 @@ namespace APVTranslator_Services.Services
                             catch (Exception e)
                             {
                                 Debug.WriteLine("DELETE FILES ERROR: " + e.ToString());
-                                return true;
+                                //sResult.IsSuccess = false;
+                                //sResult.Message = e.ToString();
                             }
-                            return true;
                         }
-                        return false;
                     }
-                    return false;
                 }
-                return false;
             }
             catch (Exception ex)
             {
                 Debug.WriteLine("Error: " + ex.ToString());
-                return false;
+                sResult.IsSuccess = false;
+                sResult.Message = ex.ToString();
             }
+            return sResult;
         }
 
         public ServiceResult GetListProjectDBReference(int projectId)
@@ -374,35 +348,31 @@ namespace APVTranslator_Services.Services
             return sResult;
         }
 
-        public bool SaveChangeDictionarySetting(object updateProject, IEnumerable<int> newlyInsertedIDList, IEnumerable<int> deletedIDList)
+        public ServiceResult SaveChangeDictionarySetting(object updateProject, IEnumerable<int> newlyInsertedIDList, IEnumerable<int> deletedIDList)
         {
+            ServiceResult sResult = new ServiceResult();
+
             try
             {
-                try
+                if (HttpContext.Current.User.Identity.IsAuthenticated)
                 {
-                    if (HttpContext.Current.User.Identity.IsAuthenticated)
-                    {
-                        DashBoardModel dbModel = new DashBoardModel();
-                        return dbModel.SaveChangeDictionarySetting(updateProject, newlyInsertedIDList, deletedIDList);
-                    }
+                    DashBoardModel dbModel = new DashBoardModel();
+                    sResult.Value = dbModel.SaveChangeDictionarySetting(updateProject, newlyInsertedIDList, deletedIDList);
                 }
-                catch (System.Data.SqlClient.SqlException e)
-                {
-                    Debug.WriteLine("Error: " + e.ToString());
-                    return false;
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine("Error: " + ex.ToString());
-                    return false;
-                }
-                return false;
             }
-            catch (Exception e)
+            catch (System.Data.SqlClient.SqlException e)
             {
                 Debug.WriteLine("Error: " + e.ToString());
-                return false;
+                sResult.IsSuccess = false;
+                sResult.Message = e.ToString();
             }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Error: " + ex.ToString());
+                sResult.IsSuccess = false;
+                sResult.Message = ex.ToString();
+            }
+            return sResult;
 
         }
 
@@ -426,35 +396,32 @@ namespace APVTranslator_Services.Services
             return sResult;
         }
 
-        public bool SaveChangeMemberSetting(int projectId, string modifiedIsAMemberList, string modifiedNotAMemberList)
+        public ServiceResult SaveChangeMemberSetting(int projectId, string modifiedIsAMemberList, string modifiedNotAMemberList)
         {
+            ServiceResult sResult = new ServiceResult();
+
             try
             {
-                try
+                if (HttpContext.Current.User.Identity.IsAuthenticated)
                 {
-                    if (HttpContext.Current.User.Identity.IsAuthenticated)
-                    {
-                        DashBoardModel dbModel = new DashBoardModel();
-                        return dbModel.SaveChangeMemberSetting(projectId, modifiedIsAMemberList, modifiedNotAMemberList);
-                    }
+                    DashBoardModel dbModel = new DashBoardModel();
+                    sResult.Value = dbModel.SaveChangeMemberSetting(projectId, modifiedIsAMemberList, modifiedNotAMemberList);
                 }
-                catch (System.Data.SqlClient.SqlException e)
-                {
-                    Debug.WriteLine("Error: " + e.ToString());
-                    return false;
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine("Error: " + ex.ToString());
-                    return false;
-                }
-                return false;
             }
-            catch (Exception e)
+            catch (System.Data.SqlClient.SqlException e)
             {
                 Debug.WriteLine("Error: " + e.ToString());
-                return false;
+                sResult.IsSuccess = false;
+                sResult.Message = e.ToString();
             }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Error: " + ex.ToString());
+                sResult.IsSuccess = false;
+                sResult.Message = ex.ToString();
+            }
+
+            return sResult;
         }
 
         public ServiceResult GetTextSearch(string textSearch)

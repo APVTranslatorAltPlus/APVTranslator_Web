@@ -321,9 +321,10 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
 
             serCreateNewProject.data(JSON.stringify(projectObject), (scope.IdList))
               .success(function (response) {
-                  if (response.CreateNewProjectResult) {
+                  if (response.CreateNewProjectResult.IsSuccess && response.CreateNewProjectResult.Value === "true") {
                       scope.loadListProject();
                       console.log(response.CreateNewProjectResult);
+                      console.log(response.CreateNewProjectResult.Value);
                       $('#successModal').modal('show');
                       $('#createNewProjectModal').modal('hide');
                       document.getElementById("successMessage").innerHTML = "Create new project successfully!!!";
@@ -642,7 +643,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
             cfpLoadingBar.start();
             serUpdateProject.data(JSON.stringify(projectObject), (scope.newlyInsertedIDList), (scope.deletedIDList))
               .success(function (response) {
-                  if (response.UpdateProjectResult) {
+                  if (response.UpdateProjectResult.IsSuccess && response.UpdateProjectResult.Value === "true") {
                       scope.loadListProject();
                       console.log(response.UpdateProjectResult);
                       $('#successModal').modal('show');
@@ -664,7 +665,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
             cfpLoadingBar.start();
             serDeleteProject.data(scope.currentProject.Id, scope.currentProject.Title)
                .success(function (response) {
-                   if (response.DeleteProjectResult) {
+                   if (response.DeleteProjectResult.IsSuccess && response.DeleteProjectResult.Value === "true") {
                        scope.loadListProject();
                        console.log(response.DeleteProjectResult);
                        $('#successModal').modal('show');
@@ -802,7 +803,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
 
                 serSaveChangeDictionarySetting.data(JSON.stringify(projectObject), scope.newlyInsertedIDList, scope.deletedIDList)
                    .success(function (response) {
-                       if (response.SaveChangeDictionarySettingResult) {
+                       if (response.SaveChangeDictionarySettingResult.IsSuccess && response.SaveChangeDictionarySettingResult.Value === "true") {
                            $('#successModal').modal('show');
                            $('#settingModal').modal('hide');
                            document.getElementById("successMessage").innerHTML = "Save changes successfully!!!";
@@ -1016,7 +1017,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
 
                 serSaveChangeMemberSetting.data(projectId, JSON.stringify(scope.modifiedIsAMemberList), JSON.stringify(scope.modifiedNotAMemberList))
                    .success(function (response) {
-                       if (response.SaveChangeMemberSettingResult) {
+                       if (response.SaveChangeMemberSettingResult.IsSuccess && response.SaveChangeMemberSettingResult.Value === "true") {
                            $('#successModal').modal('show');
                            $('#settingModal').modal('hide');
                            document.getElementById("successMessage").innerHTML = "Save changes successfully!!!";
