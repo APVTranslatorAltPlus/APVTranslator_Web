@@ -106,35 +106,6 @@
     border-radius: 4px;
 }
 
-.ngCell {
-    display: table-cell;
-    height: auto !important;
-    overflow: auto;
-    position: static;
-}
-
-.ngRow {
-    display: table-row;
-    height: auto !important;
-    position: static;
-    word-wrap: break-word;
-    text-wrap: normal;
-    overflow-wrap: break-word;
-    float: none;
-    vertical-align: middle;
-    height: auto !important;
-}
-
-.ngCellText {
-    height: auto !important;
-    white-space: normal;
-    overflow: visible;
-    word-wrap: break-word;
-    text-wrap: normal;
-    overflow-wrap: break-word;
-}
-
-
 .gridStyle {
     z-index: 2;
 }

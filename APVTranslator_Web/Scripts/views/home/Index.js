@@ -109,7 +109,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
 
         scope.buildProcess = function (value) {
             if (value) {
-               return Math.floor(value * 100) + "%";
+                return Math.floor(value * 100) + "%";
             }
             else {
                 return "0%";
@@ -321,6 +321,12 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
             projectObject["Deadline"] = deadline.value;
             projectObject["Descriptions"] = descriptions.value;
             //console.log("STARTDATE" + startDate.value);
+
+            if (projectObject["CreateAt"].trim() > projectObject["Deadline"]) {
+                angular.element("#errorMess").text("Invalid date in Create At or Deadline!!!");
+                return;
+            }
+
             for (var i = 0; i < scope.tags.length; i++) {
 
                 var obj = scope.tags[i];
@@ -368,13 +374,20 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
             angular.element('#tagList').val('');
             scope.tags = [];
             angular.element('#descriptions').val('');
-            angular.element('#startDate').val('');
-            angular.element('#deadline').val('');
+            //angular.element('#startDate').val((moment(Date($.now())).format('YYYY-MM-DD HH:mm:ss')));
+            //angular.element('#deadline').val((moment(Date($.now())).format('YYYY-MM-DD HH:mm:ss')));
             scope.IdList = [];
-            scope.dateRangeStart = '';
-            scope.dateRangeEnd = '';
+            //scope.dateRangeStart = '';
+            //scope.dateRangeEnd = '';
             angular.element("#errorMess").text("");
             //scope.data2.selectedOption = scope.tags[0];
+            if (!scope.isEdit) {
+                angular.element('#startDate').val(moment(Date($.now())).format('YYYY-MM-DD HH:mm:ss'));
+                var fiveMinutesLater = new Date();
+                fiveMinutesLater.setMinutes(fiveMinutesLater.getMinutes() + 5);
+                angular.element('#deadline').val(moment(fiveMinutesLater).format('YYYY-MM-DD HH:mm:ss'));
+            }
+
             cfpLoadingBar.start();
             serGetListUser.data()
             .success(function (response) {
@@ -490,6 +503,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                     .success(function (response) {
                         if (response.GetProjectInfoResult && response.GetProjectInfoResult.IsSuccess) {
                             var project = JSON.parse(response.GetProjectInfoResult.Value);
+                            angular.element('#startDate').val(moment(project.CreateAt).format('YYYY-MM-DD HH:mm:ss'));
 
                             scope.getListUser();
                             scope.isEdit = true;
@@ -502,11 +516,10 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                             // scope.tags = [];
                             document.getElementById("modalTitle").innerHTML = "Edit project";
                             if (project.CreateAt != '' && project.CreateAt != null) {
-                                angular.element('#startDate').val(moment(project.CreateAt).format('YYYY-MM-DD HH:MM:SS'));
+                                angular.element('#startDate').val(moment(project.CreateAt).format('YYYY-MM-DD HH:mm:ss'));
                             }
-
                             if (project.DeadLine != '' && project.DeadLine != null) {
-                                angular.element('#deadline').val(moment(project.DeadLine).format('YYYY-MM-DD HH:MM:SS'));
+                                angular.element('#deadline').val(moment(project.DeadLine).format('YYYY-MM-DD HH:mm:ss'));
                             }
                             document.getElementById("projectName").disabled = "disabled";
                             document.getElementById("descriptions").value = project.Descriptions;
@@ -669,6 +682,10 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
               });
         }
 
+        //Confirm to delete project
+        scope.confirmDeleteProject = function () {
+            Utility.showConfirm(scope, $mdDialog, 'Do you want delete the project "' + scope.currentProject.Title + '"?', scope.deleteProject)
+        }
         //Delete project
         scope.deleteProject = function () {
             cfpLoadingBar.start();

@@ -31,7 +31,7 @@
                             Edit
                         </md-button>
                         <div class="a-divider" ng-show="projectSelection"></div>
-                        <md-button class="md-raised" ng-show="projectSelection" ng-disabled="!projectSelection" ng-click="deleteProject()" aria-label="Delete">
+                        <md-button class="md-raised" ng-show="projectSelection" ng-disabled="!projectSelection" ng-click="confirmDeleteProject()" aria-label="Delete">
                             <md-icon class="material-icons">delete</md-icon>
                             <md-tooltip md-direction="bottom">
                                 Delete Project
@@ -61,14 +61,14 @@
                             </md-tooltip>
                             Delete
                         </md-button>
-                        <div class="a-divider" ng-show="fileProjectSelection"></div>
+                        @*<div class="a-divider" ng-show="fileProjectSelection"></div>
                         <md-button class="md-raised" ng-show="fileProjectSelection" ng-click="translateFile()" ng-disabled="!fileProjectSelection" aria-label="trans;ate file">
                             <md-icon class="material-icons">g_translate</md-icon>
                             <md-tooltip md-direction="bottom">
                                 Translate file
                             </md-tooltip>
                             Translate
-                        </md-button>
+                        </md-button>*@
                         <input type="file" id="file" accept=".xlsx,.xls,.doc,.docx.,.ppt,.pptx" style="display:none" value="upload" multiple />
                         <span flex></span>
                         <div id="custom-search-input" style="width:300px;height:36px;">
@@ -76,7 +76,7 @@
                                 <input type="text" onfocus="if(this.value != '') {this.value=''}" id="textSearchBox" style="height: 30px;" class="form-control input-lg" placeholder="Search..." ng-keypress="myFunct($event)" />
                                 <span class="input-group-btn" style="vertical-align: top !important;bottom:2px;">
                                     <button class="btn btn-info btn-lg" type="button" ng-click="searchText()">
-                                        <i class="glyphicon glyphicon-search"></i>
+                                        <i class="glyphicon glyphicon-search" style="font-size: 18px;"></i>
                                     </button>
                                 </span>
                             </div>
@@ -200,7 +200,7 @@
                                 <label>Create At:</label>
                                 <a class="dropdown-toggle" id="dropdownStart" role="button" data-toggle="dropdown">
                                     <div class="input-group date">
-                                        <input type="text" id="startDate" data-date-time-input="YYYY-MM-DD HH:MM:SS" class="form-control" data-ng-model="dateRangeStart" style="max-width:100%!important">
+                                        <input type="text" id="startDate" data-date-time-input="YYYY-MM-DD HH:mm:ss" class="form-control" data-ng-model="dateRangeStart" style="max-width:100%!important">
                                         <span class="input-group-addon" style="color:#3f4a54"><i class="glyphicon glyphicon-calendar"></i></span>
                                     </div>
                                 </a>
@@ -216,7 +216,7 @@
                                 <label>Deadline:</label>
                                 <a class="dropdown-toggle" id="dropdownEnd" role="button" data-toggle="dropdown">
                                     <div class="input-group date">
-                                        <input type="text" id="deadline" data-date-time-input="YYYY-MM-DD HH:MM:SS" class="form-control" data-ng-model="dateRangeEnd" style="max-width:100%!important">
+                                        <input type="text" id="deadline" data-date-time-input="YYYY-MM-DD HH:mm:ss" class="form-control" data-ng-model="dateRangeEnd" style="max-width:100%!important">
                                         <span class="input-group-addon" style="color:#3f4a54"><i class="glyphicon glyphicon-calendar"></i></span>
                                     </div>
                                 </a>
@@ -361,8 +361,8 @@
                     <div class="input-group" style="width:300px;height:40px;">
                         <input type="text" id="textSearchBox2" onfocus="if(this.value != '') {this.value=''}" style="height: 30px;top:2px;" class="form-control input-lg" placeholder="Search..." onkeypress="angular.element(document.getElementById('Homecontroller')).scope().myFunct(event);" />
                         <span class="input-group-btn" style="vertical-align: top !important;bottom:2px;">
-                            <button class="btn btn-info btn-lg" type="button" onclick="angular.element(document.getElementById('Homecontroller')).scope().searchText();">
-                                <i class="glyphicon glyphicon-search"></i>
+                            <button class="btn btn-info btn-lg" type="button" onclick="angular.element(document.getElementById('Homecontroller')).scope().searchText();" style="padding: 8px 8px 0 10px !important">
+                                <i class="glyphicon glyphicon-search" style="font-size: 18px;"></i>
                             </button>
                         </span>
                     </div>
