@@ -22,7 +22,7 @@ namespace APVTranslator_Controllers
             {
                 if (value != null)
                 {
-                    _Value = JsonConvert.SerializeObject(value);
+                    _Value = JsonConvert.SerializeObject(value, Formatting.Indented, new JsonSerializerSettings { PreserveReferencesHandling = PreserveReferencesHandling.Objects });
                 }
             }
         }

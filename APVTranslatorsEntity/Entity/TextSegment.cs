@@ -30,6 +30,10 @@ namespace APVTranslator_Entity.Models
 
         public int? Col { get; set; }
 
+        public string Suggestion { get; set; }
+
+        public string GoogleTranslate { get; set; }
+
         [StringLength(250)]
         public string SheetName { get; set; }
 

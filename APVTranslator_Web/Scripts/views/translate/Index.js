@@ -31,25 +31,27 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                          {
                              field: 'TextSegment1',
                              displayName: 'Source Language',
-                             cellTemplate: '<div ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
-                             enableCellEdit: false,
-                             minWidth: 250,
+                             cellTemplate: '<div ng-right-click="rightClickCell(row,col)" context="context1" ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText" style="white-space: normal;">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
+                             enableCellEdit: true,
+                             editableCellTemplate: '<textarea type="text" cols="40" rows="5" style="border:1px solid green;height:99%;width:99.5%; word-wrap: break-word;" ng-class="\'colt\' + col.index" ng-input="COL_FIELD" ng-model="COL_FIELD" />',
+                             minWidth: 300,
                              resizable: true
                          },
 
                          {
                              field: 'TextSegment2',
                              displayName: 'DestinationLanguage',
-                             cellTemplate: '<div Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
+                             cellTemplate: '<div ng-right-click="rightClickCell(row,col)" context="context2" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText" style="white-space: normal;">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
                              enableCellEdit: true,
-                             minWidth: 250,
+                             editableCellTemplate: '<textarea type="text" cols="40" rows="5" style="border:1px solid green;height:99%;width:99.5%; word-wrap: break-word;" ng-class="\'colt\' + col.index" ng-input="COL_FIELD" ng-model="COL_FIELD" />',
+                             minWidth: 300,
                              resizable: true
                          },
                          {
                              field: 'Suggestion',
                              displayName: 'Suggestion',
                              enableCellEdit: false,
-                             cellTemplate: '<div ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
+                             cellTemplate: '<div ng-right-click="rightClickCell(row,col)" context="context1" ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText" style="white-space: normal;">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
                              width: 250,
                              minWidth: 200,
                              resizable: true
@@ -57,7 +59,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                          {
                              field: 'GoogleTranslate',
                              displayName: 'GoogleTranslate',
-                             cellTemplate: '<div ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
+                             cellTemplate: '<div ng-right-click="rightClickCell(row,col)" context="context1" ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText" style="white-space: normal;">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
                              enableCellEdit: false,
                              minWidth: 200,
                              resizable: true
@@ -66,7 +68,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                              field: 'Row',
                              displayName: 'Row',
                              enableCellEdit: false,
-                             cellTemplate: '<div ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
+                             cellTemplate: '<div ng-right-click="rightClickCell(row,col)" context="context2" ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText" style="white-space: normal;">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
                              minWidth: 100,
                              width: 100,
                              resizable: true
@@ -75,7 +77,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                              field: 'Col',
                              displayName: 'Col',
                              enableCellEdit: false,
-                             cellTemplate: '<div ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
+                             cellTemplate: '<div ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText" style="white-space: normal;">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
                              minWidth: 100,
                              width: 100,
                              resizable: true
@@ -83,7 +85,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                          {
                              field: 'SheetName',
                              displayName: 'SheetName',
-                             cellTemplate: '<div ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
+                             cellTemplate: '<div ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText" style="white-space: normal;">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
                              enableCellEdit: false,
                              minWidth: 100,
                              width: 150,
@@ -97,24 +99,25 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
         },
                          {
                              field: 'TextSegment1',
-                             cellTemplate: '<div ng-right-click="rightClickCell(row,col)" context="context1" ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
+                             cellTemplate: '<div ng-right-click="rightClickCell(row,col)" context="context1" ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText" style="white-space: normal;">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
                              displayName: 'Source Language',
                              enableCellEdit: true,
-                             minWidth: 250,
+                             editableCellTemplate: '<textarea type="text" cols="40" rows="5" style="border:1px solid green;height:99%;width:99.5%; word-wrap: break-word;" ng-class="\'colt\' + col.index" ng-input="COL_FIELD" ng-model="COL_FIELD" />',
+                             minWidth: 300,
                              resizable: true
                          },
                          {
                              field: 'TextSegment2',
-                             cellTemplate: '<div ng-right-click="rightClickCell(row,col)" context="context2" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
+                             cellTemplate: '<div ng-right-click="rightClickCell(row,col)" context="context2" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText" style="white-space: normal;">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
                              displayName: 'DestinationLanguage',
                              enableCellEdit: true,
-                             editableCellTemplate: '<input type="text" ng-class="\'colt\' + col.index" ng-input="COL_FIELD" ng-model="COL_FIELD" />',
-                             minWidth: 250,
+                             editableCellTemplate: '<textarea type="text" cols="40" rows="5" style="border:1px solid green;height:99%;width:99.5%; word-wrap: break-word;" ng-class="\'colt\' + col.index" ng-input="COL_FIELD" ng-model="COL_FIELD" />',
+                             minWidth: 300,
                              resizable: true
                          },
                          {
                              field: 'Suggestion',
-                             cellTemplate: '<div ng-right-click="rightClickCell(row,col)" context="context2" ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
+                             cellTemplate: '<div ng-right-click="rightClickCell(row,col)" context="context1" ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText" style="white-space: normal;">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
                              displayName: 'Suggestion',
                              enableCellEdit: false,
                              width: 250,
@@ -123,7 +126,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                          },
                          {
                              field: 'GoogleTranslate',
-                             cellTemplate: '<div ng-right-click="rightClickCell(row,col)" context="context2" ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
+                             cellTemplate: '<div ng-right-click="rightClickCell(row,col)" context="context1" ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText" style="white-space: normal;">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
                              displayName: 'GoogleTranslate',
                              enableCellEdit: false,
                              minWidth: 200,
@@ -142,6 +145,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
 
         scope.gridOptions = {
             data: 'data',
+            rowHeight: 50,
             enableColumnResize: true,
             enableCellEditOnFocus: 'tesst',
             enableCellSelection: true,
@@ -186,7 +190,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                         toolTip.text(clients[i]['UserName']);
                         toolTip.css("background-color", clients[i].Color);
                         parentCell.attr("isreadonly", "1");
-                        parentCell.css("border", "2px solid " + clients[i].Color);
+                        parentCell.css("cssText", "border: 2px solid " + clients[i].Color + " !important");
                     }
                 }
             }, 400);
@@ -203,12 +207,56 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
             try {
                 var dataEdit = {};
                 var rowData = row.entity;
+                if (col.field != 'TextSegment2' && (rowData['GoogleTranslate'] == undefined || rowData['GoogleTranslate'] == "")) {
+                    try {
+                        Utility.translateText(rowData['TextSegment1'], 'auto', targetLang, rowData, function (obj, translatedText) {
+                            obj['GoogleTranslate'] = translatedText;
+                        });
+                    } catch (e) {
+                        Utility.showMessage(scope, $mdDialog, 'Translate some text error!');
+                    }
+                }
+                if (col.field != 'TextSegment2' && (rowData['Suggestion'] == undefined || rowData['Suggestion'] == "")) {
+                    var arrTextSegment = [];
+                    arrTextSegment.push(rowData);
+                    $.ajax({
+                        type: "POST",
+                        url: Utility.getBaseUrl() + 'Services/TranslateService.svc/GetSugestion',
+                        data: JSON.stringify({ 'listTexsegment': JSON.stringify(arrTextSegment) }),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (response) {
+                            if (response && response.GetSugestionResult.IsSuccess) {
+                                var data = JSON.parse(response.GetSugestionResult.Value);
+                                for (var i = 0; i < data.length; i++) {
+                                    var objs = angularScope.grep(angularScope.data, data[i], "Id");
+                                    if (objs.length > 0 && data[i]['Suggestion'] != '' && data[i]['Suggestion'] != undefined) {
+                                        objs[0]['Suggestion'] = data[i]['Suggestion'];
+                                    }
+                                }
+                            }
+                            else {
+                                Utility.showMessage(scope, $mdDialog, response.GetSugestionResult.Message);
+                            }
+                        },
+                        error: function (error) {
+                            cfpLoadingBar.complete();
+                            Utility.showMessage(scope, $mdDialog, error);
+                        }
+                    });
+                }
                 dataEdit.Id = rowData.Id;
                 dataEdit.TextSegment1 = rowData.TextSegment1;
                 dataEdit.TextSegment2 = rowData.TextSegment2;
                 dataEdit.Field = col.field;
-                scope.sendMessageSocket(dataEdit)
-            } catch (e) {
+                if (rowData.Row && rowData.Col && rowData.SheetName) {
+                    dataEdit.Row = rowData.Row;
+                    dataEdit.Col = rowData.Col;
+                    dataEdit.SheetName = rowData.SheetName;
+                }
+                scope.sendMessageSocket(dataEdit);
+            }
+            catch (e) {
                 Utility.showMessage(scope, $mdDialog, "cell click error!");
             }
         }
@@ -217,6 +265,47 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
             try {
                 if (evt.targetScope.col.field == "TextSegment1") {
                     scope.oldTextSegment1 = evt.targetScope.row.getProperty('TextSegment1');
+                }
+                else if (evt.targetScope.col.field == "TextSegment2") {
+                    var rowData = evt.targetScope.row.entity;
+                    if (rowData['GoogleTranslate'] == undefined || rowData['GoogleTranslate'] == "") {
+                        try {
+                            Utility.translateText(rowData['TextSegment1'], 'auto', targetLang, rowData, function (obj, translatedText) {
+                                obj['GoogleTranslate'] = translatedText;
+                            });
+                        } catch (e) {
+                            Utility.showMessage(scope, $mdDialog, 'Translate some text error!');
+                        }
+                    }
+                    if (rowData['Suggestion'] == undefined || rowData['Suggestion'] == "") {
+                        var arrTextSegment = [];
+                        arrTextSegment.push(rowData);
+                        $.ajax({
+                            type: "POST",
+                            url: Utility.getBaseUrl() + 'Services/TranslateService.svc/GetSugestion',
+                            data: JSON.stringify({ 'listTexsegment': JSON.stringify(arrTextSegment) }),
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            success: function (response) {
+                                if (response && response.GetSugestionResult.IsSuccess) {
+                                    var data = JSON.parse(response.GetSugestionResult.Value);
+                                    for (var i = 0; i < data.length; i++) {
+                                        var objs = angularScope.grep(angularScope.data, data[i], "Id");
+                                        if (objs.length > 0 && data[i]['Suggestion'] != '' && data[i]['Suggestion'] != undefined) {
+                                            objs[0]['Suggestion'] = data[i]['Suggestion'];
+                                        }
+                                    }
+                                }
+                                else {
+                                    Utility.showMessage(scope, $mdDialog, response.GetSugestionResult.Message);
+                                }
+                            },
+                            error: function (error) {
+                                cfpLoadingBar.complete();
+                                Utility.showMessage(scope, $mdDialog, error);
+                            }
+                        });
+                    }
                 }
             } catch (e) {
                 Utility.showMessage(scope, $mdDialog, "Can't start edit cell!");
@@ -271,6 +360,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                         }
                         scope.projectName = response.ProjectName;
                         scope.fileName = response.FileName;
+                        setTimeout(function () { scope.getSugestion(scope.data) }, 0);
                     }
                     else {
                         Utility.showMessage(scope, $mdDialog, response.ControllerResult.Message);
@@ -282,6 +372,85 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                 }
             });
         }
+
+        scope.getSugestion = function (data) {
+            try {
+                if (data) {
+                    var textSegmentCount = 0;
+                    var arrTextSegment = [];
+                    //for (var i = 0; i < data.length; i++) {
+                    //    if ((data[i]['Suggestion'] == undefined || data[i]['Suggestion'] == '')) {
+                    //        if (textSegmentCount == 10) {
+                    //            $.ajax({
+                    //                type: "POST",
+                    //                url: Utility.getBaseUrl() + 'Services/TranslateService.svc/GetSugestion',
+                    //                data: JSON.stringify({ 'listTexsegment': JSON.stringify(arrTextSegment) }),
+                    //                contentType: "application/json; charset=utf-8",
+                    //                dataType: "json",
+                    //                success: function (response) {
+                    //                    if (response && response.GetSugestionResult.IsSuccess) {
+                    //                        var data = JSON.parse(response.GetSugestionResult.Value);
+                    //                        for (var i = 0; i < data.length; i++) {
+                    //                            var objs = angularScope.grep(angularScope.data, data[i], "Id");
+                    //                            if (objs.length > 0 && data[i]['Suggestion'] != '' && data[i]['Suggestion'] != undefined) {
+                    //                                objs[0]['Suggestion'] = data[i]['Suggestion'];
+                    //                            }
+                    //                        }
+                    //                    }
+                    //                    else {
+                    //                        Utility.showMessage(scope, $mdDialog, response.GetSugestionResult.Message);
+                    //                    }
+                    //                },
+                    //                error: function (error) {
+                    //                    cfpLoadingBar.complete();
+                    //                    Utility.showMessage(scope, $mdDialog, error);
+                    //                }
+                    //            });
+                    //            textSegmentCount = 0;
+                    //            arrTextSegment = [];
+                    //        }
+                    //        else if (textSegmentCount < 10) {
+                    //            textSegmentCount++;
+                    //            arrTextSegment.push(data[i])
+                    //        }
+                    //        if (i == data.length - 1 && textSegmentCount > 0) {
+                    //            $.ajax({
+                    //                type: "POST",
+                    //                url: Utility.getBaseUrl() + 'Services/TranslateService.svc/GetSugestion',
+                    //                data: JSON.stringify({ 'listTexsegment': JSON.stringify(arrTextSegment) }),
+                    //                contentType: "application/json; charset=utf-8",
+                    //                dataType: "json",
+                    //                success: function (response) {
+                    //                    if (response && response.GetSugestionResult.IsSuccess) {
+                    //                        var data = JSON.parse(response.GetSugestionResult.Value);
+                    //                        for (var i = 0; i < data.length; i++) {
+                    //                            var objs = angularScope.grep(angularScope.data, data[i], "Id");
+                    //                            if (objs.length > 0 && data[i]['Suggestion'] != '' && data[i]['Suggestion'] != undefined) {
+                    //                                objs[0]['Suggestion'] = data[i]['Suggestion'];
+                    //                            }
+                    //                        }
+                    //                    }
+                    //                    else {
+                    //                        Utility.showMessage(scope, $mdDialog, response.GetSugestionResult.Message);
+                    //                    }
+                    //                },
+                    //                error: function (error) {
+                    //                    cfpLoadingBar.complete();
+                    //                    Utility.showMessage(scope, $mdDialog, error);
+                    //                }
+                    //            });
+                    //            textSegmentCount = 0;
+                    //            arrTextSegment = [];
+                    //        }
+                    //    }
+                    //    //data[i]['Suggestion'] = 'đấy là gợi ý đó';
+                    //}
+                }
+            } catch (e) {
+
+            }
+        }
+
         scope.getSocket = function () {
             ws = new WebSocket("ws://" + location.host + "/Handler/SocketHandler.ashx" + "?projectId=" + projectId);
             scope.onopen = function () {
@@ -311,7 +480,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                             toolTip.text(data['UserName']);
                             toolTip.css("background-color", data.Color);
                             parentCell.attr("isreadonly", "1");
-                            parentCell.css("border", "2px solid " + data.Color);
+                            parentCell.css("cssText", "border: 2px solid " + data.Color + " !important");
                         }
                         else if (arrClient.length == 1) {
                             //clear old Cell
@@ -330,7 +499,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                             toolTip.css("background-color", data.Color);
                             toolTip.text(data['UserName']);
                             parentCell.attr("isreadonly", "1");
-                            parentCell.css("border", "2px solid " + data.Color);
+                            parentCell.css("cssText", "border: 2px solid " + data.Color + " !important");
                         }
                         var arrRecord = scope.grep(angularScope.data, data, "Id")
                         if (arrRecord.length == 0) {
@@ -363,7 +532,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                                     toolTip.text(clients[i]['UserName']);
                                     toolTip.css("background-color", clients[i].Color);
                                     parentCell.attr("isreadonly", "1");
-                                    parentCell.css("border", "2px solid " + clients[i].Color);
+                                    parentCell.css("cssText", "border: 2px solid " + clients[i].Color + " !important");
                                 }
                             }
                         }
@@ -417,6 +586,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                     data: JSON.stringify({ 'projectId': projectId, 'fileId': fileId }),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
+
                     success: function (response) {
                         cfpLoadingBar.complete();
                         if (response.IsSuccess) {
@@ -424,7 +594,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                             window.location.replace(Utility.getBaseUrl() + "Handler/DownloadHandler.ashx?projectId=" + projectId + "&fileId=" + fileId);
                         }
                         else {
-                            Utility.showMessage(scope, $mdDialog, response.ControllerResult.Message);
+                            Utility.showMessage(scope, $mdDialog, response.Message);
                         }
                     },
                     error: function (error) {
@@ -457,7 +627,10 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                             //not found
                         }
                         else if (arrRecord.length == 1) {
-                            arrRecord[0]['TextSegment2'] = this.currentRow.entity['TextSegment1'];
+                            var text = this.currentRow.entity[this.currentCol.field];
+                            if (text && text != '') {
+                                arrRecord[0]['TextSegment2'] = text;
+                            }
                             var dataEdit = {};
                             dataEdit.Id = this.currentRow.entity['Id'];
                             dataEdit.TextSegment1 = this.currentRow.entity['TextSegment1'];
@@ -476,7 +649,10 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                         //not found
                     }
                     else if (arrRecord.length == 1) {
-                        arrRecord[0]['TextSegment2'] = this.currentRow.entity['TextSegment1'];
+                        var text = this.currentRow.entity[this.currentCol.field];
+                        if (text && text != '') {
+                            arrRecord[0]['TextSegment2'] = text;
+                        }
                         var dataEdit = {};
                         dataEdit.Id = this.currentRow.entity['Id'];
                         dataEdit.TextSegment1 = this.currentRow.entity['TextSegment1'];
@@ -489,7 +665,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                 Utility.showMessage(scope, $mdDialog, "Can't copy to DestinationLanguage!");
             }
         }
-
+        //xem lại 
         scope.copyTextToClipboard = function (text) {
             var textArea = document.createElement("textarea");
             textArea.style.position = 'fixed';
@@ -572,3 +748,4 @@ apvApp.directive('ngRightClick', function ($parse) {
         });
     };
 });
+

@@ -23,7 +23,7 @@ Utility.getStringDate = function (stringDate, format) {
 
 Utility.showMessage = function (scope, $mdDialog, mes, title) {
     var _title = "APV Translator";
-    var _mes="Check network connect!"
+    var _mes = "Check network connect!"
     if (title != null) {
         _title = title;
     }
@@ -53,6 +53,54 @@ Utility.showConfirm = function (scope, $mdDialog, mes, callback, title) {
           .cancel('Cancel');
 
     $mdDialog.show(confirm).then(callback, function () {
-       //cancel
+        //cancel
     });
+}
+
+/* Written by Amit Agarwal */
+/* web: ctrlq.org          */
+
+Utility.translateText = function (sourceText, sourceLang, targetLang, obj, callback) {
+    var _sourceText = '';
+    if (sourceText) {
+        _sourceText = sourceText;
+    }
+
+    var _sourceLang = 'auto';
+    if (sourceLang) {
+        _sourceLang = sourceLang;
+    }
+
+    var _targetLang = 'vi';
+    if (targetLang) {
+        _targetLang = targetLang;
+    }
+    var url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl="
+              + _sourceLang + "&tl=" + _targetLang + "&dt=t&q=" + encodeURI(_sourceText);
+    Utility.UrlFetchApp(url, obj, callback);
+}
+
+Utility.UrlFetchApp = function (url, objRef, callback) {
+    $.ajax({
+        type: 'GET',
+        url: url,
+        crossDomain: true,
+        dataType: 'text'
+    })
+            .done(function (obj) {
+
+                var jsonObj;
+                eval('jsonObj = ' + obj);
+                var translatedText = "";
+                $.each(jsonObj[0], function (key, value) {
+                    translatedText += value[0];
+                });
+                if (callback) {
+                    callback(objRef, translatedText);
+                }
+
+            })
+            .fail(function (obj) {
+                console.log("Fail to translate message: ");
+            });
 }

@@ -30,5 +30,11 @@ namespace APVTranslators_Entity.Entity
         public DateTime SendTime { get; set; }
 
         public Boolean IsClose { get; set; } = false;
+
+        public int Row { get; set; }
+
+        public int Col { get; set; }
+
+        public string SheetName { get; set; }
     }
 }

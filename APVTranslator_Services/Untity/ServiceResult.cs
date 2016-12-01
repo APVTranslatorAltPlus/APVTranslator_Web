@@ -21,22 +21,10 @@ namespace APVTranslator_Services.Untity
             }
             set
             {
-                try
+                if (value != null)
                 {
-                    if (value != null)
-                    {
-                        _Value = JsonConvert.SerializeObject(value, Formatting.Indented,
-new JsonSerializerSettings
-{
-    PreserveReferencesHandling = PreserveReferencesHandling.Objects
-});
-                    }
+                    _Value = JsonConvert.SerializeObject(value, Formatting.Indented, new JsonSerializerSettings { PreserveReferencesHandling = PreserveReferencesHandling.Objects });
                 }
-                catch (Exception e)
-                {
-                    Debug.WriteLine(e.ToString());
-                }
-
             }
         }
         public string Message { get; set; }
