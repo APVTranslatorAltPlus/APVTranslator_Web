@@ -505,7 +505,7 @@ md-dialog-actions{
 }
 
     .ngCellElement div {
-        height: inherit;
+        height: auto;
         min-height:30px;
     }
 

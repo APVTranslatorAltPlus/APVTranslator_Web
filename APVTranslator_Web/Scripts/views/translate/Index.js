@@ -33,7 +33,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                              displayName: 'Source Language',
                              cellTemplate: '<div ng-right-click="rightClickCell(row,col)" context="context1" ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText" style="white-space: normal;">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
                              enableCellEdit: true,
-                             editableCellTemplate: '<textarea type="text" cols="40" rows="5" style="border:1px solid green;height:99%;width:99.5%; word-wrap: break-word;" ng-class="\'colt\' + col.index" ng-input="COL_FIELD" ng-model="COL_FIELD" />',
+                             editableCellTemplate: '<textarea type="text" cols="40" rows="5" style="border-left:1px solid green;border-right:1px solid green;height:99%;width:99.5%; word-wrap: break-word;" ng-class="\'colt\' + col.index" ng-input="COL_FIELD" ng-model="COL_FIELD" />',
                              minWidth: 300,
                              resizable: true
                          },
@@ -43,7 +43,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                              displayName: 'DestinationLanguage',
                              cellTemplate: '<div ng-right-click="rightClickCell(row,col)" context="context2" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText" style="white-space: normal;">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
                              enableCellEdit: true,
-                             editableCellTemplate: '<textarea type="text" cols="40" rows="5" style="border:1px solid green;height:99%;width:99.5%; word-wrap: break-word;" ng-class="\'colt\' + col.index" ng-input="COL_FIELD" ng-model="COL_FIELD" />',
+                             editableCellTemplate: '<textarea type="text" cols="40" rows="5" style="border-left:1px solid green;border-right:1px solid green;width:99.5%; word-wrap: break-word;" ng-class="\'colt\' + col.index" ng-input="COL_FIELD" ng-model="COL_FIELD" />',
                              minWidth: 300,
                              resizable: true
                          },
@@ -102,7 +102,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                              cellTemplate: '<div ng-right-click="rightClickCell(row,col)" context="context1" ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText" style="white-space: normal;">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
                              displayName: 'Source Language',
                              enableCellEdit: true,
-                             editableCellTemplate: '<textarea type="text" cols="40" rows="5" style="border:1px solid green;height:99%;width:99.5%; word-wrap: break-word;" ng-class="\'colt\' + col.index" ng-input="COL_FIELD" ng-model="COL_FIELD" />',
+                             editableCellTemplate: '<textarea type="text" cols="40" rows="5" style="border-left:1px solid green;border-right:1px solid green;height:99%;width:99.5%; word-wrap: break-word;" ng-class="\'colt\' + col.index" ng-input="COL_FIELD" ng-model="COL_FIELD" />',
                              minWidth: 300,
                              resizable: true
                          },
@@ -111,7 +111,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                              cellTemplate: '<div ng-right-click="rightClickCell(row,col)" context="context2" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText" style="white-space: normal;">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
                              displayName: 'DestinationLanguage',
                              enableCellEdit: true,
-                             editableCellTemplate: '<textarea type="text" cols="40" rows="5" style="border:1px solid green;height:99%;width:99.5%; word-wrap: break-word;" ng-class="\'colt\' + col.index" ng-input="COL_FIELD" ng-model="COL_FIELD" />',
+                             editableCellTemplate: '<textarea type="text" cols="40" rows="5" style="border-left:1px solid green;border-right:1px solid green;height:99%;width:99.5%; word-wrap: break-word;" ng-class="\'colt\' + col.index" ng-input="COL_FIELD" ng-model="COL_FIELD" />',
                              minWidth: 300,
                              resizable: true
                          },
