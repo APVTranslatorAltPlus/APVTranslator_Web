@@ -86,7 +86,7 @@ namespace APVTranslator_Controllers.Controllers
                                 {
                                     using (var excel = new ExcelHelper(importFile, true))
                                     {
-                                        List<TextSegment> lstTextSegment = translateModel.GetTextSegment(fileId, projectId);
+                                        List<TextSegment> lstTextSegment = translateModel.GetTextSegment(projectId, fileId);
                                         var segments = excel.GetTextSegment();
                                         var objects = excel.GetTextObject();
                                         List<TextRead> lstTextSegments = new List<TextRead>();
@@ -140,7 +140,7 @@ namespace APVTranslator_Controllers.Controllers
                                 {
                                     using (var word = new WordHelper(importFile, true))
                                     {
-                                        List<TextSegment> lstTextSegment = translateModel.GetTextSegment(fileId, projectId); ;
+                                        List<TextSegment> lstTextSegment = translateModel.GetTextSegment(projectId, fileId); ;
                                         var segments = word.GetTextSegmentInWord();
                                         var objects = word.GetTextObjectInWord();
                                         List<TextRead> lstTextSegments = new List<TextRead>();
@@ -185,7 +185,7 @@ namespace APVTranslator_Controllers.Controllers
                                 {
                                     using (var powerpoint = new PowerPointHelper(importFile))
                                     {
-                                        List<TextSegment> lstTextSegment = translateModel.GetTextSegment(fileId, projectId); ;
+                                        List<TextSegment> lstTextSegment = translateModel.GetTextSegment(projectId, fileId); ;
                                         var textSegments = powerpoint.GetTexts();
                                         List<TextRead> lstTextSegments = new List<TextRead>();
                                         foreach (var item in textSegments)
