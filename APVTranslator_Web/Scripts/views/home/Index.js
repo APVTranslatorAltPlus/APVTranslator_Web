@@ -24,13 +24,13 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
         scope.columnDefs2 = [{ displayName: 'STT', cellTemplate: '<div style="text-align:center;">{{row.rowIndex}}</div>', width: 50, enableCellEdit: false },
                              { field: 'FileName', displayName: 'FileName', enableCellEdit: false, minWidth: 220, resizable: true },
                              { field: 'FilePath', displayName: 'File Path', enableCellEdit: false, minWidth: 350, resizable: true },
-                             { field: 'FileType', displayName: 'File Type', cellTemplate: '<div class="ngCellText ng-scope ngCellElement">{{getFileTypeName(row.entity.FileType)}}</div>', enableCellEdit: false, width: 70, minWidth: 50, resizable: true },
+                             { field: 'FileType', displayName: 'File Type', cellTemplate: '<div class="ngCellText ng-scope ngCellElement">{{getFileTypeName(row.entity.FileType)}}</div>', enableCellEdit: false, width: 100, minWidth: 50, resizable: true },
                             { field: 'LastUpdate', displayName: 'Last Update', type: 'date', cellFilter: 'date:\'mm:hh dd/MM/yyyy\'', enableCellEdit: false, minWidth: 150, resizable: true }];
         //column list project
         scope.columnDefs1 = [{ displayName: 'STT', cellTemplate: '<div style="text-align:center;">{{row.rowIndex}}</div>', width: 50, enableCellEdit: false },
                              { field: 'Title', displayName: 'ProjectName', enableCellEdit: false, minWidth: 200, resizable: true },
                              { field: 'Status', displayName: 'Status', minWidth: 100, cellTemplate: '<div class="ngCellText ng-scope ngCellElement">{{row.entity.Progress<100?"Translating":"Translated"}}</div>', enableCellEdit: false, resizable: true },
-                             { field: 'Progress', displayName: 'Progress', minWidth: 100, cellTemplate: '<div class="ngCellText ng-scope ngCellElement">{{row.entity.Progress*100}}%</div>', width: 80, enableCellEdit: false, resizable: true },
+                             { field: 'Progress', displayName: 'Progress', minWidth: 100, cellTemplate: '<div class="ngCellText ng-scope ngCellElement">{{buildProcess(row.entity.Progress)}}</div>', width: 80, enableCellEdit: false, resizable: true },
                              { field: 'Path', displayName: 'Path', enableCellEdit: false, resizable: true, minWidth: 220 },
                              { field: 'TranslateLanguageID', displayName: 'TranslateLanguage', enableCellEdit: false, resizable: true, minWidth: 220, cellTemplate: '<div class="ngCellText ng-scope ngCellElement">{{row.entity.TranslateLanguageID == 1?"Japanese To Vietnamese":"Vietnamese To Japanese"}}</div>' },
                              { field: 'CreateAt', displayName: 'CreateAt', enableCellEdit: false, type: 'date', cellFilter: 'date:\'hh:mm dd/MM/yyyy\'', resizable: true, minWidth: 150 },
@@ -71,7 +71,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                 if (scope.gridType == Enumeration.GridType.ListProject) {
                     scope.loadListFileProject(row.entity.Id);
                 }
-                if(scope.gridType == Enumeration.GridType.ListFileProject){
+                if (scope.gridType == Enumeration.GridType.ListFileProject) {
                     scope.translateFile();
                 }
             } catch (e) {
@@ -104,6 +104,15 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                     break;
                 default:
                     break;
+            }
+        }
+
+        scope.buildProcess = function (value) {
+            if (value) {
+               return Math.floor(value * 100) + "%";
+            }
+            else {
+                return "0%";
             }
         }
 
@@ -263,7 +272,8 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
             try {
                 var projectId = scope.currentFileProject.ProjectID;
                 var fileId = scope.currentFileProject.FileID;
-                window.location.href = Utility.getBaseUrl() + 'Translate/Index' + '?projectId=' + projectId + '&fileId=' + fileId;
+                window.open(Utility.getBaseUrl() + 'Translate/Index' + '?projectId=' + projectId + '&fileId=' + fileId, '_blank');
+                //window.location.href = Utility.getBaseUrl() + 'Translate/Index' + '?projectId=' + projectId + '&fileId=' + fileId;
             } catch (e) {
                 Utility.showMessage(scope, $mdDialog, e.message);
             }
@@ -310,7 +320,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
             projectObject["CreateAt"] = startDate.value;
             projectObject["Deadline"] = deadline.value;
             projectObject["Descriptions"] = descriptions.value;
-            console.log("STARTDATE" + startDate.value);
+            //console.log("STARTDATE" + startDate.value);
             for (var i = 0; i < scope.tags.length; i++) {
 
                 var obj = scope.tags[i];
@@ -1057,9 +1067,8 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
         scope.isTextSearchBox2 = false;
 
         scope.myFunct = function (keyEvent) {
-           
-            if (keyEvent.which === 13)
-            {
+
+            if (keyEvent.which === 13) {
                 scope.searchText();
             }
         }
@@ -1186,7 +1195,7 @@ apvApp.service('serSaveChangeMemberSetting', function ($http) {
 });
 apvApp.service('serGetTextSearch', function ($http) {
     this.data = function (textSearch) {
-        return $http.post(Utility.getBaseUrl() + 'Services/DashboardService.svc/GetTextSearch', { 'textSearch': textSearch});
+        return $http.post(Utility.getBaseUrl() + 'Services/DashboardService.svc/GetTextSearch', { 'textSearch': textSearch });
     };
 });
 
