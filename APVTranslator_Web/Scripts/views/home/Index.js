@@ -3,8 +3,8 @@
 //        cfpLoadingBarProvider.includeSpinner = true;
 //    })
 
-apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFileProject', 'cfpLoadingBar', '$mdDialog', 'deleteFileProject', 'serCreateNewProject', 'serGetListUser', 'cfpLoadingBar', 'serGetProjectInfo', 'serGetListProjectMember', 'serUpdateProject', 'serDeleteProject', 'serGetListProjectDBReference', 'serSaveChangeDictionarySetting', 'serGetInfoForMemberSetting', 'serSaveChangeMemberSetting',
-    function (scope, http, serListProject, serListFileProject, cfpLoadingBar, $mdDialog, deleteFileProject, serCreateNewProject, serGetListUser, cfpLoadingBar, serGetProjectInfo, serGetListProjectMember, serUpdateProject, serDeleteProject, serGetListProjectDBReference, serSaveChangeDictionarySetting, serGetInfoForMemberSetting, serSaveChangeMemberSetting) {
+apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFileProject', 'cfpLoadingBar', '$mdDialog', 'deleteFileProject', 'serCreateNewProject', 'serGetListUser', 'cfpLoadingBar', 'serGetProjectInfo', 'serGetListProjectMember', 'serUpdateProject', 'serDeleteProject', 'serGetListProjectDBReference', 'serSaveChangeDictionarySetting', 'serGetInfoForMemberSetting', 'serSaveChangeMemberSetting', 'serGetTextSearch',
+    function (scope, http, serListProject, serListFileProject, cfpLoadingBar, $mdDialog, deleteFileProject, serCreateNewProject, serGetListUser, cfpLoadingBar, serGetProjectInfo, serGetListProjectMember, serUpdateProject, serDeleteProject, serGetListProjectDBReference, serSaveChangeDictionarySetting, serGetInfoForMemberSetting, serSaveChangeMemberSetting, serGetTextSearch) {
         scope.init = function () {
             scope.loadListProject();
         }
@@ -64,11 +64,15 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
             rowTemplate: rowTemplate(),
             columnDefs: 'columnDefs'
         };
-
+        scope.showSearchBoxDivider = false;
         scope.rowDblClick = function (row) {
             try {
+                scope.showSearchBoxDivider = true;
                 if (scope.gridType == Enumeration.GridType.ListProject) {
                     scope.loadListFileProject(row.entity.Id);
+                }
+                if(scope.gridType == Enumeration.GridType.ListFileProject){
+                    scope.translateFile();
                 }
             } catch (e) {
                 Utility.showMessage(scope, $mdDialog, e.message);
@@ -106,6 +110,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
         scope.loadListProject = function () {
             cfpLoadingBar.start();
             scope.enableRowSelection = true;
+            scope.showSearchBoxDivider = false;
             serListProject.data()
             .success(function (response) {
                 if (response.GetListProjectResult && response.GetListProjectResult.IsSuccess) {
@@ -315,9 +320,10 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
 
             serCreateNewProject.data(JSON.stringify(projectObject), (scope.IdList))
               .success(function (response) {
-                  if (response.CreateNewProjectResult) {
+                  if (response.CreateNewProjectResult.IsSuccess && response.CreateNewProjectResult.Value === "true") {
                       scope.loadListProject();
                       console.log(response.CreateNewProjectResult);
+                      console.log(response.CreateNewProjectResult.Value);
                       $('#successModal').modal('show');
                       $('#createNewProjectModal').modal('hide');
                       document.getElementById("successMessage").innerHTML = "Create new project successfully!!!";
@@ -493,7 +499,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                                 angular.element('#deadline').val(moment(project.DeadLine).format('YYYY-MM-DD HH:MM:SS'));
                             }
                             document.getElementById("projectName").disabled = "disabled";
-
+                            document.getElementById("descriptions").value = project.Descriptions;
                             //scope.IdList = [];
                             //scope.dateRangeStart = '';
                             //scope.dateRangeEnd = '';
@@ -636,7 +642,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
             cfpLoadingBar.start();
             serUpdateProject.data(JSON.stringify(projectObject), (scope.newlyInsertedIDList), (scope.deletedIDList))
               .success(function (response) {
-                  if (response.UpdateProjectResult) {
+                  if (response.UpdateProjectResult.IsSuccess && response.UpdateProjectResult.Value === "true") {
                       scope.loadListProject();
                       console.log(response.UpdateProjectResult);
                       $('#successModal').modal('show');
@@ -658,7 +664,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
             cfpLoadingBar.start();
             serDeleteProject.data(scope.currentProject.Id, scope.currentProject.Title)
                .success(function (response) {
-                   if (response.DeleteProjectResult) {
+                   if (response.DeleteProjectResult.IsSuccess && response.DeleteProjectResult.Value === "true") {
                        scope.loadListProject();
                        console.log(response.DeleteProjectResult);
                        $('#successModal').modal('show');
@@ -796,7 +802,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
 
                 serSaveChangeDictionarySetting.data(JSON.stringify(projectObject), scope.newlyInsertedIDList, scope.deletedIDList)
                    .success(function (response) {
-                       if (response.SaveChangeDictionarySettingResult) {
+                       if (response.SaveChangeDictionarySettingResult.IsSuccess && response.SaveChangeDictionarySettingResult.Value === "true") {
                            $('#successModal').modal('show');
                            $('#settingModal').modal('hide');
                            document.getElementById("successMessage").innerHTML = "Save changes successfully!!!";
@@ -1010,7 +1016,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
 
                 serSaveChangeMemberSetting.data(projectId, JSON.stringify(scope.modifiedIsAMemberList), JSON.stringify(scope.modifiedNotAMemberList))
                    .success(function (response) {
-                       if (response.SaveChangeMemberSettingResult) {
+                       if (response.SaveChangeMemberSettingResult.IsSuccess && response.SaveChangeMemberSettingResult.Value === "true") {
                            $('#successModal').modal('show');
                            $('#settingModal').modal('hide');
                            document.getElementById("successMessage").innerHTML = "Save changes successfully!!!";
@@ -1041,6 +1047,69 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
             scope.settingMember();
             scope.settingDictionary();
         }
+        scope.callRestService = function () {
+            //$http({ method: 'GET', url: '/someUrl' }).
+            //  success(function (data, status, headers, config) {
+            //      $scope.results.push(data);  //retrieve results and add to existing results
+            //  })
+            alert(10);
+        }
+        scope.isTextSearchBox2 = false;
+
+        scope.myFunct = function (keyEvent) {
+           
+            if (keyEvent.which === 13)
+            {
+                scope.searchText();
+            }
+        }
+
+        scope.searchText = function () {
+            $('#textSearchTable-body').empty();
+            document.getElementById("noTextFound").style.display = "none";
+            var textSearch;
+            if ($('#searchModal').hasClass('in')) {
+                textSearch = angular.element('#textSearchBox2').val().trim();
+            } else {
+                textSearch = angular.element('#textSearchBox').val().trim();
+                angular.element('#textSearchBox2').val("");
+            }
+
+            serGetTextSearch.data(textSearch)
+           .success(function (response) {
+
+               if (response.GetTextSearchResult && response.GetTextSearchResult.IsSuccess) {
+                   var textSearchResult = JSON.parse(response.GetTextSearchResult.Value);
+                   var trHTML = '';
+                   $.each(textSearchResult, function (i, item) {
+
+                       trHTML += '<tr><td>' + i + '</td><td>' + item.TextSegment1 + '</td>'
+                     + '<td>' + item.TextSegment2 + ' </td>'
+                      + '<td>' + item.Dictionary + ' </td>'
+                       + '<td>' + item.Title + ' </td>'
+                   }
+
+                   );
+                   $('#textSearch-table').append(trHTML);
+
+                   if (textSearchResult.length == 0) {
+                       document.getElementById("noTextFound").innerHTML = "Sorry no result found!!!";
+                       document.getElementById("noTextFound").style.display = "inline";
+                   }
+                   if (!$('#myModal').hasClass('in')) {
+                       $('#searchModal').modal('show');
+
+                   }
+                   console.log(response.GetTextSearchResult);
+               } else {
+                   angular.element('#noTextFound').val("No result found!!!");
+               }
+           }).error(function (err) {
+               console.log(err);
+               cfpLoadingBar.complete();
+           });
+        }
+
     }])
 apvApp.service('serListProject', function ($http) {
     this.data = function () {
@@ -1113,6 +1182,11 @@ apvApp.service('serGetInfoForMemberSetting', function ($http) {
 apvApp.service('serSaveChangeMemberSetting', function ($http) {
     this.data = function (projectId, modifiedIsAMemberList, modifiedNotAMemberList) {
         return $http.post(Utility.getBaseUrl() + 'Services/DashboardService.svc/SaveChangeMemberSetting', { 'projectId': projectId, 'modifiedIsAMemberList': modifiedIsAMemberList, 'modifiedNotAMemberList': modifiedNotAMemberList });
+    };
+});
+apvApp.service('serGetTextSearch', function ($http) {
+    this.data = function (textSearch) {
+        return $http.post(Utility.getBaseUrl() + 'Services/DashboardService.svc/GetTextSearch', { 'textSearch': textSearch});
     };
 });
 
