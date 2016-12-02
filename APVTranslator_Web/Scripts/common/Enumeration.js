@@ -9,3 +9,7 @@ Enumeration.FileType = {
     PowerPoint: 3,
     PDF: 4
 }
+Enumeration.UserRole = {
+    Admin: 1,
+    Other: 2
+}

@@ -91,6 +91,24 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
             return '<div ng-dblclick="rowDblClick(row)" ng-style="{\'cursor\': row.cursor, \'z-index\': col.zIndex() }" ng-repeat="col in renderedColumns" ng-class="col.colIndex()" class="ngCell {{col.cellClass}}" ng-cell></div>';
         }
 
+        scope.checkPermissionNewProject = function () {
+            if (parseInt(userRole) == Enumeration.UserRole.Admin && !scope.checked) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
+        scope.checkPermissionEditProject = function () {
+            if (parseInt(userRole) == Enumeration.UserRole.Admin && scope.projectSelection) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
         scope.getFileTypeName = function (typeFile) {
             switch (typeFile) {
                 case Enumeration.FileType.Word:
@@ -1248,3 +1266,33 @@ function closeNav() {
     document.getElementById("mySidenav").style.overflow = "hidden";
 }
 
+$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+    var target = $(e.target).attr("href") // activated tab
+    if (target === "#member-manager") {
+        angular.element(document.getElementById('Homecontroller')).scope().selectedTab = '#member-manager';
+    }
+    if (target === "#dictionaries") {
+        angular.element(document.getElementById('Homecontroller')).scope().selectedTab = '#dictionaries';
+    }
+
+});
+
+$(function () {
+    $('#useCompanyDBSetting').change(function () {
+
+        $('#checkboxValue').text($(this).prop('checked'));
+
+    })
+})
+
+var lastScrollLeft = 0;
+$(window).scroll(function () {
+    var documentScrollLeft = $(document).scrollLeft();
+    if (lastScrollLeft != documentScrollLeft) {
+        $('#gridTable').trigger('resize');
+        $('.main-index').trigger('resize'); $('#DashBoard').trigger('resize');
+        alert(1);
+        console.log('scroll x');
+        lastScrollLeft = documentScrollLeft;
+    }
+});
