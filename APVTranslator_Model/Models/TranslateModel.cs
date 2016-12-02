@@ -196,11 +196,11 @@ namespace APVTranslator_Model.Models
 
         }
 
-        public ProjectFile GetFile(int fileId)
+        public ProjectFile GetFile(int projectId, int fileId)
         {
             try
             {
-                var file = ProjectFiles.Where<ProjectFile>(p => p.FileID == fileId).FirstOrDefault();
+                var file = ProjectFiles.Where<ProjectFile>(p => p.FileID == fileId && p.ProjectID == projectId).FirstOrDefault();
                 return file;
             }
             catch (Exception)

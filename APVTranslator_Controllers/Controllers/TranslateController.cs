@@ -54,7 +54,7 @@ namespace APVTranslator_Controllers.Controllers
                 {
                     TranslateModel translateModel = new TranslateModel();
                     Project project = translateModel.GetProject(projectId);
-                    ProjectFile file = translateModel.GetFile(fileId);
+                    ProjectFile file = translateModel.GetFile(projectId,fileId);
                     if (project != null && file != null)
                     {
                         sResult.FileName = file.FileName;
@@ -245,7 +245,7 @@ namespace APVTranslator_Controllers.Controllers
                 {
                     TranslateModel translateModel = new TranslateModel();
                     Project project = translateModel.GetProject(projectId);
-                    ProjectFile file = translateModel.GetFile(fileId);
+                    ProjectFile file = translateModel.GetFile(projectId,fileId);
                     if (project != null && file != null)
                     {
                         string rootPath = Utility.GetRootPath();

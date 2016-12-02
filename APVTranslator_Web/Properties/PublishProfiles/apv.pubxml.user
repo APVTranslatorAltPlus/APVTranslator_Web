@@ -22,46 +22,46 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/11/2016 09:30:54</publishTime>
     </File>
     <File Include="bin/App_global.asax.compiled">
-      <publishTime>11/25/2016 17:43:47</publishTime>
+      <publishTime>12/02/2016 10:49:49</publishTime>
     </File>
     <File Include="bin/App_global.asax.dll">
-      <publishTime>11/25/2016 17:43:47</publishTime>
+      <publishTime>12/02/2016 10:49:49</publishTime>
     </File>
     <File Include="bin/APVTranslators_Entity.dll">
-      <publishTime>11/25/2016 17:43:13</publishTime>
+      <publishTime>12/02/2016 10:19:34</publishTime>
     </File>
     <File Include="bin/APVTranslators_Entity.pdb">
-      <publishTime>11/25/2016 17:43:13</publishTime>
+      <publishTime>12/02/2016 10:19:34</publishTime>
     </File>
     <File Include="bin/APVTranslator_Common.dll">
-      <publishTime>11/25/2016 17:43:13</publishTime>
+      <publishTime>12/02/2016 10:19:34</publishTime>
     </File>
     <File Include="bin/APVTranslator_Common.pdb">
-      <publishTime>11/25/2016 17:43:13</publishTime>
+      <publishTime>12/02/2016 10:19:34</publishTime>
     </File>
     <File Include="bin/APVTranslator_Controllers.dll">
-      <publishTime>11/25/2016 17:43:14</publishTime>
+      <publishTime>12/02/2016 10:48:53</publishTime>
     </File>
     <File Include="bin/APVTranslator_Controllers.pdb">
-      <publishTime>11/25/2016 17:43:14</publishTime>
+      <publishTime>12/02/2016 10:48:53</publishTime>
     </File>
     <File Include="bin/APVTranslator_Model.dll">
-      <publishTime>11/25/2016 17:43:14</publishTime>
+      <publishTime>12/02/2016 10:48:18</publishTime>
     </File>
     <File Include="bin/APVTranslator_Model.pdb">
-      <publishTime>11/25/2016 17:43:14</publishTime>
+      <publishTime>12/02/2016 10:48:18</publishTime>
     </File>
     <File Include="bin/APVTranslator_Services.dll">
-      <publishTime>11/25/2016 17:43:14</publishTime>
+      <publishTime>12/02/2016 10:48:54</publishTime>
     </File>
     <File Include="bin/APVTranslator_Services.pdb">
-      <publishTime>11/25/2016 17:43:14</publishTime>
+      <publishTime>12/02/2016 10:48:54</publishTime>
     </File>
     <File Include="bin/APVTranslator_Web.dll">
-      <publishTime>11/25/2016 17:43:19</publishTime>
+      <publishTime>12/02/2016 10:49:15</publishTime>
     </File>
     <File Include="bin/APVTranslator_Web.pdb">
-      <publishTime>11/25/2016 17:43:19</publishTime>
+      <publishTime>12/02/2016 10:49:15</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>11/11/2016 09:31:02</publishTime>
@@ -241,7 +241,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/11/2016 09:39:49</publishTime>
     </File>
     <File Include="Content/angular-custom.css">
-      <publishTime>11/22/2016 11:10:54</publishTime>
+      <publishTime>12/02/2016 10:16:04</publishTime>
     </File>
     <File Include="Content/angular-loading-bar/loading-bar.css">
       <publishTime>11/11/2016 09:30:55</publishTime>
@@ -319,7 +319,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/11/2016 09:39:49</publishTime>
     </File>
     <File Include="Content/layouts/_Layout.css">
-      <publishTime>11/18/2016 16:51:47</publishTime>
+      <publishTime>12/01/2016 10:54:51</publishTime>
     </File>
     <File Include="Content/layouts/_TranslateLayout.css">
       <publishTime>11/18/2016 16:53:42</publishTime>
@@ -337,7 +337,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/18/2016 16:51:47</publishTime>
     </File>
     <File Include="Content/views/home/Index.css">
-      <publishTime>11/18/2016 16:53:42</publishTime>
+      <publishTime>12/02/2016 10:16:38</publishTime>
     </File>
     <File Include="Content/views/home/jquery.mCustomScrollbar.min.css">
       <publishTime>11/18/2016 16:51:47</publishTime>
@@ -346,7 +346,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/25/2016 17:39:08</publishTime>
     </File>
     <File Include="favicon.ico">
-      <publishTime>11/11/2016 09:30:55</publishTime>
+      <publishTime>12/02/2016 10:16:38</publishTime>
     </File>
     <File Include="fonts/glyphicons-halflings-regular.eot">
       <publishTime>11/11/2016 09:30:55</publishTime>
@@ -373,7 +373,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/25/2016 17:39:09</publishTime>
     </File>
     <File Include="PrecompiledApp.config">
-      <publishTime>11/25/2016 17:43:41</publishTime>
+      <publishTime>12/02/2016 10:49:42</publishTime>
     </File>
     <File Include="Scripts/ai.0.22.19-build00125.js">
       <publishTime>11/11/2016 09:30:56</publishTime>
@@ -430,7 +430,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/11/2016 09:30:57</publishTime>
     </File>
     <File Include="Scripts/angular-grid/ng-grid.js">
-      <publishTime>11/22/2016 11:10:54</publishTime>
+      <publishTime>11/30/2016 12:13:49</publishTime>
     </File>
     <File Include="Scripts/angular-grid/ng-grid.min.js">
       <publishTime>11/11/2016 09:30:57</publishTime>
@@ -502,13 +502,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/11/2016 09:30:58</publishTime>
     </File>
     <File Include="Scripts/common/Enumeration.js">
-      <publishTime>11/11/2016 09:30:58</publishTime>
+      <publishTime>12/02/2016 10:16:04</publishTime>
     </File>
     <File Include="Scripts/common/Overrides.js">
       <publishTime>11/25/2016 17:39:09</publishTime>
     </File>
     <File Include="Scripts/common/Utility.js">
-      <publishTime>11/21/2016 16:34:22</publishTime>
+      <publishTime>12/02/2016 10:15:48</publishTime>
     </File>
     <File Include="Scripts/i18n/angular-locale_af-na.js">
       <publishTime>11/11/2016 09:30:58</publishTime>
@@ -1423,7 +1423,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/11/2016 09:30:59</publishTime>
     </File>
     <File Include="Scripts/views/home/Index.js">
-      <publishTime>11/25/2016 17:39:42</publishTime>
+      <publishTime>12/02/2016 10:16:38</publishTime>
     </File>
     <File Include="Scripts/views/home/jquery.mCustomScrollbar.concat.min.js">
       <publishTime>11/18/2016 16:51:47</publishTime>
@@ -1432,13 +1432,16 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/18/2016 16:51:47</publishTime>
     </File>
     <File Include="Scripts/views/translate/Index.js">
-      <publishTime>11/25/2016 17:39:09</publishTime>
+      <publishTime>12/02/2016 10:16:04</publishTime>
     </File>
     <File Include="Scripts/_references.js">
       <publishTime>11/25/2016 17:39:09</publishTime>
     </File>
     <File Include="Services/DashboardService.svc">
       <publishTime>11/11/2016 09:30:59</publishTime>
+    </File>
+    <File Include="Services/TranslateService.svc">
+      <publishTime>12/02/2016 10:15:48</publishTime>
     </File>
     <File Include="Views/Account/ConfirmEmail.cshtml">
       <publishTime>11/11/2016 09:30:59</publishTime>
@@ -1483,7 +1486,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/11/2016 09:30:59</publishTime>
     </File>
     <File Include="Views/Home/Index.cshtml">
-      <publishTime>11/25/2016 17:09:27</publishTime>
+      <publishTime>12/02/2016 10:21:19</publishTime>
     </File>
     <File Include="Views/Home/Manage/AddPhoneNumber.cshtml">
       <publishTime>11/11/2016 09:30:59</publishTime>
@@ -1510,16 +1513,16 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/11/2016 09:30:59</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>11/25/2016 16:25:31</publishTime>
+      <publishTime>12/02/2016 10:16:38</publishTime>
     </File>
     <File Include="Views/Shared/_LoginPartial.cshtml">
       <publishTime>11/25/2016 16:25:31</publishTime>
     </File>
     <File Include="Views/Shared/_TranslateLayout.cshtml">
-      <publishTime>11/18/2016 16:53:42</publishTime>
+      <publishTime>12/02/2016 10:15:48</publishTime>
     </File>
     <File Include="Views/Translate/Index.cshtml">
-      <publishTime>11/25/2016 17:39:09</publishTime>
+      <publishTime>12/02/2016 10:15:48</publishTime>
     </File>
     <File Include="Views/Web.config">
       <publishTime>11/11/2016 09:30:59</publishTime>
@@ -1528,7 +1531,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/11/2016 09:30:59</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>11/25/2016 17:43:39</publishTime>
+      <publishTime>12/02/2016 10:22:39</publishTime>
     </File>
   </ItemGroup>
 </Project>

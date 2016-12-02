@@ -28,7 +28,7 @@ namespace APVTranslator_Web.Handler
 
                     TranslateModel translateModel = new TranslateModel();
                     Project project = translateModel.GetProject(Convert.ToInt32(projectId));
-                    ProjectFile file = translateModel.GetFile(Convert.ToInt32(fileId));
+                    ProjectFile file = translateModel.GetFile(Convert.ToInt32(projectId), Convert.ToInt32(fileId));
                     if (project != null && file != null)
                     {
                         context.Response.Clear();
