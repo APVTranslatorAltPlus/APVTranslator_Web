@@ -9,6 +9,7 @@ using System.Net;
 using Newtonsoft.Json;
 using Microsoft.AspNet.Identity;
 using System.IO;
+using APVTranslator_Common;
 
 namespace APVTranslator_Controllers.Controllers
 {
@@ -20,6 +21,21 @@ namespace APVTranslator_Controllers.Controllers
         [Authorize]
         public ActionResult Index()
         {
+            var user = HttpContext.User;
+            if (user.Identity.IsAuthenticated)
+            {
+                var userId = SessionUser.GetUserId();
+                ApplicationDbContext appDb = new ApplicationDbContext();
+                List<Role> lstUserRoles = appDb.GetUserRoleId(userId);
+                if (lstUserRoles.Any(r => r.Id == (int)UserRoles.Admin))
+                {
+                    ViewBag.UserRole = (int)UserRoles.Admin;
+                }
+                else
+                {
+                    ViewBag.UserRole = (int)UserRoles.Other;
+                }
+            }
             return View();
         }
 

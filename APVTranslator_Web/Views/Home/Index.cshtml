@@ -15,30 +15,30 @@
                 @*<label>APVTranslator</label>*@
                 <md-toolbar ng-cloak>
                     <div class="md-toolbar-tools">
-                        <md-button class="md-raised" ng-show="!checked" ng-click="getListUser()" data-toggle="modal" data-target="#createNewProjectModal" data-backdrop="static" data-keyboard="false" aria-label="New">
+                        <md-button class="md-raised" ng-show="checkPermissionNewProject()" ng-click="getListUser()" data-toggle="modal" data-target="#createNewProjectModal" data-backdrop="static" data-keyboard="false" aria-label="New">
                             <md-icon class="material-icons">add</md-icon>
                             <md-tooltip md-direction="bottom">
                                 New Project
                             </md-tooltip>
                             New
                         </md-button>
-                        <div class="a-divider" ng-show="projectSelection"></div>
-                        <md-button class="md-raised" ng-show="projectSelection" ng-disabled="!projectSelection" ng-click="editProject()" aria-label="Edit">
+                        <div class="a-divider" ng-show="checkPermissionEditProject()"></div>
+                        <md-button class="md-raised" ng-show="checkPermissionEditProject()" ng-disabled="!projectSelection" ng-click="editProject()" aria-label="Edit">
                             <md-icon class="material-icons">edit</md-icon>
                             <md-tooltip md-direction="bottom">
                                 Edit Project
                             </md-tooltip>
                             Edit
                         </md-button>
-                        <div class="a-divider" ng-show="projectSelection"></div>
-                        <md-button class="md-raised" ng-show="projectSelection" ng-disabled="!projectSelection" ng-click="deleteProject()" aria-label="Delete">
+                        <div class="a-divider" ng-show="checkPermissionEditProject()"></div>
+                        <md-button class="md-raised" ng-show="checkPermissionEditProject()" ng-disabled="!projectSelection" ng-click="deleteProject()" aria-label="Delete">
                             <md-icon class="material-icons">delete</md-icon>
                             <md-tooltip md-direction="bottom">
                                 Delete Project
                             </md-tooltip>
                             Delete
                         </md-button>
-                        <div class="a-divider" ng-show="projectSelection"></div>
+                        <div class="a-divider" ng-show="checkPermissionEditProject()"></div>
                         <md-button class="md-raised" ng-show="projectSelection" ng-disabled="!projectSelection" aria-label="Setting" data-toggle="modal" data-target="#settingModal" data-backdrop="static" data-keyboard="false" ng-click="initSetting()">
                             <md-icon class="material-icons">settings</md-icon>
                             <md-tooltip md-direction="bottom">
@@ -428,37 +428,8 @@
 
     }
 </style>
-<script>
-
-    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-        var target = $(e.target).attr("href") // activated tab
-        if (target === "#member-manager") {
-            angular.element(document.getElementById('Homecontroller')).scope().selectedTab = '#member-manager';
-        }
-        if (target === "#dictionaries") {
-            angular.element(document.getElementById('Homecontroller')).scope().selectedTab = '#dictionaries';
-        }
-
-    });
-
-    $(function () {
-        $('#useCompanyDBSetting').change(function () {
-
-            $('#checkboxValue').text($(this).prop('checked'));
-
-        })
-    })
-
-    var lastScrollLeft = 0;
-    $(window).scroll(function () {
-        var documentScrollLeft = $(document).scrollLeft();
-        if (lastScrollLeft != documentScrollLeft) {
-            $('#gridTable').trigger('resize');
-            $('.main-index').trigger('resize'); $('#DashBoard').trigger('resize');
-            alert(1);
-            console.log('scroll x');
-            lastScrollLeft = documentScrollLeft;
-        }
-    });
-
-</script>
+@section scripts{
+    <script>
+        var userRole = @ViewBag.UserRole;
+    </script>
+}
