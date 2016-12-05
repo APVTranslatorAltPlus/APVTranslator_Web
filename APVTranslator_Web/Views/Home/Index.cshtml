@@ -31,7 +31,9 @@
                         <button type="button" style="display:inline-block;" class="btn btn-default button-toolbar" ng-show="projectSelection" ng-disabled="!projectSelection" aria-label="Setting" data-toggle="modal" data-target="#settingModal" data-backdrop="static" data-keyboard="false" ng-click="initSetting()">
                             <span class="glyphicon glyphicon-wrench"></span>
                         Settings</button>
-                        <button type="button" style="display:inline-block;" class="btn btn-default button-toolbar" ng-show="checked" ng-click="showInputFile()">Import</button>
+                        <button type="button" style="display:inline-block;" class="btn btn-default button-toolbar" ng-show="checked" ng-click="showInputFile()">
+                            <span class="glyphicon glyphicon-download-alt"></span>    
+                        Import</button>
                         <div class="a-divider" ng-show="fileProjectSelection"></div>
                         <button type="button" style="display:inline-block;" class="btn btn-default button-toolbar" ng-show="fileProjectSelection" ng-click="confirmDeleteFile()" ng-disabled="!fileProjectSelection">
                             <span class="glyphicon glyphicon-remove"></span>
