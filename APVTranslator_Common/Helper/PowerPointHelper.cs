@@ -3,9 +3,10 @@ using Microsoft.Office.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using PowerPoint = Microsoft.Office.Interop.PowerPoint;
+using PowerPoint = Microsoft.Office.    ;
 
 namespace APVTranslator_Common.Helpers
 {
@@ -23,19 +24,36 @@ namespace APVTranslator_Common.Helpers
 
         public PowerPointHelper()
         {
-            OpenPresentation();
+            try
+            {
+                OpenPresentation();
+            }
+            catch (Exception ex)
+            {
+                this.Dispose();
+                throw ex;
+            }
         }
 
         public PowerPointHelper(string path)
         {
-            FilePath = path;
-            OpenPresentation();
+            try
+            {
+                FilePath = path;
+                OpenPresentation();
+            }
+            catch (Exception ex)
+            {
+                this.Dispose();
+                throw ex;
+            }
         }
 
         private void OpenPresentation()
         {
             _application = new PowerPoint.Application();
             _presentations = _application.Presentations;
+            GC.Collect();
             _presentation = _presentations.Open(FilePath, MsoTriState.msoFalse, MsoTriState.msoFalse, MsoTriState.msoFalse);
 
         }
@@ -81,6 +99,7 @@ namespace APVTranslator_Common.Helpers
             }
             catch (Exception)
             {
+                this.Dispose();
                 throw;
             }
         }
@@ -112,6 +131,7 @@ namespace APVTranslator_Common.Helpers
             }
             catch (Exception)
             {
+                this.Dispose();
                 throw;
             }
         }
@@ -123,7 +143,23 @@ namespace APVTranslator_Common.Helpers
 
         public void Dispose()
         {
-            _application.Quit();
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+            if (_presentations != null)
+            {
+                Marshal.ReleaseComObject(_presentations);
+            }
+            if (_presentation != null)
+            {
+                _presentation.Close();
+                Marshal.ReleaseComObject(_presentation);
+            }
+            if (_application != null)
+            {
+                _application.Quit();
+                Marshal.ReleaseComObject(_application);
+            }
         }
     }
 }

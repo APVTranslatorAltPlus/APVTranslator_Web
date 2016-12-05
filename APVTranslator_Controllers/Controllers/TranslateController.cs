@@ -54,7 +54,7 @@ namespace APVTranslator_Controllers.Controllers
                 {
                     TranslateModel translateModel = new TranslateModel();
                     Project project = translateModel.GetProject(projectId);
-                    ProjectFile file = translateModel.GetFile(projectId,fileId);
+                    ProjectFile file = translateModel.GetFile(projectId, fileId);
                     if (project != null && file != null)
                     {
                         sResult.FileName = file.FileName;
@@ -84,31 +84,34 @@ namespace APVTranslator_Controllers.Controllers
                                 }
                                 else if (System.IO.File.Exists(importFile))
                                 {
+                                    List<TextRead> segments = new List<TextRead>();
+                                    List<TextRead> objects = new List<TextRead>();
                                     using (var excel = new ExcelHelper(importFile, true))
                                     {
-                                        List<TextSegment> lstTextSegment = translateModel.GetTextSegment(projectId, fileId);
-                                        var segments = excel.GetTextSegment();
-                                        var objects = excel.GetTextObject();
-                                        List<TextRead> lstTextSegments = new List<TextRead>();
-                                        List<TextRead> lstTextObjects = new List<TextRead>();
-                                        foreach (var item in segments)
-                                        {
-                                            if (!lstTextSegment.Any(a => a.Row == item.Row && a.Col == item.Col && a.SheetName == item.SheetName && a.TextSegment1 == item.Value))
-                                            {
-                                                lstTextSegments.Add(item);
-                                            }
-                                        }
-                                        foreach (var item in objects)
-                                        {
-                                            if (!lstTextSegment.Any(a => a.Row == item.Row && a.Col == item.Col && a.SheetName == item.SheetName && a.TextSegment1 == item.Value))
-                                            {
-                                                lstTextObjects.Add(item);
-                                            }
-                                        }
-                                        var insertedTxt = translateModel.BatchInsert(lstTextSegments, fileId, projectId, (int)FileTypes.EXCEL, (int)TextSegmentType.TEXT);
-                                        var insertedObj = translateModel.BatchInsert(lstTextObjects, fileId, projectId, (int)FileTypes.EXCEL, (int)TextSegmentType.OBJECT);
+                                        segments = excel.GetTextSegment();
+                                        objects = excel.GetTextObject();
                                     }
+                                    List<TextSegment> lstTextSegment = translateModel.GetTextSegment(projectId, fileId);
+                                    List<TextRead> lstTextSegments = new List<TextRead>();
+                                    List<TextRead> lstTextObjects = new List<TextRead>();
+                                    foreach (var item in segments)
+                                    {
+                                        if (!lstTextSegment.Any(a => a.Row == item.Row && a.Col == item.Col && a.SheetName == item.SheetName && a.TextSegment1 == item.Value))
+                                        {
+                                            lstTextSegments.Add(item);
+                                        }
+                                    }
+                                    foreach (var item in objects)
+                                    {
+                                        if (!lstTextSegment.Any(a => a.Row == item.Row && a.Col == item.Col && a.SheetName == item.SheetName && a.TextSegment1 == item.Value))
+                                        {
+                                            lstTextObjects.Add(item);
+                                        }
+                                    }
+                                    var insertedTxt = translateModel.BatchInsert(lstTextSegments, fileId, projectId, (int)FileTypes.EXCEL, (int)TextSegmentType.TEXT);
+                                    var insertedObj = translateModel.BatchInsert(lstTextObjects, fileId, projectId, (int)FileTypes.EXCEL, (int)TextSegmentType.OBJECT);
                                     translateModel.UpdateStatusFileTranslate(projectId, fileId, true);
+
                                     List<TextSegment> lstPureTextSegment = translateModel.GetTextSegment(projectId, fileId);
                                     List<TextSegment> lstSegments = new List<TextSegment>();
                                     foreach (var textSegment in lstPureTextSegment)
@@ -138,31 +141,33 @@ namespace APVTranslator_Controllers.Controllers
                                 }
                                 else if (System.IO.File.Exists(importFile))
                                 {
+                                    List<TextRead> segments = new List<TextRead>();
+                                    List<TextRead> objects = new List<TextRead>();
                                     using (var word = new WordHelper(importFile, true))
                                     {
-                                        List<TextSegment> lstTextSegment = translateModel.GetTextSegment(projectId, fileId); ;
-                                        var segments = word.GetTextSegmentInWord();
-                                        var objects = word.GetTextObjectInWord();
-                                        List<TextRead> lstTextSegments = new List<TextRead>();
-                                        List<TextRead> lstTextObjects = new List<TextRead>();
-                                        foreach (var item in segments)
-                                        {
-                                            if (!lstTextSegment.Any(a => a.TextSegment1 == item.Value))
-                                            {
-                                                lstTextSegments.Add(item);
-                                            }
-                                        }
-                                        foreach (var item in objects)
-                                        {
-                                            if (!lstTextSegment.Any(a => a.TextSegment1 == item.Value))
-                                            {
-                                                lstTextObjects.Add(item);
-                                            }
-                                        }
-                                        var insertedTxt = translateModel.BatchInsert(lstTextSegments, fileId, projectId, (int)FileTypes.WORD, (int)TextSegmentType.TEXT);
-                                        var insertedObj = translateModel.BatchInsert(lstTextObjects, fileId, projectId, (int)FileTypes.WORD, (int)TextSegmentType.OBJECT);
-
+                                        segments = word.GetTextSegmentInWord();
+                                        objects = word.GetTextObjectInWord();
                                     }
+                                    List<TextSegment> lstTextSegment = translateModel.GetTextSegment(projectId, fileId);
+                                    List<TextRead> lstTextSegments = new List<TextRead>();
+                                    List<TextRead> lstTextObjects = new List<TextRead>();
+                                    foreach (var item in segments)
+                                    {
+                                        if (!lstTextSegment.Any(a => a.TextSegment1 == item.Value))
+                                        {
+                                            lstTextSegments.Add(item);
+                                        }
+                                    }
+                                    foreach (var item in objects)
+                                    {
+                                        if (!lstTextSegment.Any(a => a.TextSegment1 == item.Value))
+                                        {
+                                            lstTextObjects.Add(item);
+                                        }
+                                    }
+                                    var insertedTxt = translateModel.BatchInsert(lstTextSegments, fileId, projectId, (int)FileTypes.WORD, (int)TextSegmentType.TEXT);
+                                    var insertedObj = translateModel.BatchInsert(lstTextObjects, fileId, projectId, (int)FileTypes.WORD, (int)TextSegmentType.OBJECT);
+
                                     translateModel.UpdateStatusFileTranslate(projectId, fileId, true);
                                     List<TextSegment> lstSegments = translateModel.GetTextSegment(projectId, fileId);
                                     sResult.ControllerResult.Value = lstSegments;
@@ -183,20 +188,22 @@ namespace APVTranslator_Controllers.Controllers
                                 }
                                 else if (System.IO.File.Exists(importFile))
                                 {
+                                    List<TextRead> textSegments = new List<TextRead>();
                                     using (var powerpoint = new PowerPointHelper(importFile))
                                     {
-                                        List<TextSegment> lstTextSegment = translateModel.GetTextSegment(projectId, fileId); ;
-                                        var textSegments = powerpoint.GetTexts();
-                                        List<TextRead> lstTextSegments = new List<TextRead>();
-                                        foreach (var item in textSegments)
-                                        {
-                                            if (!lstTextSegment.Any(a => a.TextSegment1 == item.Value))
-                                            {
-                                                lstTextSegments.Add(item);
-                                            }
-                                        }
-                                        var insertedTxt = translateModel.BatchInsert(lstTextSegments, fileId, projectId, (int)FileTypes.WORD, (int)TextSegmentType.OBJECT);
+                                        textSegments = powerpoint.GetTexts();
                                     }
+                                    List<TextSegment> lstTextSegment = translateModel.GetTextSegment(projectId, fileId);
+                                    List<TextRead> lstTextSegments = new List<TextRead>();
+                                    foreach (var item in textSegments)
+                                    {
+                                        if (!lstTextSegment.Any(a => a.TextSegment1 == item.Value))
+                                        {
+                                            lstTextSegments.Add(item);
+                                        }
+                                    }
+                                    var insertedTxt = translateModel.BatchInsert(lstTextSegments, fileId, projectId, (int)FileTypes.WORD, (int)TextSegmentType.OBJECT);
+
                                     translateModel.UpdateStatusFileTranslate(projectId, fileId, true);
                                     List<TextSegment> lstSegments = translateModel.GetTextSegment(projectId, fileId);
                                     sResult.ControllerResult.Value = lstSegments;
@@ -245,7 +252,7 @@ namespace APVTranslator_Controllers.Controllers
                 {
                     TranslateModel translateModel = new TranslateModel();
                     Project project = translateModel.GetProject(projectId);
-                    ProjectFile file = translateModel.GetFile(projectId,fileId);
+                    ProjectFile file = translateModel.GetFile(projectId, fileId);
                     if (project != null && file != null)
                     {
                         string rootPath = Utility.GetRootPath();

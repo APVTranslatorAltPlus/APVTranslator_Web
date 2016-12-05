@@ -20,9 +20,17 @@ namespace APVTranslator_Common.Helpers
         #region "Fun/Sub"
         public WordHelper(string fileName, bool readOnly = false)
         {
-            this._fileName = fileName;
-            this.readOnly = readOnly;
-            this._document = _wordApplication.Documents.Open(ref _fileName, ref miss, ref this.readOnly, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss);
+            try
+            {
+                this._fileName = fileName;
+                this.readOnly = readOnly;
+                this._document = _wordApplication.Documents.Open(ref _fileName, ref miss, ref this.readOnly, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss);
+            }
+            catch (Exception ex)
+            {
+                this.Dispose();
+                throw ex;
+            }
         }
         /// <summary>
         /// BACHBD 8/8/2016
@@ -59,7 +67,7 @@ namespace APVTranslator_Common.Helpers
             }
             catch (Exception ex)
             {
-
+                this.Dispose();
                 throw ex;
             }
             return lstTextRead;
@@ -96,6 +104,7 @@ namespace APVTranslator_Common.Helpers
             }
             catch (Exception ex)
             {
+                this.Dispose();
                 throw ex;
             }
             return lstTextRead;
@@ -140,7 +149,7 @@ namespace APVTranslator_Common.Helpers
             try
             {
                 double checkNumber;
-                bool bReplacedText=false;
+                bool bReplacedText = false;
                 foreach (Paragraph objParagraph in _document.Paragraphs)
                 {
                     if (bReplacedText)
@@ -161,20 +170,10 @@ namespace APVTranslator_Common.Helpers
                         }
                     }
                 }
-                //Find findObject = _wordApplication.Selection.Find;
-                //findObject.Text = what;
-                ////findObject.ClearFormatting();
-                //findObject.Replacement.Text = replacement;
-                ////findObject.MatchWholeWord = true;
-                ////findObject.Replacement.ClearFormatting();
-                //object replaceAll = WdReplace.wdReplaceAll;
-                //findObject.Execute(ref miss, ref miss, ref miss, ref miss, ref miss,
-                //ref miss, ref miss, ref miss, ref miss, ref miss,
-                //ref replaceAll, ref miss, ref miss, ref miss, ref miss);
             }
             catch (Exception ex)
             {
-
+                this.Dispose();
                 throw ex;
             }
         }
@@ -190,41 +189,41 @@ namespace APVTranslator_Common.Helpers
         /// </summary>
         public void ReplaceObject(string what, string replacement)
         {
-            //if (what.EndsWith("."))
-            //{
-            //    replacement = (replacement.EndsWith(". ") || replacement.EndsWith(".")) ? replacement : string.Concat(replacement, ".");
-            //}
-            //if (what.EndsWith("\r"))
-            //{
-            //    replacement = replacement.EndsWith("\r") ? replacement : string.Concat(replacement, "\r");
-            //}
-            //if (what.EndsWith("\n"))
-            //{
-            //    replacement = replacement.EndsWith("\n") ? replacement : string.Concat(replacement, "\n");
-            //}
-            foreach (Microsoft.Office.Interop.Word.Shape shp in _document.Shapes)
+            try
             {
-                if (shp.TextFrame.HasText != 0)
+                foreach (Microsoft.Office.Interop.Word.Shape shp in _document.Shapes)
                 {
-                    if (shp.TextFrame.TextRange.Text.ToString().Contains(what))
+                    if (shp.TextFrame.HasText != 0)
                     {
-                        var initialText = shp.TextFrame.TextRange.Text;
-                        var resultText = initialText.Replace(what, replacement);
-                        shp.TextFrame.TextRange.Text = resultText;
+                        if (shp.TextFrame.TextRange.Text.ToString().Contains(what))
+                        {
+                            var initialText = shp.TextFrame.TextRange.Text;
+                            var resultText = initialText.Replace(what, replacement);
+                            shp.TextFrame.TextRange.Text = resultText;
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                this.Dispose();
+                throw ex;
             }
         }
         //Garbage collection for memory.
         public void Dispose()
         {
-            _document.Close(null, null, null);
-            _wordApplication.Application.Quit();
-            _wordApplication.Quit();
-            if (_wordApplication != null)
-                System.Runtime.InteropServices.Marshal.ReleaseComObject(_wordApplication);
             GC.Collect(); // force final cleanup!
             GC.WaitForPendingFinalizers();
+            if (_document != null)
+            {
+                _document.Close(null, null, null);
+            }
+            if (_wordApplication != null)
+            {
+                _wordApplication.Quit();
+                System.Runtime.InteropServices.Marshal.ReleaseComObject(_wordApplication);
+            }
         }
         #endregion
     }

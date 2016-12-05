@@ -80,6 +80,11 @@ namespace APVTranslator_Services.Services
                     {
                         sResult.IsSuccess = dbModel.DeleteFileProject(projectId, fileId);
                     }
+                    else
+                    {
+                        sResult.IsSuccess = false;
+                        sResult.Message = "Just admin or leader have permisstion to delete file!";
+                    }
                     //delete File
                     if (sResult.IsSuccess)
                     {
