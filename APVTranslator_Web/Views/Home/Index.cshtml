@@ -73,7 +73,7 @@
                         <div class="detail-item">
                             <b>Status:</b>
                             <p id="Status">
-                                {{currentProject.Status?'Translated':'Translating'}}
+                                {{currentProject.Progress*100<100?"Translating":"Translated"}}
                             </p>
                         </div>
                         <div class="detail-item">
@@ -91,7 +91,7 @@
                         <div class="detail-item">
                             <b>Translate Language:</b>
                             <p id="TranslateLanguage">
-                                {{currentProject.LanguageDescription}}
+                                {{currentProject.TranslateLanguageID == 1?"Japanese To Vietnamese":"Vietnamese To Japanese"}}
                             </p>
                         </div>
                         <div class="detail-item">
