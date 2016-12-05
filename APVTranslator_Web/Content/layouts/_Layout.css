@@ -22,14 +22,14 @@ footer {
 .main {
     overflow: auto;
     flex: 1 1 auto;
-    display:flex;
+    display: flex;
 }
 
 /* Set padding to keep content from hitting the edges */
 .body-content {
     padding-left: 15px;
     padding-right: 15px;
-    height:100%;
+    height: 100%;
 }
 
 /* Override the default bootstrap behavior where horizontal description lists 
@@ -78,18 +78,25 @@ textarea {
     min-height: 33px;
     border-left: 1px #e6e6e6 solid;
     width: 1px;
-    margin-left:6px;
-    margin-right:6px;
-    display:inline-block;
+    margin-left: 6px;
+    margin-right: 6px;
+    display: inline-block;
     /*margin: 15px 7px;*/
 }
- .navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {
+
+.navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {
     background-color: #2e8c85 !important;
 }
-    .navbar-default .navbar-toggle .icon-bar {
+
+.navbar-default .navbar-toggle .icon-bar {
     background-color: white !important;
 }
 
-    .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
-    color: white!important;
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+    color: white !important;
 }
+
+.ngHeaderButton {
+display:none;
+}
+
