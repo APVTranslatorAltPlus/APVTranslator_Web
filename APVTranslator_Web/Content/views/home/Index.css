@@ -155,3 +155,31 @@ button:active, .button:active, button:focus, .button:focus, button:hover, .butto
     outline:none !important;
     border-left: solid 1px #ccc !important;
 }
+
+.button-toolbar{
+       display:inline-block;
+    }
+
+@media only screen and (max-width: 450px) {
+    #mySidenav {
+        display:none;
+    }
+
+    #gridTable{
+        width:100%;
+    }
+
+    .button-toolbar{
+        margin-bottom:6px;
+    }
+    #custom-search-input{
+        width:200px !important;
+    }
+    .input-group{
+         width:200px !important;
+    }
+}
+
+input.input-lg:focus {
+    outline-width: 0;
+}

@@ -394,9 +394,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                 if (response.GetListUserResult && response.GetListUserResult.IsSuccess) {
                     scope.data2.availableOptions = JSON.parse(response.GetListUserResult.Value);
                     scope.data2.selectedOption = scope.data2.availableOptions[0];
-                } else {
-                    alert("error");
-                }
+                } 
             }).error(function (err) {
                 console.log(err);
                 cfpLoadingBar.complete();
@@ -421,7 +419,6 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                 scope.tags.push(item);
                 isDuplicated = false;
             }
-            //alert(item.value);
             console.log(scope.tags);
         }
 
@@ -442,8 +439,6 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                 scope.ProjectTags.push(item);
                 isDuplicated = false;
             }
-            //alert(item.value);
-            // console.log(scope.tags);
         }
 
         //Handle datetime validation
@@ -498,12 +493,10 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
             scope.oldIDList = [];
             if (scope.currentProject) {
                 projectId = scope.currentProject.Id;
-                //alert(projectId);
                 serGetProjectInfo.data(projectId)
                     .success(function (response) {
                         if (response.GetProjectInfoResult && response.GetProjectInfoResult.IsSuccess) {
                             var project = JSON.parse(response.GetProjectInfoResult.Value);
-                            angular.element('#startDate').val(moment(project.CreateAt).format('YYYY-MM-DD HH:mm:ss'));
 
                             scope.getListUser();
                             scope.isEdit = true;
@@ -529,8 +522,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                             //angular.element("#errorMess").text("");
                         }
                         else {
-                            alert(23);
-                            //   Utility.showMessage(scope, $mdDialog, response.GetListFileProjectResult.Message);
+                            Utility.showMessage(scope, $mdDialog, response.GetProjectInfoResult.Message);
                         }
                     }).error(function (err) {
                         console.log(err);
@@ -555,7 +547,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                         console.log("INITIAL = " + scope.oldIDList[i]);
                     }
                 } else {
-                    alert("error");
+                    Utility.showMessage(scope, $mdDialog, response.GetListProjectMemberResult.Message);
                 }
             }).error(function (err) {
                 console.log(err);
@@ -578,7 +570,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                         console.log("INITIAL = " + scope.oldIDList[i]);
                     }
                 } else {
-                    // alert("error");
+                    Utility.showMessage(scope, $mdDialog, response.GetListProjectDBReferenceResult.Message);
                 }
             }).error(function (err) {
                 console.log(err);
@@ -1026,7 +1018,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                          });
 
                      } else {
-                         alert("error");
+                         Utility.showMessage(scope, $mdDialog, response.GetInfoForMemberSettingResult.Message);
                      }
                  }).error(function (err) {
                      console.log(err);
@@ -1079,7 +1071,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
             //  success(function (data, status, headers, config) {
             //      $scope.results.push(data);  //retrieve results and add to existing results
             //  })
-            alert(10);
+            //alert(10);
         }
         scope.isTextSearchBox2 = false;
 
@@ -1218,6 +1210,7 @@ apvApp.service('serGetTextSearch', function ($http) {
 
 //Handle splitter transition 
 var isOpen = true;
+var isCollapsed = false;
 var initialWidth;
 function toggle() {
     if (isOpen == true) {
@@ -1248,3 +1241,27 @@ function closeNav() {
     document.getElementById("mySidenav").style.overflow = "hidden";
 }
 
+function closeExpandedArea() {
+    
+    if (isCollapsed) {
+        $("button.navbar-toggle").click();
+        isCollapsed = false;
+    }
+}
+
+function openExpandedArea() {
+    isCollapsed = true;
+}
+
+$(window).resize(function () {
+    var width = $(window).width();
+    //Assuming X=550   
+    if (width <= 450) {
+      //  $('.button-toolbar').removeClass('btn-default');
+        $('.button-toolbar').addClass('btn-sm');
+    }
+    else {
+        $('.button-toolbar').removeClass('btn-sm');
+        $('.button-toolbar').addClass('btn-default');
+    }
+})

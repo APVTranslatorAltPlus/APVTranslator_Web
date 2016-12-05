@@ -10,70 +10,40 @@
 <div class="row" style="width:100%;height:100%;">
     <div class="col-lg-12" style="width:100%;height:100%;">
         <div ng-controller="MyCtrl" class="app-index" id="Homecontroller">
-            <div class="m-top">
+            <div class="m-top" style="display:table;padding:10px;width:inherit">
                 @*<md-button style="float:right;" class="md-accent" ng-show="checked" ng-click="loadListProject()">Back</md-button>*@
                 @*<label>APVTranslator</label>*@
-                <md-toolbar ng-cloak>
-                    <div class="md-toolbar-tools">
-                        <md-button class="md-raised" ng-show="!checked" ng-click="getListUser()" data-toggle="modal" data-target="#createNewProjectModal" data-backdrop="static" data-keyboard="false" aria-label="New">
-                            <md-icon class="material-icons">add</md-icon>
-                            <md-tooltip md-direction="bottom">
-                                New Project
-                            </md-tooltip>
-                            New
-                        </md-button>
-                        <div class="a-divider" ng-show="projectSelection"></div>
-                        <md-button class="md-raised" ng-show="projectSelection" ng-disabled="!projectSelection" ng-click="editProject()" aria-label="Edit">
-                            <md-icon class="material-icons">edit</md-icon>
-                            <md-tooltip md-direction="bottom">
-                                Edit Project
-                            </md-tooltip>
-                            Edit
-                        </md-button>
-                        <div class="a-divider" ng-show="projectSelection"></div>
-                        <md-button class="md-raised" ng-show="projectSelection" ng-disabled="!projectSelection" ng-click="confirmDeleteProject()" aria-label="Delete">
-                            <md-icon class="material-icons">delete</md-icon>
-                            <md-tooltip md-direction="bottom">
-                                Delete Project
-                            </md-tooltip>
-                            Delete
-                        </md-button>
-                        <div class="a-divider" ng-show="projectSelection"></div>
-                        <md-button class="md-raised" ng-show="projectSelection" ng-disabled="!projectSelection" aria-label="Setting" data-toggle="modal" data-target="#settingModal" data-backdrop="static" data-keyboard="false" ng-click="initSetting()">
-                            <md-icon class="material-icons">settings</md-icon>
-                            <md-tooltip md-direction="bottom">
-                                Project Setting
-                            </md-tooltip>
-                            Setting
-                        </md-button>
-                        <md-button class="md-raised" ng-show="checked" ng-click="showInputFile()" aria-label="Import">
-                            <md-icon class="material-icons">file_upload</md-icon>
-                            <md-tooltip md-direction="bottom">
-                                Import File
-                            </md-tooltip>
-                            Import
-                        </md-button>
+                <div class="row" style="vertical-align:middle;display:table-cell">
+                    <div style="margin-bottom:6px;display:inline-block">
+                        <button type="button" style="display:inline-block;" class="btn btn-default button-toolbar" ng-show="!checked" ng-click="getListUser()" data-toggle="modal" data-target="#createNewProjectModal" data-backdrop="static" data-keyboard="false">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        Create
+                        </button>
+                        <div class="a-divider " style="display:inline-block;" ng-show="projectSelection"></div>
+                        <button type="button" style="display:inline-block;" class="btn btn-default button-toolbar" ng-show="projectSelection" ng-disabled="!projectSelection" ng-click="editProject()">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                        Edit</button>
+                        <div class="a-divider " style="display:inline-block;" ng-show="projectSelection"></div>
+                        <button type="button" style="display:inline-block;" class="btn btn-default button-toolbar" ng-show="projectSelection" ng-disabled="!projectSelection" ng-click="confirmDeleteProject()">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        Delete</button>
+                        <div class="a-divider" style="display:inline-block;" ng-show="projectSelection"></div>
+                        <button type="button" style="display:inline-block;" class="btn btn-default button-toolbar" ng-show="projectSelection" ng-disabled="!projectSelection" aria-label="Setting" data-toggle="modal" data-target="#settingModal" data-backdrop="static" data-keyboard="false" ng-click="initSetting()">
+                            <span class="glyphicon glyphicon-wrench"></span>
+                        Settings</button>
+                        <button type="button" style="display:inline-block;" class="btn btn-default button-toolbar" ng-show="checked" ng-click="showInputFile()">Import</button>
                         <div class="a-divider" ng-show="fileProjectSelection"></div>
-                        <md-button class="md-raised" ng-show="fileProjectSelection" ng-click="confirmDeleteFile()" ng-disabled="!fileProjectSelection" aria-label="delete file">
-                            <md-icon class="material-icons">delete</md-icon>
-                            <md-tooltip md-direction="bottom">
-                                Delete File
-                            </md-tooltip>
-                            Delete
-                        </md-button>
-                        @*<div class="a-divider" ng-show="fileProjectSelection"></div>
-                        <md-button class="md-raised" ng-show="fileProjectSelection" ng-click="translateFile()" ng-disabled="!fileProjectSelection" aria-label="trans;ate file">
-                            <md-icon class="material-icons">g_translate</md-icon>
-                            <md-tooltip md-direction="bottom">
-                                Translate file
-                            </md-tooltip>
-                            Translate
-                        </md-button>*@
+                        <button type="button" style="display:inline-block;" class="btn btn-default button-toolbar" ng-show="fileProjectSelection" ng-click="confirmDeleteFile()" ng-disabled="!fileProjectSelection">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        Delete</button>
                         <input type="file" id="file" accept=".xlsx,.xls,.doc,.docx.,.ppt,.pptx" style="display:none" value="upload" multiple />
                         <span flex></span>
-                        <div id="custom-search-input" style="width:300px;height:36px;">
+
+                     </div>
+                    <div style="float:right;display:inline-block;vertical-align:middle;display:table-cell;">
+                        <div id="custom-search-input" style="width:300px;height:36px;display:inline-block; float:left;margin-bottom:8px;">
                             <div class="input-group" style="width:300px;height:36px;">
-                                <input type="text" onfocus="if(this.value != '') {this.value=''}" id="textSearchBox" style="height: 30px;" class="form-control input-lg" placeholder="Search..." ng-keypress="myFunct($event)" />
+                                <input type="text" onfocus="if(this.value != '') {this.value=''}" id="textSearchBox" style="height: 30px;" class = "input-lg" placeholder="Search..." ng-keypress="myFunct($event)" />
                                 <span class="input-group-btn" style="vertical-align: top !important;bottom:2px;">
                                     <button class="btn btn-info btn-lg" type="button" ng-click="searchText()">
                                         <i class="glyphicon glyphicon-search" style="font-size: 18px;"></i>
@@ -81,17 +51,12 @@
                                 </span>
                             </div>
                         </div>
-
-                        <div class="a-divider" ng-show="showSearchBoxDivider"></div>
-                        <md-button class="md-raised md-warn" aria-label="Back" ng-show="checked" ng-click="loadListProject()">
-                            <md-icon class="material-icons">undo</md-icon>
-                            <md-tooltip md-direction="bottom">
-                                Back To List Project
-                            </md-tooltip>
-                            Back
-                        </md-button>
+                        <div class="a-divider" ng-show="showSearchBoxDivider" style="display:inline-block;"></div>
+                        <button type="button" ng-show="checked" ng-click="loadListProject()" style="display:inline-block;" class="btn btn-default button-toolbar">
+                            <span class="glyphicon glyphicon-backward"></span>
+                        Back</button>
                     </div>
-                </md-toolbar>
+                </div>
             </div>
             <div class="m-center">
 
@@ -329,7 +294,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content" style="width:100%">
             <div class="modal-body" style="width:100%">
-                <p id="successMessage" style="display:inline;font-size:35px;color:#5cb85c;padding:10px;">Create new project successfully!!!</p>
+                <p id="successMessage" style="display:inline;font-size:33px;color:#5cb85c;padding:10px;">Create new project successfully!!!</p>
                 <img src="~/Content/Images/success.png" alt="" style="height:30px;width:30px;margin-bottom:12px; object-fit: cover;overflow:hidden ;display:inline">
             </div>
 
@@ -389,45 +354,6 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-<style>
-    @@media screen and (min-width: 768px) {
-
-        #createNewProjectModal .modal-dialog {
-            /*width: 900px;*/
-        }
-    }
-
-    @@media screen and (min-width: 768px) {
-
-        #successModal .modal-dialog {
-            width: 650px !important;
-            height: 50px !important;
-        }
-    }
-
-    @@media screen and (min-width: 768px) {
-
-        #errorModal .modal-dialog {
-            width: 820px !important;
-            height: 50px !important;
-        }
-    }
-
-    @@media (max-width: 900px) {
-        .m-top {
-            width: 100%;
-        }
-    }
-
-    @@media (max-width: 480px) {
-        .m-top {
-            font-size: 70%;
-            margin: 0;
-        }
-    }
-
-    }
-</style>
 <script>
 
     $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {

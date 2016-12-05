@@ -29,36 +29,38 @@
     <style>
         .onHoverChangeColor:hover{
    background-color:#c56767 !important;
+   color:white;
 }
-        .onHoverChangeColor:{
+        /*.onHoverChangeColor:{
    background-color:#c56767 !important;
-}
+}*/
     </style>
     <link rel="icon" href="~/favicon.ico">
 </head>
 <body ng-app="apvApp">
-    <div ng-controller="ctTopbar" class="apv-navbar navbar layout-top">
+    <div ng-controller="ctTopbar" class="apv-navbar navbar layout-top navbar-default navbar-fixed-top">
         <div class="container-fluid">
-            <div class="navbar-header ">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <div class="navbar-header" id="collapseParent">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse" id="collapseButton" onclick="openExpandedArea();">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
                 @Html.ActionLink("APVTranslator", "Index", "Home", new { area = "" }, new { @class = "navbar-brand onHoverChangeColor" })
             </div>
-            <div class="navbar-collapse collapse ">
+            <div class="navbar-collapse collapse" id="collapseMenu">
                 <ul class="nav navbar-nav">
-              @*      <li>@Html.ActionLink("Dashboard", "Index", "Home", new { @class = "onHoverChangeColor" })</li>*@
-                    <li ><a  class="onHoverChangeColor" onclick="angular.element(document.getElementById('Homecontroller')).scope().loadListProject();">Dashboard</a></li>
-                  @*  <li>@Html.ActionLink("Help", "About", "Home", new { @class = "onHoverChangeColor" })</li>*@
+                 @*   <li>@Html.ActionLink("Dashboard", "Index", "Home", new { @class = "onHoverChangeColor" })</li>*@
+                    <li ><a id="dashboard" class="onHoverChangeColor" onclick="closeExpandedArea(); angular.element(document.getElementById('Homecontroller')).scope().loadListProject();">Dashboard</a></li>
+                    @*<li>@Html.ActionLink("Help", "About", "Home", new { @class = "onHoverChangeColor" })</li>*@
                   
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
         </div>
     </div>
-    <div class="main body-content">
+    
+    <div class="main body-content" style="margin-top:50px;" >
         @RenderBody()
     </div>
     <footer>
