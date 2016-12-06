@@ -379,7 +379,7 @@ namespace APVTranslator_Controllers.Controllers
                                 break;
                             case ".ppt":
                             case ".pptx":
-                                using (var powerpoint = new PowerPointHelper(translatedFile))
+                                using (var powerpoint = new PowerPointHelper(translatedFile,false))
                                 {
                                     List<TextSegment> lstTextSegment = translateModel.GetTextSegment(projectId, fileId);
                                     lstTextSegment = lstTextSegment.OrderByDescending(x => x.TextSegment1.Length).ToList();
@@ -424,7 +424,7 @@ namespace APVTranslator_Controllers.Controllers
                     cResult.Message = "User don't has permissions!";
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 cResult.IsSuccess = false;
                 cResult.Message = "Build export file error!";

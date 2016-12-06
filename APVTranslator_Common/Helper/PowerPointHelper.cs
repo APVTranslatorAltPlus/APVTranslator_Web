@@ -6,7 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using PowerPoint = Microsoft.Office.    ;
+using PowerPoint = Microsoft.Office.Interop.PowerPoint;
 
 namespace APVTranslator_Common.Helpers
 {
@@ -19,6 +19,7 @@ namespace APVTranslator_Common.Helpers
 
         public static string FilePath { get; set; }
 
+        private Boolean _ReadOnly { get; set; }
         #endregion
 
 
@@ -35,11 +36,12 @@ namespace APVTranslator_Common.Helpers
             }
         }
 
-        public PowerPointHelper(string path)
+        public PowerPointHelper(string path, bool readOnly = true)
         {
             try
             {
                 FilePath = path;
+                _ReadOnly = readOnly;
                 OpenPresentation();
             }
             catch (Exception ex)
@@ -54,8 +56,14 @@ namespace APVTranslator_Common.Helpers
             _application = new PowerPoint.Application();
             _presentations = _application.Presentations;
             GC.Collect();
-            _presentation = _presentations.Open(FilePath, MsoTriState.msoFalse, MsoTriState.msoFalse, MsoTriState.msoFalse);
-
+            if (_ReadOnly)
+            {
+                _presentation = _presentations.Open(FilePath, MsoTriState.msoCTrue, MsoTriState.msoFalse, MsoTriState.msoFalse);
+            }
+            else
+            {
+                _presentation = _presentations.Open(FilePath, MsoTriState.msoFalse, MsoTriState.msoFalse, MsoTriState.msoFalse);
+            }
         }
 
         public List<TextRead> GetTexts()
@@ -123,13 +131,15 @@ namespace APVTranslator_Common.Helpers
                         {
                             if (sItem.Trim() == what)
                             {
-                                textRange.Text = textRange.Text.Replace(what, replacement);
+                                string text = textRange.Text;
+                                textRange.Text = text.Replace(what, replacement);
+                                //textRange.Text = textRange.Text.Replace(what, replacement);
                             }
                         }
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 this.Dispose();
                 throw;

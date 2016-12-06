@@ -443,7 +443,7 @@ namespace APVTranslator_Common.Helpers
             if (_workbook != null)
             {
                 _workbook.Close(Type.Missing, Type.Missing, Type.Missing);
-                Marshal.ReleaseComObject(_workbook);
+                //Marshal.ReleaseComObject(_workbook);
             }
 
             if (_workbooks != null)
