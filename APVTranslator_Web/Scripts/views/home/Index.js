@@ -23,6 +23,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
         //columns list file in project
         scope.columnDefs2 = [{ displayName: 'STT', cellTemplate: '<div style="text-align:center;">{{row.rowIndex +1}}</div>', width: 50, enableCellEdit: false },
                              { field: 'FileName', displayName: 'FileName', enableCellEdit: false, minWidth: 220, resizable: true },
+                             { field: 'FileProgress', displayName: 'File Progress', enableCellEdit: false, width: 120,cellTemplate: '<div class="ngCellText ng-scope ngCellElement">{{buildProcess(row.entity.FileProgress)}}</div>', resizable: true },
                              { field: 'FilePath', displayName: 'File Path', enableCellEdit: false, minWidth: 350, resizable: true },
                              { field: 'FileType', displayName: 'File Type', cellTemplate: '<div class="ngCellText ng-scope ngCellElement">{{getFileTypeName(row.entity.FileType)}}</div>', enableCellEdit: false, width: 100, minWidth: 50, resizable: true },
                             { field: 'LastUpdate', displayName: 'Last Update', type: 'date', cellFilter: 'date:\'hh:mm dd/MM/yyyy\'', enableCellEdit: false, minWidth: 150, resizable: true }];
@@ -64,7 +65,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
             rowTemplate: rowTemplate(),
             columnDefs: 'columnDefs'
         };
-        scope.FilterOptions  = { filterText: '', useExternalFilter: false };
+        scope.FilterOptions = { filterText: '', useExternalFilter: false };
         scope.showSearchBoxDivider = false;
         scope.rowDblClick = function (row) {
             try {
@@ -395,7 +396,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                 if (response.GetListUserResult && response.GetListUserResult.IsSuccess) {
                     scope.data2.availableOptions = JSON.parse(response.GetListUserResult.Value);
                     scope.data2.selectedOption = scope.data2.availableOptions[0];
-                } 
+                }
             }).error(function (err) {
                 console.log(err);
                 cfpLoadingBar.complete();
@@ -1243,7 +1244,7 @@ function closeNav() {
 }
 
 function closeExpandedArea() {
-    
+
     if (isCollapsed) {
         $("button.navbar-toggle").click();
         isCollapsed = false;
@@ -1258,7 +1259,7 @@ $(window).resize(function () {
     var width = $(window).width();
     //Assuming X=550   
     if (width <= 450) {
-      //  $('.button-toolbar').removeClass('btn-default');
+        //  $('.button-toolbar').removeClass('btn-default');
         $('.button-toolbar').addClass('btn-sm');
     }
     else {

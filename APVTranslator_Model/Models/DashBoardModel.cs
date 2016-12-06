@@ -29,10 +29,10 @@ namespace APVTranslator_Model.Models
             return listProjects;
         }
 
-        public virtual List<ProjectFile> Proc_GetListFileProject(object projectId)
+        public virtual List<ListProjectFileViewModel> Proc_GetListFileProject(object projectId)
         {
             var userIDParameter = new SqlParameter("@projectId", projectId);
-            List<ProjectFile> listProjects = this.Database.SqlQuery<ProjectFile>("Proc_GetListProjectFile @projectId", userIDParameter).ToList();
+            List<ListProjectFileViewModel> listProjects = this.Database.SqlQuery<ListProjectFileViewModel>("Proc_GetListPorjectFileViewModel @projectId", userIDParameter).ToList();
             return listProjects;
         }
         /// <summary>

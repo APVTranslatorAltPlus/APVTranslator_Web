@@ -28,5 +28,7 @@ namespace APVTranslator_Entity.Models
         public DateTime? LastUpdate { get; set; }
 
         public bool? IsLoadText { get; set; }
+
+        //public decimal? FileProgress { get; set; }
     }
 }
