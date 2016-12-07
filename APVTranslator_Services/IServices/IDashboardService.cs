@@ -55,5 +55,8 @@ namespace APVTranslator_Services.Services
         [OperationContract]
         [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped)]
         ServiceResult GetTextSearch(string textSearch);
+        [OperationContract]
+        [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped)]
+        ServiceResult GetListDictionary(int projectId);
     }
 }

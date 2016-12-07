@@ -424,5 +424,13 @@ namespace APVTranslator_Model.Models
             List<SearchViewModel> textSearchResult = this.Database.SqlQuery<SearchViewModel>("Proc_GetTextSearch @sTextSearch", textSearchParameter).ToList();
             return textSearchResult;
         }
+
+        public virtual List<Dictionary> GetListDictionary(int projectId)
+        {
+            var projectIdParameter = new SqlParameter("@Id", projectId);
+            List<Dictionary> listDictionaries = new List<Dictionary>();
+            listDictionaries = this.Dictionaries.Where(d => d.ProjectID == projectId).Select(d => new Dictionary()).ToList();
+            return listDictionaries;
+        }
     }
 }

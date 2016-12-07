@@ -217,7 +217,7 @@
                             <ul class="nav nav-tabs" id="tabContent">
                                 <li class="active"><a href="#project" data-toggle="tab">Project</a></li>
                                 <li><a href="#member-manager" data-toggle="tab">Member Manager</a></li>
-                                <li><a href="#file-manager" data-toggle="tab">File Manager</a></li>
+                               @* <li><a href="#dictionary-manager" data-toggle="tab">Dictionary Manager</a></li>*@
                             </ul>
 
                             <div class="tab-content">
@@ -272,8 +272,17 @@
 
                                 </div>
 
-                                <div class="tab-pane" id="file-manager">
-
+                                <div class="tab-pane" id="dictionary-manager">
+                                    <table class="table" id="dictionary-table">
+                                        <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Dictionary Name</th>
+                                                <th>Delete Dictionary</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="Dic-table-body"></tbody>
+                                    </table>
                                 </div>
                             </div>
 

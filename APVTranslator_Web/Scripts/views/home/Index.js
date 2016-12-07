@@ -3,8 +3,8 @@
 //        cfpLoadingBarProvider.includeSpinner = true;
 //    })
 
-apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFileProject', 'cfpLoadingBar', '$mdDialog', 'deleteFileProject', 'serCreateNewProject', 'serGetListUser', 'cfpLoadingBar', 'serGetProjectInfo', 'serGetListProjectMember', 'serUpdateProject', 'serDeleteProject', 'serGetListProjectDBReference', 'serSaveChangeProjectSetting', 'serGetInfoForMemberSetting', 'serSaveChangeMemberSetting', 'serGetTextSearch',
-    function (scope, http, serListProject, serListFileProject, cfpLoadingBar, $mdDialog, deleteFileProject, serCreateNewProject, serGetListUser, cfpLoadingBar, serGetProjectInfo, serGetListProjectMember, serUpdateProject, serDeleteProject, serGetListProjectDBReference, serSaveChangeProjectSetting, serGetInfoForMemberSetting, serSaveChangeMemberSetting, serGetTextSearch) {
+apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFileProject', 'cfpLoadingBar', '$mdDialog', 'deleteFileProject', 'serCreateNewProject', 'serGetListUser', 'cfpLoadingBar', 'serGetProjectInfo', 'serGetListProjectMember', 'serUpdateProject', 'serDeleteProject', 'serGetListProjectDBReference', 'serSaveChangeProjectSetting', 'serGetInfoForMemberSetting', 'serSaveChangeMemberSetting', 'serGetTextSearch','serGetListDictionary',
+    function (scope, http, serListProject, serListFileProject, cfpLoadingBar, $mdDialog, deleteFileProject, serCreateNewProject, serGetListUser, cfpLoadingBar, serGetProjectInfo, serGetListProjectMember, serUpdateProject, serDeleteProject, serGetListProjectDBReference, serSaveChangeProjectSetting, serGetInfoForMemberSetting, serSaveChangeMemberSetting, serGetTextSearch, serGetListDictionary) {
         scope.init = function () {
             scope.loadListProject();
         }
@@ -1031,7 +1031,28 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                  });
             }
         }
+        scope.settingDictionary = function () {
+            $('#Dic-table-body').empty();
+            if (scope.currentProject) {
+                projectId = scope.currentProject.Id;
 
+                serGetListDictionary.data(projectId)
+                 .success(function (response) {
+
+                     if (response.GetListDictionaryResult && response.GetListDictionaryResult.IsSuccess) {
+                         var listDictionaries = JSON.parse(response.GetListDictionaryResult.Value);
+                         console.log(listDictionaries);
+                         //pending
+                        
+                     } else {
+                         Utility.showMessage(scope, $mdDialog, response.GetListDictionaryResult.Message);
+                     }
+                 }).error(function (err) {
+                     console.log(err);
+                     cfpLoadingBar.complete();
+                 });
+            }
+        }
         scope.selectedTab = '#project';
 
         scope.saveChangeMemberSetting = function () {
@@ -1070,6 +1091,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
         scope.initSetting = function () {
             scope.settingMember();
             scope.settingProject();
+        //    scope.settingDictionary();
         }
         scope.callRestService = function () {
             //$http({ method: 'GET', url: '/someUrl' }).
@@ -1212,7 +1234,11 @@ apvApp.service('serGetTextSearch', function ($http) {
         return $http.post(Utility.getBaseUrl() + 'Services/DashboardService.svc/GetTextSearch', { 'textSearch': textSearch });
     };
 });
-
+apvApp.service('serGetListDictionary', function ($http) {
+    this.data = function (projectId) {
+        return $http.post(Utility.getBaseUrl() + 'Services/DashboardService.svc/GetListDictionary', { 'projectId': projectId });
+    };
+});
 //Handle splitter transition 
 var isOpen = true;
 var isCollapsed = false;

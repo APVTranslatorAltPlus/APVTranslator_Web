@@ -432,5 +432,23 @@ namespace APVTranslator_Services.Services
             return sResult;
         }
 
+        public ServiceResult GetListDictionary(int projectId)
+        {
+            ServiceResult sResult = new ServiceResult();
+            try
+            {
+                if (HttpContext.Current.User.Identity.IsAuthenticated)
+                {
+                    DashBoardModel dbModel = new DashBoardModel();
+                    sResult.Value = dbModel.GetListDictionary(projectId);
+                }
+            }
+            catch (Exception ex)
+            {
+                sResult.IsSuccess = false;
+                sResult.Message = ex.Message;
+            }
+            return sResult;
+        }
     }
 }
