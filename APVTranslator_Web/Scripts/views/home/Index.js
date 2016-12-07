@@ -518,6 +518,8 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                             }
                             document.getElementById("projectName").disabled = "disabled";
                             document.getElementById("descriptions").value = project.Descriptions;
+                            var translateLanguage = document.getElementById("translateLanguage");
+                            translateLanguage.value = project.TranslateLanguageID;
                             //scope.IdList = [];
                             //scope.dateRangeStart = '';
                             //scope.dateRangeEnd = '';
@@ -824,6 +826,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                 serSaveChangeDictionarySetting.data(JSON.stringify(projectObject), scope.newlyInsertedIDList, scope.deletedIDList)
                    .success(function (response) {
                        if (response.SaveChangeDictionarySettingResult.IsSuccess && response.SaveChangeDictionarySettingResult.Value === "true") {
+                           scope.loadListProject();
                            $('#successModal').modal('show');
                            $('#settingModal').modal('hide');
                            document.getElementById("successMessage").innerHTML = "Save changes successfully!!!";

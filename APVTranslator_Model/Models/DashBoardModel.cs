@@ -322,6 +322,7 @@ namespace APVTranslator_Model.Models
                     {
                         var sql = @"DELETE FROM ReferenceDB WHERE ReferenceDB.ID = {0} AND ReferenceDB.ProjectReferID = {1}";
                         this.Database.ExecuteSqlCommand(sql, Id, referId);
+                        Debug.WriteLine(referId);
                     }
 
                     var sql2 = @"UPDATE Projects SET Projects.UseCompanyDB = {0},Projects.TranslateLanguageID = {1} WHERE Projects.Id = {2}";
