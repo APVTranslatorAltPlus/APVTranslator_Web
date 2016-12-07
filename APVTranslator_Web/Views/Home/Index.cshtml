@@ -215,13 +215,13 @@
                         <div class="modal-body" style="width:100%">
 
                             <ul class="nav nav-tabs" id="tabContent">
-                                <li class="active"><a href="#dictionaries" data-toggle="tab">Dictionaries</a></li>
+                                <li class="active"><a href="#project" data-toggle="tab">Project</a></li>
                                 <li><a href="#member-manager" data-toggle="tab">Member Manager</a></li>
                                 <li><a href="#file-manager" data-toggle="tab">File Manager</a></li>
                             </ul>
 
                             <div class="tab-content">
-                                <div class="tab-pane active" id="dictionaries">
+                                <div class="tab-pane active" id="project">
                                     <div class="form-group">
                                         <label for="usr">Project Name:</label>
                                         <input type="text" class="form-control" id="projectNameSetting" style="max-width:100%!important;" disabled="disabled">
@@ -363,8 +363,8 @@
         if (target === "#member-manager") {
             angular.element(document.getElementById('Homecontroller')).scope().selectedTab = '#member-manager';
         }
-        if (target === "#dictionaries") {
-            angular.element(document.getElementById('Homecontroller')).scope().selectedTab = '#dictionaries';
+        if (target === "#project") {
+            angular.element(document.getElementById('Homecontroller')).scope().selectedTab = '#project';
         }
 
     });

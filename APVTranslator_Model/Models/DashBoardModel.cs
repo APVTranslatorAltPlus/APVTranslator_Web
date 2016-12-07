@@ -164,11 +164,8 @@ namespace APVTranslator_Model.Models
                     this.Projects.Add(newProject);
                     this.SaveChanges();
                     int? newId = newProject.Id;
-                    Debug.WriteLine("PROJECTID=" + newId);
                     foreach (var id in listMember)
                     {
-                        Debug.WriteLine("ID=" + id);
-                        Debug.WriteLine("pair ==" + id + "/" + newId);
                         var sql = @"INSERT INTO ProjectMembers VALUES({0}, {1}, 0)";
                         this.Database.ExecuteSqlCommand(sql, newId, id);
                     }
@@ -210,11 +207,6 @@ namespace APVTranslator_Model.Models
             //return listMember;
             var projectIdParameter = new SqlParameter("@Id", projectId);
             List<AspNetUser> listUsers = this.Database.SqlQuery<AspNetUser>("Proc_GetListProjectMember @Id", projectIdParameter).ToList();
-            Debug.WriteLine("User");
-            foreach (var u in listUsers)
-            {
-                Debug.WriteLine("User" + u.Email);
-            }
 
             return listUsers;
         }
@@ -227,7 +219,6 @@ namespace APVTranslator_Model.Models
                 {
                     foreach (var memberId in newlyInsertedIDList)
                     {
-                        Debug.WriteLine("Insert = " + project.Id + "/" + memberId);
                         var sql = @"INSERT INTO ProjectMembers VALUES({0}, {1}, 0)";
                         this.Database.ExecuteSqlCommand(sql, project.Id, memberId);
                     }
@@ -235,7 +226,6 @@ namespace APVTranslator_Model.Models
 
                     foreach (var memberId in deletedIDList)
                     {
-                        Debug.WriteLine(project.Id + "/" + memberId);
                         var sql = @"DELETE FROM ProjectMembers WHERE  ProjectMembers.ProjectID = {0} AND ProjectMembers.UserID = {1}";
                         this.Database.ExecuteSqlCommand(sql, project.Id, memberId);
                     }
@@ -296,7 +286,7 @@ namespace APVTranslator_Model.Models
             return listProjects;
         }
 
-        public bool SaveChangeDictionarySetting(object updateProject, IEnumerable<int> newlyInsertedIDList, IEnumerable<int> deletedIDList)
+        public bool SaveChangeProjectSetting(object updateProject, IEnumerable<int> newlyInsertedIDList, IEnumerable<int> deletedIDList)
         {
             using (System.Data.Entity.DbContextTransaction dbTran = this.Database.BeginTransaction())
             {
@@ -308,9 +298,6 @@ namespace APVTranslator_Model.Models
                     int Id = stuff.Id;
                     int UseCompanyDB = stuff.UseCompanyDB;
                     int TranslateLanguageID = stuff.TranslateLanguage;
-                    Debug.WriteLine("Id = " + Id);
-                    Debug.WriteLine("UseCompanyDB = " + UseCompanyDB);
-                    Debug.WriteLine("TranslateLanguageID = " + TranslateLanguageID);
                     foreach (var referId in newlyInsertedIDList)
                     {
                         var sql = @"INSERT INTO ReferenceDB VALUES({0}, {1})";
@@ -322,7 +309,6 @@ namespace APVTranslator_Model.Models
                     {
                         var sql = @"DELETE FROM ReferenceDB WHERE ReferenceDB.ID = {0} AND ReferenceDB.ProjectReferID = {1}";
                         this.Database.ExecuteSqlCommand(sql, Id, referId);
-                        Debug.WriteLine(referId);
                     }
 
                     var sql2 = @"UPDATE Projects SET Projects.UseCompanyDB = {0},Projects.TranslateLanguageID = {1} WHERE Projects.Id = {2}";
@@ -436,7 +422,6 @@ namespace APVTranslator_Model.Models
 
             var textSearchParameter = new SqlParameter("@sTextSearch", textSearch);
             List<SearchViewModel> textSearchResult = this.Database.SqlQuery<SearchViewModel>("Proc_GetTextSearch @sTextSearch", textSearchParameter).ToList();
-            Debug.WriteLine(textSearchResult.ToString());
             return textSearchResult;
         }
     }

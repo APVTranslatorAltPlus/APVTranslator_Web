@@ -3,8 +3,8 @@
 //        cfpLoadingBarProvider.includeSpinner = true;
 //    })
 
-apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFileProject', 'cfpLoadingBar', '$mdDialog', 'deleteFileProject', 'serCreateNewProject', 'serGetListUser', 'cfpLoadingBar', 'serGetProjectInfo', 'serGetListProjectMember', 'serUpdateProject', 'serDeleteProject', 'serGetListProjectDBReference', 'serSaveChangeDictionarySetting', 'serGetInfoForMemberSetting', 'serSaveChangeMemberSetting', 'serGetTextSearch',
-    function (scope, http, serListProject, serListFileProject, cfpLoadingBar, $mdDialog, deleteFileProject, serCreateNewProject, serGetListUser, cfpLoadingBar, serGetProjectInfo, serGetListProjectMember, serUpdateProject, serDeleteProject, serGetListProjectDBReference, serSaveChangeDictionarySetting, serGetInfoForMemberSetting, serSaveChangeMemberSetting, serGetTextSearch) {
+apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFileProject', 'cfpLoadingBar', '$mdDialog', 'deleteFileProject', 'serCreateNewProject', 'serGetListUser', 'cfpLoadingBar', 'serGetProjectInfo', 'serGetListProjectMember', 'serUpdateProject', 'serDeleteProject', 'serGetListProjectDBReference', 'serSaveChangeProjectSetting', 'serGetInfoForMemberSetting', 'serSaveChangeMemberSetting', 'serGetTextSearch',
+    function (scope, http, serListProject, serListFileProject, cfpLoadingBar, $mdDialog, deleteFileProject, serCreateNewProject, serGetListUser, cfpLoadingBar, serGetProjectInfo, serGetListProjectMember, serUpdateProject, serDeleteProject, serGetListProjectDBReference, serSaveChangeProjectSetting, serGetInfoForMemberSetting, serSaveChangeMemberSetting, serGetTextSearch) {
         scope.init = function () {
             scope.loadListProject();
         }
@@ -704,7 +704,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                });
         }
 
-        scope.settingDictionary = function () {
+        scope.settingProject = function () {
 
             angular.element('#projectNameSetting').val("");
             var translateLanguage = document.getElementById("translateLanguageSetting");
@@ -765,7 +765,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
             }
         }
 
-        scope.saveChangeDictionarySetting = function () {
+        scope.saveChangeProjectSetting = function () {
             var projectObject = {};
             if (scope.currentProject) {
                 projectId = scope.currentProject.Id;
@@ -823,9 +823,9 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                     }
                 }
 
-                serSaveChangeDictionarySetting.data(JSON.stringify(projectObject), scope.newlyInsertedIDList, scope.deletedIDList)
+                serSaveChangeProjectSetting.data(JSON.stringify(projectObject), scope.newlyInsertedIDList, scope.deletedIDList)
                    .success(function (response) {
-                       if (response.SaveChangeDictionarySettingResult.IsSuccess && response.SaveChangeDictionarySettingResult.Value === "true") {
+                       if (response.SaveChangeProjectSettingResult.IsSuccess && response.SaveChangeProjectSettingResult.Value === "true") {
                            scope.loadListProject();
                            $('#successModal').modal('show');
                            $('#settingModal').modal('hide');
@@ -1032,7 +1032,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
             }
         }
 
-        scope.selectedTab = '#dictionaries';
+        scope.selectedTab = '#project';
 
         scope.saveChangeMemberSetting = function () {
             if (scope.currentProject) {
@@ -1059,8 +1059,8 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
 
         scope.saveChangesSetting = function () {
 
-            if (scope.selectedTab == "#dictionaries") {
-                scope.saveChangeDictionarySetting();
+            if (scope.selectedTab == "#project") {
+                scope.saveChangeProjectSetting();
             }
             if (scope.selectedTab == "#member-manager") {
                 scope.saveChangeMemberSetting();
@@ -1069,7 +1069,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
 
         scope.initSetting = function () {
             scope.settingMember();
-            scope.settingDictionary();
+            scope.settingProject();
         }
         scope.callRestService = function () {
             //$http({ method: 'GET', url: '/someUrl' }).
@@ -1191,9 +1191,9 @@ apvApp.service('serGetListProjectDBReference', function ($http) {
         return $http.post(Utility.getBaseUrl() + 'Services/DashboardService.svc/GetListProjectDBReference', { 'projectId': projectId });
     };
 });
-apvApp.service('serSaveChangeDictionarySetting', function ($http) {
+apvApp.service('serSaveChangeProjectSetting', function ($http) {
     this.data = function (project, newlyInsertedIDList, deletedIDList) {
-        return $http.post(Utility.getBaseUrl() + 'Services/DashboardService.svc/SaveChangeDictionarySetting', { 'project': project, 'newlyInsertedIDList': newlyInsertedIDList, 'deletedIDList': deletedIDList });
+        return $http.post(Utility.getBaseUrl() + 'Services/DashboardService.svc/SaveChangeProjectSetting', { 'project': project, 'newlyInsertedIDList': newlyInsertedIDList, 'deletedIDList': deletedIDList });
     };
 });
 

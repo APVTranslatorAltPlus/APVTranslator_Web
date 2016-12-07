@@ -142,18 +142,6 @@ namespace APVTranslator_Services.Services
                     }
 
                     Project newProjectToDB = new Project(null, title, null, path, 0, null, null, createBy, dtStartDate, dtDeadline, translateLanguage, descriptions);
-                    // Debug.WriteLine("Year: {0}, Month: {1}, Day: {2}", dt.Year, dt.Month, dt.Day);
-                    //Debug.WriteLine("Title = " + newProjectToDB.Title);
-                    //Debug.WriteLine("UseCompanyDB = " + newProjectToDB.UseCompanyDB);
-                    //Debug.WriteLine("Path = " + newProjectToDB.Path);
-                    //Debug.WriteLine("ProjectTypeID = " + newProjectToDB.ProjectTypeID);
-                    //Debug.WriteLine("Status = " + newProjectToDB.Status);
-                    //Debug.WriteLine("Progress = " + newProjectToDB.Progress);
-                    //Debug.WriteLine("CreateBy = " + newProjectToDB.CreateBy);
-                    //Debug.WriteLine("StartDate = " + newProjectToDB.CreateAt);
-                    //Debug.WriteLine("Deadline = " + newProjectToDB.DeadLine);
-                    //Debug.WriteLine("TranslateLanguage = " + newProjectToDB.TranslateLanguageID);
-                    //Debug.WriteLine("Description = " + newProjectToDB.Descriptions);
 
                     DashBoardModel dbModel = new DashBoardModel();
                     sResult.Value = dbModel.CreateNewProject(newProjectToDB, listMember);
@@ -348,7 +336,7 @@ namespace APVTranslator_Services.Services
             return sResult;
         }
 
-        public ServiceResult SaveChangeDictionarySetting(object updateProject, IEnumerable<int> newlyInsertedIDList, IEnumerable<int> deletedIDList)
+        public ServiceResult SaveChangeProjectSetting(object updateProject, IEnumerable<int> newlyInsertedIDList, IEnumerable<int> deletedIDList)
         {
             ServiceResult sResult = new ServiceResult();
 
@@ -357,7 +345,7 @@ namespace APVTranslator_Services.Services
                 if (HttpContext.Current.User.Identity.IsAuthenticated)
                 {
                     DashBoardModel dbModel = new DashBoardModel();
-                    sResult.Value = dbModel.SaveChangeDictionarySetting(updateProject, newlyInsertedIDList, deletedIDList);
+                    sResult.Value = dbModel.SaveChangeProjectSetting(updateProject, newlyInsertedIDList, deletedIDList);
                 }
             }
             catch (System.Data.SqlClient.SqlException e)
