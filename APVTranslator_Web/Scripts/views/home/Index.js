@@ -241,6 +241,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                                 error: function (error) {
                                     cfpLoadingBar.complete();
                                     Utility.showMessage(scope, $mdDialog, error);
+                                    $('#file').replaceWith($('#file').val('').clone(true));
                                 }
                             });
                         }
