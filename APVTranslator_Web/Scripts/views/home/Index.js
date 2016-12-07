@@ -147,7 +147,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                     scope.setGridList(Enumeration.GridType.ListProject);
                 }
                 else {
-                    Utility.showMessage(scope, $mdDialog, response.GetListFileProjectResult.Message);
+                    Utility.showMessage(scope, $mdDialog, response.GetListProjectResult.Message);
                 }
                 cfpLoadingBar.complete();
             }).error(function (err) {
