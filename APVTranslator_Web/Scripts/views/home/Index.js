@@ -3,7 +3,7 @@
 //        cfpLoadingBarProvider.includeSpinner = true;
 //    })
 
-apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFileProject', 'cfpLoadingBar', '$mdDialog', 'deleteFileProject', 'serCreateNewProject', 'serGetListUser', 'cfpLoadingBar', 'serGetProjectInfo', 'serGetListProjectMember', 'serUpdateProject', 'serDeleteProject', 'serGetListProjectDBReference', 'serSaveChangeProjectSetting', 'serGetInfoForMemberSetting', 'serSaveChangeMemberSetting', 'serGetTextSearch','serGetListDictionary',
+apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFileProject', 'cfpLoadingBar', '$mdDialog', 'deleteFileProject', 'serCreateNewProject', 'serGetListUser', 'cfpLoadingBar', 'serGetProjectInfo', 'serGetListProjectMember', 'serUpdateProject', 'serDeleteProject', 'serGetListProjectDBReference', 'serSaveChangeProjectSetting', 'serGetInfoForMemberSetting', 'serSaveChangeMemberSetting', 'serGetTextSearch', 'serGetListDictionary',
     function (scope, http, serListProject, serListFileProject, cfpLoadingBar, $mdDialog, deleteFileProject, serCreateNewProject, serGetListUser, cfpLoadingBar, serGetProjectInfo, serGetListProjectMember, serUpdateProject, serDeleteProject, serGetListProjectDBReference, serSaveChangeProjectSetting, serGetInfoForMemberSetting, serSaveChangeMemberSetting, serGetTextSearch, serGetListDictionary) {
         scope.init = function () {
             scope.loadListProject();
@@ -23,7 +23,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
         //columns list file in project
         scope.columnDefs2 = [{ displayName: 'STT', cellTemplate: '<div style="text-align:center;">{{row.rowIndex +1}}</div>', width: 50, enableCellEdit: false },
                              { field: 'FileName', displayName: 'FileName', enableCellEdit: false, minWidth: 220, resizable: true },
-                             { field: 'FileProgress', displayName: 'File Progress', enableCellEdit: false, width: 120,cellTemplate: '<div class="ngCellText ng-scope ngCellElement">{{buildProcess(row.entity.FileProgress)}}</div>', resizable: true },
+                             { field: 'FileProgress', displayName: 'File Progress', enableCellEdit: false, width: 120, cellTemplate: '<div class="ngCellText ng-scope ngCellElement">{{buildProcess(row.entity.FileProgress)}}</div>', resizable: true },
                              { field: 'FilePath', displayName: 'File Path', enableCellEdit: false, minWidth: 350, resizable: true },
                              { field: 'FileType', displayName: 'File Type', cellTemplate: '<div class="ngCellText ng-scope ngCellElement">{{getFileTypeName(row.entity.FileType)}}</div>', enableCellEdit: false, width: 100, minWidth: 50, resizable: true },
                             { field: 'LastUpdate', displayName: 'Last Update', type: 'date', cellFilter: 'date:\'HH:mm dd/MM/yyyy\'', enableCellEdit: false, minWidth: 150, resizable: true }];
@@ -86,6 +86,24 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                 scope.columnDefs = scope.columnDefs1;
             } catch (e) {
                 Utility.showMessage(scope, $mdDialog, e.message);
+            }
+        }
+
+        scope.checkPermissionNewProject = function () {
+            if (parseInt(userRole) == Enumeration.UserRole.Admin && !scope.checked) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
+        scope.checkPermissionEditProject = function () {
+            if (parseInt(userRole) == Enumeration.UserRole.Admin && scope.projectSelection) {
+                return true;
+            }
+            else {
+                return false;
             }
         }
 
@@ -218,6 +236,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                                 success: function (response) {
                                     cfpLoadingBar.complete();
                                     scope.loadListFileProject(projectId);
+                                    $('#file').replaceWith($('#file').val('').clone(true));
                                 },
                                 error: function (error) {
                                     cfpLoadingBar.complete();
@@ -227,11 +246,13 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                         }
                     } catch (e) {
                         Utility.showMessage(scope, $mdDialog, e.message);
+                        $('#file').replaceWith($('#file').val('').clone(true));
                     }
                 })
                 $('#file').click();
             } catch (e) {
                 Utility.showMessage(scope, $mdDialog, e.message);
+                $('#file').replaceWith($('#file').val('').clone(true));
             }
         }
 
@@ -396,6 +417,8 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                 if (response.GetListUserResult && response.GetListUserResult.IsSuccess) {
                     scope.data2.availableOptions = JSON.parse(response.GetListUserResult.Value);
                     scope.data2.selectedOption = scope.data2.availableOptions[0];
+                } else {
+                    alert("error");
                 }
             }).error(function (err) {
                 console.log(err);
@@ -1043,7 +1066,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                          var listDictionaries = JSON.parse(response.GetListDictionaryResult.Value);
                          console.log(listDictionaries);
                          //pending
-                        
+
                      } else {
                          Utility.showMessage(scope, $mdDialog, response.GetListDictionaryResult.Message);
                      }
@@ -1091,7 +1114,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
         scope.initSetting = function () {
             scope.settingMember();
             scope.settingProject();
-        //    scope.settingDictionary();
+            //    scope.settingDictionary();
         }
         scope.callRestService = function () {
             //$http({ method: 'GET', url: '/someUrl' }).
