@@ -18,7 +18,7 @@ namespace APVTranslator_Model.Models
         {
             try
             {
-                string qry = "SELECT [Id], [FileId], [ProjectId], [Type], [TextSegment1], [TextSegment2],[Row],[Col],[SheetName],[InsertTime],[Dictionary],[IsSheetName],[SheetIndex],[Suggestion] ='',[GoogleTranslate]='' FROM [dbo].[TextSegment] WHERE [FileId] = @FileId AND [ProjectId] = @ProjectId ORDER BY InsertTime ASC";
+                string qry = "SELECT [Id], [FileId], [ProjectId], [Type], [TextSegment1], [TextSegment2],[Row],[Col],[SheetName],[InsertTime],[Dictionary],[IsSheetName],[SheetIndex],[Suggestion] ='',[GoogleTranslate]='' FROM [dbo].[TextSegment] (NOLOCK) WHERE [FileId] = @FileId AND [ProjectId] = @ProjectId ORDER BY InsertTime ASC";
                 var lstTextSegment = this.Database.SqlQuery<TextSegment>(qry,
                     new SqlParameter("@FileId", fileId),
                     new SqlParameter("@ProjectId", projectId)
@@ -104,19 +104,19 @@ namespace APVTranslator_Model.Models
                 textSeggment1 = textSeggment1.Replace("\"", "\"\"");
                 string fullTextSearch = "\"" + textSeggment1 + "\"";
                 string qry = "select Dictionary,TextSegment1,TextSegment2,(CAST(RANK as DECIMAL)) as MatchPoint into #Table_Contains " +
-                                    "from TextSegment " +
+                                    "from TextSegment (NOLOCK)" +
                                     "INNER JOIN CONTAINSTABLE(TextSegment, TextSegment1,@TextSegmentFTS) " +
                                     "as KEY_TBL on dbo.TextSegment.Id = KEY_TBL.[KEY] " +
                                     "where TextSegment2 != ''" + sbPID.ToString() +
 
                                     "select Dictionary,TextSegment1, TextSegment2,(CAST(RANK as DECIMAL)) as MatchPoint into #Table_FreeText " +
-                                    "from TextSegment " +
+                                    "from TextSegment (NOLOCK)" +
                                     "INNER JOIN FREETEXTTABLE(TextSegment, TextSegment1,@TextSegmentFTS) " +
                                     "as KEY_TBL on dbo.TextSegment.Id = KEY_TBL.[KEY] " +
                                     "where TextSegment2 != ''" + sbPID.ToString() +
 
                                     "select Dictionary,TextSegment1, TextSegment2,1000 as MatchPoint into #Table_Match " +
-                                    "from TextSegment " +
+                                    "from TextSegment (NOLOCK)" +
                                     "where TextSegment1 = @TextSegment1 and TextSegment2 != '' " + sbPID.ToString() +
 
                                     "select* into #Table_Union from ( " +

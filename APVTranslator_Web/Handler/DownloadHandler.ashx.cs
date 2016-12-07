@@ -23,6 +23,7 @@ namespace APVTranslator_Web.Handler
                 var user = HttpContext.Current.User;
                 var projectId = context.Request["projectId"];
                 var fileId = context.Request["fileId"];
+                var fileExportName = context.Request["fileExportName"];
                 if (user.Identity.IsAuthenticated && projectId != null && fileId != null && GetUserPermission(SessionUser.GetUserId(), Convert.ToInt32(projectId)))
                 {
 
@@ -33,22 +34,37 @@ namespace APVTranslator_Web.Handler
                     {
                         context.Response.Clear();
                         context.Response.ContentType = "application/octet-stream";
-                        context.Response.AddHeader("Content-Disposition", "attachment; filename=" + file.FileName);
-                        string exportPath = Utility.GetRootPath() + Contanst.rootProject + "\\" + project.Title + "\\Exports\\" + file.FileName;
+
+                        string exportPath = String.Empty;
                         var fileExt = Path.GetExtension(file.FileName);
-                        string translatedFile = exportPath.Replace(fileExt, $"_Export{fileExt}");
-                        context.Response.WriteFile(translatedFile);
-                        context.Response.End();
-                    }
-                    else
-                    {
-                        //error
+                        string translatedFile = string.Empty;
+                        if (fileExportName != null)
+                        {
+                            exportPath = Utility.GetRootPath() + Contanst.rootProject + "\\" + project.Title + "\\Exports\\" + fileExportName;
+                            context.Response.AddHeader("Content-Disposition", "attachment; filename=" + fileExportName);
+                            context.Response.WriteFile(exportPath);
+                            context.Response.Flush();
+                            File.Delete(exportPath);
+                        }
+                        else
+                        {
+                            exportPath = Utility.GetRootPath() + Contanst.rootProject + "\\" + project.Title + "\\Exports\\" + file.FileName;
+                            translatedFile = exportPath.Replace(fileExt, $"_Export{fileExt}");
+                            context.Response.AddHeader("Content-Disposition", "attachment; filename=" + file.FileName);
+                            context.Response.WriteFile(translatedFile);
+                            context.Response.Flush();
+                            File.Delete(translatedFile);
+                        }
+                        context.Response.SuppressContent = true;
+                        context.ApplicationInstance.CompleteRequest();
+
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                //context.Response.ContentType = "text/plain";
+                context.Response.Write(ex.Message);
             }
 
         }

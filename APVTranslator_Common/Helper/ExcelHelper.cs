@@ -33,7 +33,7 @@ namespace APVTranslator_Common.Helpers
             catch (Exception ex)
             {
                 this.Dispose();
-                throw ex;
+                throw new Exception("Can't open file from server please fix error your file and reimport and try again!");
             }
 
         }
@@ -49,7 +49,7 @@ namespace APVTranslator_Common.Helpers
             catch (Exception ex)
             {
                 this.Dispose();
-                throw ex;
+                throw new Exception("Can't open file from server please fix error your file and reimport and try again!");
             }
         }
 
@@ -59,16 +59,16 @@ namespace APVTranslator_Common.Helpers
             {
                 DisplayAlerts = false
             };
+            _application.Application.Interactive = true;
+            _application.Application.UserControl = true;
+            _application.Visible = false;
+
             _workbooks = _application.Workbooks;
             _workbook = _workbooks.Open(FilePath,
             Type.Missing, this._ReadOnly, Type.Missing, Type.Missing,
             Type.Missing, Type.Missing, Type.Missing, Type.Missing,
             Type.Missing, Type.Missing, Type.Missing, Type.Missing,
-            Type.Missing, Type.Missing); ;//_workbooks.Open(FilePath);
-
-            _application.Application.Interactive = true;
-            _application.Application.UserControl = true;
-            _application.Visible = false;
+            Type.Missing, Type.Missing); ;
         }
 
         public void ReplaceText(string what, string replacement, int row, int col, string sheetName, bool isSheetName, int sheetIndex)
@@ -442,8 +442,8 @@ namespace APVTranslator_Common.Helpers
             GC.WaitForPendingFinalizers();
             if (_workbook != null)
             {
-                _workbook.Close(Type.Missing, Type.Missing, Type.Missing);
-                //Marshal.ReleaseComObject(_workbook);
+                _workbook.Close(0);
+                Marshal.ReleaseComObject(_workbook);
             }
 
             if (_workbooks != null)
@@ -454,11 +454,6 @@ namespace APVTranslator_Common.Helpers
             if (_sheets != null)
             {
                 Marshal.ReleaseComObject(_sheets);
-            }
-
-            if (_application != null)
-            {
-                Marshal.ReleaseComObject(_application);
             }
 
             if (_application != null)

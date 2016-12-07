@@ -612,8 +612,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                     success: function (response) {
                         cfpLoadingBar.complete();
                         if (response.IsSuccess) {
-                            var bResult = JSON.parse(response.Value)
-                            window.location.replace(Utility.getBaseUrl() + "Handler/DownloadHandler.ashx?projectId=" + projectId + "&fileId=" + fileId);
+                            window.location.replace(Utility.getBaseUrl() + "Handler/DownloadHandler.ashx?projectId=" + projectId + "&fileId=" + fileId + "&fileExportName=" + JSON.parse(response.Value));
                         }
                         else {
                             Utility.showMessage(scope, $mdDialog, response.Message);

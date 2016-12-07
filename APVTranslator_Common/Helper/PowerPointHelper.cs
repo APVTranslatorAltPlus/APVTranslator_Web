@@ -32,7 +32,7 @@ namespace APVTranslator_Common.Helpers
             catch (Exception ex)
             {
                 this.Dispose();
-                throw ex;
+                throw new Exception("Can't open file from server please fix error your file and reimport and try again!");
             }
         }
 
@@ -47,7 +47,7 @@ namespace APVTranslator_Common.Helpers
             catch (Exception ex)
             {
                 this.Dispose();
-                throw ex;
+                throw new Exception("Can't open file from server please fix error your file and reimport and try again!");
             }
         }
 
