@@ -3,6 +3,7 @@ using Microsoft.Office.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using PowerPoint = Microsoft.Office.Interop.PowerPoint;
@@ -18,26 +19,51 @@ namespace APVTranslator_Common.Helpers
 
         public static string FilePath { get; set; }
 
+        private Boolean _ReadOnly { get; set; }
         #endregion
 
 
         public PowerPointHelper()
         {
-            OpenPresentation();
+            try
+            {
+                OpenPresentation();
+            }
+            catch (Exception ex)
+            {
+                this.Dispose();
+                throw new Exception("Can't open file from server please fix error your file and reimport and try again!");
+            }
         }
 
-        public PowerPointHelper(string path)
+        public PowerPointHelper(string path, bool readOnly = true)
         {
-            FilePath = path;
-            OpenPresentation();
+            try
+            {
+                FilePath = path;
+                _ReadOnly = readOnly;
+                OpenPresentation();
+            }
+            catch (Exception ex)
+            {
+                this.Dispose();
+                throw new Exception("Can't open file from server please fix error your file and reimport and try again!");
+            }
         }
 
         private void OpenPresentation()
         {
             _application = new PowerPoint.Application();
             _presentations = _application.Presentations;
-            _presentation = _presentations.Open(FilePath, MsoTriState.msoFalse, MsoTriState.msoFalse, MsoTriState.msoFalse);
-
+            GC.Collect();
+            if (_ReadOnly)
+            {
+                _presentation = _presentations.Open(FilePath, MsoTriState.msoCTrue, MsoTriState.msoFalse, MsoTriState.msoFalse);
+            }
+            else
+            {
+                _presentation = _presentations.Open(FilePath, MsoTriState.msoFalse, MsoTriState.msoFalse, MsoTriState.msoFalse);
+            }
         }
 
         public List<TextRead> GetTexts()
@@ -81,6 +107,7 @@ namespace APVTranslator_Common.Helpers
             }
             catch (Exception)
             {
+                this.Dispose();
                 throw;
             }
         }
@@ -104,14 +131,17 @@ namespace APVTranslator_Common.Helpers
                         {
                             if (sItem.Trim() == what)
                             {
-                                textRange.Text = textRange.Text.Replace(what, replacement);
+                                string text = textRange.Text;
+                                textRange.Text = text.Replace(what, replacement);
+                                //textRange.Text = textRange.Text.Replace(what, replacement);
                             }
                         }
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                this.Dispose();
                 throw;
             }
         }
@@ -123,7 +153,23 @@ namespace APVTranslator_Common.Helpers
 
         public void Dispose()
         {
-            _application.Quit();
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+            if (_presentations != null)
+            {
+                Marshal.ReleaseComObject(_presentations);
+            }
+            if (_presentation != null)
+            {
+                _presentation.Close();
+                Marshal.ReleaseComObject(_presentation);
+            }
+            if (_application != null)
+            {
+                _application.Quit();
+                Marshal.ReleaseComObject(_application);
+            }
         }
     }
 }

@@ -145,7 +145,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                     scope.setGridList(Enumeration.GridType.ListProject);
                 }
                 else {
-                    Utility.showMessage(scope, $mdDialog, response.GetListFileProjectResult.Message);
+                    Utility.showMessage(scope, $mdDialog, response.GetListProjectResult.Message);
                 }
                 cfpLoadingBar.complete();
             }).error(function (err) {
@@ -234,14 +234,17 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                                 success: function (response) {
                                     cfpLoadingBar.complete();
                                     scope.loadListFileProject(projectId);
+                                    $('#file').replaceWith($('#file').val('').clone(true));
                                 },
                                 error: function (error) {
                                     cfpLoadingBar.complete();
                                     Utility.showMessage(scope, $mdDialog, error);
+                                    $('#file').replaceWith($('#file').val('').clone(true));
                                 }
                             });
                         }
                     } catch (e) {
+                        $('#file').replaceWith($('#file').val('').clone(true));
                         Utility.showMessage(scope, $mdDialog, e.message);
                     }
                 })

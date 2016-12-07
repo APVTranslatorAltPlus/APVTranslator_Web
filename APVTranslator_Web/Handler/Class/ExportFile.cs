@@ -31,7 +31,7 @@ namespace APVTranslator_Web.Handler.Class
             {
                 TranslateModel translateModel = new TranslateModel();
                 Project project = translateModel.GetProject(_projectId);
-                ProjectFile file = translateModel.GetFile(_fileId);
+                ProjectFile file = translateModel.GetFile(_projectId, _fileId);
                 if (project != null && file != null)
                 {
                     this.fileName = file.FileName;

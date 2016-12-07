@@ -13,7 +13,7 @@ namespace APVTranslator_Common
     {
         public static string GetRootPath()
         {
-            return HttpContext.Current.Server.MapPath("~");
+            return System.Web.Hosting.HostingEnvironment.MapPath("~");
         }
     }
 }

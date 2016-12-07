@@ -72,6 +72,12 @@ namespace APVTranslator_Web
                 ClientId = "184146087568-23421gppd0h8ocu9vt70tg8du2uda9si.apps.googleusercontent.com",
                 ClientSecret = "OEbzhDuu7CeizCiybv_701Bh"
             });
+            //local iis
+            //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+            //{
+            //    ClientId = "184146087568-jf07l9hurtj7gqahnv96o5jui9mbfd21.apps.googleusercontent.com",
+            //    ClientSecret = "3fGdCxRz8Lw0D-xp7cTukocf"
+            //});
         }
     }
 }

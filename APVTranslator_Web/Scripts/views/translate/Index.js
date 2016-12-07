@@ -263,11 +263,22 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
 
         scope.$on('ngGridEventStartCellEdit', function (evt) {
             try {
+                var rowData = evt.targetScope.row.entity;
                 if (evt.targetScope.col.field == "TextSegment1") {
                     scope.oldTextSegment1 = evt.targetScope.row.getProperty('TextSegment1');
+                    var dataEdit = {};
+                    dataEdit.Id = rowData.Id;
+                    dataEdit.TextSegment1 = rowData.TextSegment1;
+                    dataEdit.TextSegment2 = rowData.TextSegment2;
+                    dataEdit.Field = "TextSegment1";
+                    if (rowData.Row && rowData.Col && rowData.SheetName) {
+                        dataEdit.Row = rowData.Row;
+                        dataEdit.Col = rowData.Col;
+                        dataEdit.SheetName = rowData.SheetName;
+                    }
+                    scope.sendMessageSocket(dataEdit);
                 }
                 else if (evt.targetScope.col.field == "TextSegment2") {
-                    var rowData = evt.targetScope.row.entity;
                     if (rowData['GoogleTranslate'] == undefined || rowData['GoogleTranslate'] == "") {
                         try {
                             Utility.translateText(rowData['TextSegment1'], 'auto', targetLang, rowData, function (obj, translatedText) {
@@ -305,6 +316,17 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                                 Utility.showMessage(scope, $mdDialog, error);
                             }
                         });
+                        var dataEdit = {};
+                        dataEdit.Id = rowData.Id;
+                        dataEdit.TextSegment1 = rowData.TextSegment1;
+                        dataEdit.TextSegment2 = rowData.TextSegment2;
+                        dataEdit.Field = "TextSegment2";
+                        if (rowData.Row && rowData.Col && rowData.SheetName) {
+                            dataEdit.Row = rowData.Row;
+                            dataEdit.Col = rowData.Col;
+                            dataEdit.SheetName = rowData.SheetName;
+                        }
+                        scope.sendMessageSocket(dataEdit);
                     }
                 }
             } catch (e) {
@@ -590,8 +612,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                     success: function (response) {
                         cfpLoadingBar.complete();
                         if (response.IsSuccess) {
-                            var bResult = JSON.parse(response.Value)
-                            window.location.replace(Utility.getBaseUrl() + "Handler/DownloadHandler.ashx?projectId=" + projectId + "&fileId=" + fileId);
+                            window.location.replace(Utility.getBaseUrl() + "Handler/DownloadHandler.ashx?projectId=" + projectId + "&fileId=" + fileId + "&fileExportName=" + JSON.parse(response.Value));
                         }
                         else {
                             Utility.showMessage(scope, $mdDialog, response.Message);

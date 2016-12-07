@@ -56,6 +56,10 @@ namespace APVTranslator_Web.Handler
                                 string fileExt = Path.GetExtension(file.FileName);
                                 if (Contanst.fileType.Contains(fileExt))
                                 {
+                                    if (File.Exists(importPath + "\\" + file.FileName))
+                                    {
+                                        File.Delete(importPath + "\\" + file.FileName);
+                                    }
                                     file.SaveAs(importPath + "\\" + file.FileName);
                                     lstFile.Add(file);
                                 }
