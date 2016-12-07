@@ -26,14 +26,31 @@ namespace APVTranslator_Common.Helpers
 
         public ExcelHelper()
         {
-            OpenWorkbook();
+            try
+            {
+                OpenWorkbook();
+            }
+            catch (Exception ex)
+            {
+                this.Dispose();
+                throw new Exception("Can't open file from server please fix error your file and reimport and try again!");
+            }
+
         }
 
         public ExcelHelper(string path, Boolean readOnLy = true)
         {
-            FilePath = path;
-            this._ReadOnly = readOnLy;
-            OpenWorkbook();
+            try
+            {
+                FilePath = path;
+                this._ReadOnly = readOnLy;
+                OpenWorkbook();
+            }
+            catch (Exception ex)
+            {
+                this.Dispose();
+                throw new Exception("Can't open file from server please fix error your file and reimport and try again!");
+            }
         }
 
         private void OpenWorkbook()
@@ -42,99 +59,114 @@ namespace APVTranslator_Common.Helpers
             {
                 DisplayAlerts = false
             };
+            _application.Application.Interactive = true;
+            _application.Application.UserControl = true;
+            _application.Visible = false;
+
             _workbooks = _application.Workbooks;
             _workbook = _workbooks.Open(FilePath,
             Type.Missing, this._ReadOnly, Type.Missing, Type.Missing,
             Type.Missing, Type.Missing, Type.Missing, Type.Missing,
             Type.Missing, Type.Missing, Type.Missing, Type.Missing,
-            Type.Missing, Type.Missing); ;//_workbooks.Open(FilePath);
-
-            _application.Application.Interactive = true;
-            _application.Application.UserControl = true;
-            _application.Visible = false;
+            Type.Missing, Type.Missing); ;
         }
 
         public void ReplaceText(string what, string replacement, int row, int col, string sheetName, bool isSheetName, int sheetIndex)
         {
-            _application.EnableEvents = false;
-            _application.ScreenUpdating = false;
-            _application.Calculation = Excel.XlCalculation.xlCalculationManual;
-            foreach (Excel.Worksheet worksheet in _workbook.Worksheets)
+            try
             {
-                int sIndex = worksheet.Index;
-                if (sIndex == sheetIndex)
+                _application.EnableEvents = false;
+                _application.ScreenUpdating = false;
+                _application.Calculation = Excel.XlCalculation.xlCalculationManual;
+                foreach (Excel.Worksheet worksheet in _workbook.Worksheets)
                 {
-                    if (isSheetName && !String.IsNullOrEmpty(replacement) && !Regex.IsMatch(replacement, "[\\[\\]*?]"))
+                    int sIndex = worksheet.Index;
+                    if (sIndex == sheetIndex)
                     {
-                        if (replacement.Length > 31)
+                        if (isSheetName && !String.IsNullOrEmpty(replacement) && !Regex.IsMatch(replacement, "[\\[\\]*?]"))
                         {
-                            replacement = replacement.Substring(0, 31);
+                            if (replacement.Length > 31)
+                            {
+                                replacement = replacement.Substring(0, 31);
+                            }
+                            worksheet.Name = replacement;
                         }
-                        worksheet.Name = replacement;
-                    }
-                    else
-                    {
-                        Excel.Range xlRange = worksheet.UsedRange;
-                        if (row > 0 && col > 0 && !string.IsNullOrEmpty(replacement))
+                        else
                         {
-                            string formulaCell = ((object[,])xlRange.Formula)[row, col].ToString();
-                            try
+                            Excel.Range xlRange = worksheet.UsedRange;
+                            if (row > 0 && col > 0 && !string.IsNullOrEmpty(replacement))
                             {
-                                formulaCell = formulaCell.Replace(what, replacement);
-                                ((Excel.Range)xlRange.Cells[row, col]).Formula = formulaCell;
-                            }
-                            catch (Exception ex)
-                            {
-                                ((Excel.Range)xlRange.Cells[row, col]).Formula = " " + formulaCell;
-                                //trường hợp formula sửa thành hàm lỗi cho thêm dấu cách trước đầu
-                                continue;
-                            }
+                                string formulaCell = ((object[,])xlRange.Formula)[row, col].ToString();
+                                try
+                                {
+                                    formulaCell = formulaCell.Replace(what, replacement);
+                                    ((Excel.Range)xlRange.Cells[row, col]).Formula = formulaCell;
+                                }
+                                catch (Exception ex)
+                                {
+                                    ((Excel.Range)xlRange.Cells[row, col]).Formula = " " + formulaCell;
+                                    //trường hợp formula sửa thành hàm lỗi cho thêm dấu cách trước đầu
+                                    continue;
+                                }
 
+                            }
                         }
                     }
+                    Marshal.ReleaseComObject(worksheet);
                 }
-                Marshal.ReleaseComObject(worksheet);
+                _application.EnableEvents = true;
+                _application.ScreenUpdating = true;
+                _application.Calculation = Excel.XlCalculation.xlCalculationAutomatic;
+                _application.CalculateFull();
             }
-            _application.EnableEvents = true;
-            _application.ScreenUpdating = true;
-            _application.Calculation = Excel.XlCalculation.xlCalculationAutomatic;
-            _application.CalculateFull();
+            catch (Exception ex)
+            {
+                this.Dispose();
+                throw ex;
+            }
         }
 
         public void ReplaceObject(string what, string replacement)
         {
-
-            //_application.EnableEvents = false;
-            //_application.ScreenUpdating = false;
-            //_application.Calculation = Excel.XlCalculation.xlCalculationManual;
-            foreach (Excel.Worksheet worksheet in _workbook.Worksheets)
+            try
             {
-                foreach (Excel.Shape shp in worksheet.Shapes)
+                //_application.EnableEvents = false;
+                //_application.ScreenUpdating = false;
+                //_application.Calculation = Excel.XlCalculation.xlCalculationManual;
+                foreach (Excel.Worksheet worksheet in _workbook.Worksheets)
                 {
-                    String text;
-                    try
+                    foreach (Excel.Shape shp in worksheet.Shapes)
                     {
-                        text = shp.TextFrame.Characters(Type.Missing, Type.Missing).Text.Trim();
+                        String text;
+                        try
+                        {
+                            text = shp.TextFrame.Characters(Type.Missing, Type.Missing).Text.Trim();
+                        }
+                        catch (Exception ex)
+                        {
+                            continue;
+                            //throw;
+                        }
+                        if (text.Trim().Length <= 0) continue;
+                        if (text.Contains(what))
+                        {
+                            String textReplace = text.Replace(what, replacement);
+                            shp.TextFrame.Characters(Type.Missing, Type.Missing).Text = textReplace;
+                        }
                     }
-                    catch (Exception ex)
-                    {
-                        continue;
-                        //throw;
-                    }
-                    if (text.Trim().Length <= 0) continue;
-                    if (text.Contains(what))
-                    {
-                        String textReplace = text.Replace(what, replacement);
-                        shp.TextFrame.Characters(Type.Missing, Type.Missing).Text = textReplace;
-                    }
-                }
 
-                Marshal.ReleaseComObject(worksheet);
+                    Marshal.ReleaseComObject(worksheet);
+                }
+                //_application.EnableEvents = true;
+                //_application.ScreenUpdating = true;
+                //_application.Calculation = Excel.XlCalculation.xlCalculationAutomatic;
+                //_application.CalculateFull();
             }
-            //_application.EnableEvents = true;
-            //_application.ScreenUpdating = true;
-            //_application.Calculation = Excel.XlCalculation.xlCalculationAutomatic;
-            //_application.CalculateFull();
+            catch (Exception ex)
+            {
+                this.Dispose();
+                throw ex;
+            }
         }
 
         public IEnumerable<string> GetSheetsName()
@@ -153,73 +185,77 @@ namespace APVTranslator_Common.Helpers
 
         public List<TextRead> GetTextObject()
         {
-            _sheets = _workbook.Worksheets;
-
-            //var lst = new List<string>();
-            List<TextRead> lstTextExcel = new List<TextRead>();
-
-            foreach (Excel.Worksheet worksheet in _sheets)
+            try
             {
-                Double checkNumber;
-                DateTime dt = new DateTime();
-                int i = 0;
-                try
+                _sheets = _workbook.Worksheets;
+                //var lst = new List<string>();
+                List<TextRead> lstTextExcel = new List<TextRead>();
+                foreach (Excel.Worksheet worksheet in _sheets)
                 {
-                    foreach (Excel.Shape shp in worksheet.Shapes)
+                    Double checkNumber;
+                    DateTime dt = new DateTime();
+                    int i = 0;
+                    try
                     {
-                        try
+                        foreach (Excel.Shape shp in worksheet.Shapes)
                         {
-                            var text = shp.TextFrame.Characters(Type.Missing, Type.Missing).Text;
-                            if (string.IsNullOrEmpty(text.Trim())) continue;
-                            if (DateTime.TryParse(text.ToString(), out dt)) continue;
-                            var stringSeparators = new char[] { '。', '.', '\n', '\r', '\a', '\u0001' };
-                            //var segment = text.Split(stringSeparators, StringSplitOptions.None);
-                            //segment = segment.Where(x => x.Trim().Length > 0).ToArray();
-                            bool isURL = Regex.IsMatch(text.Trim(), Contanst.sRegexLink);
-                            string[] segment;
-                            //List<String> lstResult = new List<string>();
-                            if (isURL)
+                            try
                             {
-                                if (!String.IsNullOrEmpty(text.Trim()))
+                                var text = shp.TextFrame.Characters(Type.Missing, Type.Missing).Text;
+                                if (string.IsNullOrEmpty(text.Trim())) continue;
+                                if (DateTime.TryParse(text.ToString(), out dt)) continue;
+                                var stringSeparators = new char[] { '。', '.', '\n', '\r', '\a', '\u0001' };
+                                //var segment = text.Split(stringSeparators, StringSplitOptions.None);
+                                //segment = segment.Where(x => x.Trim().Length > 0).ToArray();
+                                bool isURL = Regex.IsMatch(text.Trim(), Contanst.sRegexLink);
+                                string[] segment;
+                                //List<String> lstResult = new List<string>();
+                                if (isURL)
                                 {
-                                    //lstResult.Add(text.Trim());
-                                    lstTextExcel.Add(new TextRead() { Row = -1, Col = -1, Value = text.Trim(), SheetName = worksheet.Name });
-                                }
-                            }
-                            else
-                            {
-                                segment = text.Split(stringSeparators, StringSplitOptions.RemoveEmptyEntries);
-                                segment = segment.Where(x => x.Length > 0 && !Double.TryParse(x, out checkNumber)).ToArray();
-                                int k = 0;
-                                foreach (var itsegment in segment)
-                                {
-                                    if (!String.IsNullOrEmpty(itsegment.Trim()))
+                                    if (!String.IsNullOrEmpty(text.Trim()))
                                     {
-                                        //lstResult.Add(segment[k].Trim());
-                                        lstTextExcel.Add(new TextRead() { Row = -1, Col = -1, Value = segment[k].Trim(), SheetName = worksheet.Name });
+                                        //lstResult.Add(text.Trim());
+                                        lstTextExcel.Add(new TextRead() { Row = -1, Col = -1, Value = text.Trim(), SheetName = worksheet.Name });
                                     }
-                                    k++;
                                 }
+                                else
+                                {
+                                    segment = text.Split(stringSeparators, StringSplitOptions.RemoveEmptyEntries);
+                                    segment = segment.Where(x => x.Length > 0 && !Double.TryParse(x, out checkNumber)).ToArray();
+                                    int k = 0;
+                                    foreach (var itsegment in segment)
+                                    {
+                                        if (!String.IsNullOrEmpty(itsegment.Trim()))
+                                        {
+                                            //lstResult.Add(segment[k].Trim());
+                                            lstTextExcel.Add(new TextRead() { Row = -1, Col = -1, Value = segment[k].Trim(), SheetName = worksheet.Name });
+                                        }
+                                        k++;
+                                    }
+                                }
+                                i++;
+                                //lst.AddRange(lstResult);
                             }
-                            i++;
-                            //lst.AddRange(lstResult);
-                        }
-                        catch (Exception ex)
-                        {
-                            // ignore shape don't contain text
-                            continue;
-                        }
+                            catch (Exception ex)
+                            {
+                                // ignore shape don't contain text
+                                continue;
+                            }
 
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        continue;
                     }
                 }
-                catch (Exception ex)
-                {
-                    continue;
-                }
+                return lstTextExcel;
             }
-
-
-            return lstTextExcel;
+            catch (Exception ex)
+            {
+                this.Dispose();
+                throw ex;
+            }
         }
 
         public void Save()
@@ -306,6 +342,7 @@ namespace APVTranslator_Common.Helpers
             }
             catch (Exception ex)
             {
+                this.Dispose();
                 throw ex;
             }
         }
@@ -349,6 +386,7 @@ namespace APVTranslator_Common.Helpers
             }
             catch (Exception ex)
             {
+                this.Dispose();
                 throw ex;
             }
         }
@@ -390,6 +428,7 @@ namespace APVTranslator_Common.Helpers
                 }
                 catch (Exception ex)
                 {
+                    this.Dispose();
                     throw ex;
                 }
             }
@@ -398,20 +437,30 @@ namespace APVTranslator_Common.Helpers
 
         public void Dispose()
         {
-            _workbook.Close(Type.Missing, Type.Missing, Type.Missing);
-            _application.Application.Quit();
-            _application.Quit();
+
             GC.Collect();
             GC.WaitForPendingFinalizers();
             if (_workbook != null)
+            {
+                _workbook.Close(0);
                 Marshal.ReleaseComObject(_workbook);
-            if (_workbooks != null)
-                Marshal.ReleaseComObject(_workbooks);
-            if (_sheets != null)
-                Marshal.ReleaseComObject(_sheets);
-            if (_application != null)
-                Marshal.ReleaseComObject(_application);
+            }
 
+            if (_workbooks != null)
+            {
+                Marshal.ReleaseComObject(_workbooks);
+            }
+
+            if (_sheets != null)
+            {
+                Marshal.ReleaseComObject(_sheets);
+            }
+
+            if (_application != null)
+            {
+                _application.Quit();
+                Marshal.FinalReleaseComObject(_application);
+            }
         }
     }
 }

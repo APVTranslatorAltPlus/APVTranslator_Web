@@ -33,7 +33,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                              displayName: 'Source Language',
                              cellTemplate: '<div ng-right-click="rightClickCell(row,col)" context="context1" ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText" style="white-space: normal;">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
                              enableCellEdit: true,
-                             editableCellTemplate: '<textarea type="text" cols="40" rows="5" style="border:1px solid green;height:99%;width:99.5%; word-wrap: break-word;" ng-class="\'colt\' + col.index" ng-input="COL_FIELD" ng-model="COL_FIELD" />',
+                             editableCellTemplate: '<textarea type="text" cols="40" rows="5" style="border-left:1px solid green;border-right:1px solid green;height:99%;width:99.5%; word-wrap: break-word;" ng-class="\'colt\' + col.index" ng-input="COL_FIELD" ng-model="COL_FIELD" />',
                              minWidth: 300,
                              resizable: true
                          },
@@ -43,7 +43,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                              displayName: 'DestinationLanguage',
                              cellTemplate: '<div ng-right-click="rightClickCell(row,col)" context="context2" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText" style="white-space: normal;">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
                              enableCellEdit: true,
-                             editableCellTemplate: '<textarea type="text" cols="40" rows="5" style="border:1px solid green;height:99%;width:99.5%; word-wrap: break-word;" ng-class="\'colt\' + col.index" ng-input="COL_FIELD" ng-model="COL_FIELD" />',
+                             editableCellTemplate: '<textarea type="text" cols="40" rows="5" style="border-left:1px solid green;border-right:1px solid green;width:99.5%; word-wrap: break-word;" ng-class="\'colt\' + col.index" ng-input="COL_FIELD" ng-model="COL_FIELD" />',
                              minWidth: 300,
                              resizable: true
                          },
@@ -102,7 +102,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                              cellTemplate: '<div ng-right-click="rightClickCell(row,col)" context="context1" ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText" style="white-space: normal;">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
                              displayName: 'Source Language',
                              enableCellEdit: true,
-                             editableCellTemplate: '<textarea type="text" cols="40" rows="5" style="border:1px solid green;height:99%;width:99.5%; word-wrap: break-word;" ng-class="\'colt\' + col.index" ng-input="COL_FIELD" ng-model="COL_FIELD" />',
+                             editableCellTemplate: '<textarea type="text" cols="40" rows="5" style="border-left:1px solid green;border-right:1px solid green;height:99%;width:99.5%; word-wrap: break-word;" ng-class="\'colt\' + col.index" ng-input="COL_FIELD" ng-model="COL_FIELD" />',
                              minWidth: 300,
                              resizable: true
                          },
@@ -111,7 +111,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                              cellTemplate: '<div ng-right-click="rightClickCell(row,col)" context="context2" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText" style="white-space: normal;">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
                              displayName: 'DestinationLanguage',
                              enableCellEdit: true,
-                             editableCellTemplate: '<textarea type="text" cols="40" rows="5" style="border:1px solid green;height:99%;width:99.5%; word-wrap: break-word;" ng-class="\'colt\' + col.index" ng-input="COL_FIELD" ng-model="COL_FIELD" />',
+                             editableCellTemplate: '<textarea type="text" cols="40" rows="5" style="border-left:1px solid green;border-right:1px solid green;height:99%;width:99.5%; word-wrap: break-word;" ng-class="\'colt\' + col.index" ng-input="COL_FIELD" ng-model="COL_FIELD" />',
                              minWidth: 300,
                              resizable: true
                          },
@@ -263,11 +263,22 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
 
         scope.$on('ngGridEventStartCellEdit', function (evt) {
             try {
+                var rowData = evt.targetScope.row.entity;
                 if (evt.targetScope.col.field == "TextSegment1") {
                     scope.oldTextSegment1 = evt.targetScope.row.getProperty('TextSegment1');
+                    var dataEdit = {};
+                    dataEdit.Id = rowData.Id;
+                    dataEdit.TextSegment1 = rowData.TextSegment1;
+                    dataEdit.TextSegment2 = rowData.TextSegment2;
+                    dataEdit.Field = "TextSegment1";
+                    if (rowData.Row && rowData.Col && rowData.SheetName) {
+                        dataEdit.Row = rowData.Row;
+                        dataEdit.Col = rowData.Col;
+                        dataEdit.SheetName = rowData.SheetName;
+                    }
+                    scope.sendMessageSocket(dataEdit);
                 }
                 else if (evt.targetScope.col.field == "TextSegment2") {
-                    var rowData = evt.targetScope.row.entity;
                     if (rowData['GoogleTranslate'] == undefined || rowData['GoogleTranslate'] == "") {
                         try {
                             Utility.translateText(rowData['TextSegment1'], 'auto', targetLang, rowData, function (obj, translatedText) {
@@ -305,6 +316,17 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                                 Utility.showMessage(scope, $mdDialog, error);
                             }
                         });
+                        var dataEdit = {};
+                        dataEdit.Id = rowData.Id;
+                        dataEdit.TextSegment1 = rowData.TextSegment1;
+                        dataEdit.TextSegment2 = rowData.TextSegment2;
+                        dataEdit.Field = "TextSegment2";
+                        if (rowData.Row && rowData.Col && rowData.SheetName) {
+                            dataEdit.Row = rowData.Row;
+                            dataEdit.Col = rowData.Col;
+                            dataEdit.SheetName = rowData.SheetName;
+                        }
+                        scope.sendMessageSocket(dataEdit);
                     }
                 }
             } catch (e) {
@@ -590,8 +612,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                     success: function (response) {
                         cfpLoadingBar.complete();
                         if (response.IsSuccess) {
-                            var bResult = JSON.parse(response.Value)
-                            window.location.replace(Utility.getBaseUrl() + "Handler/DownloadHandler.ashx?projectId=" + projectId + "&fileId=" + fileId);
+                            window.location.replace(Utility.getBaseUrl() + "Handler/DownloadHandler.ashx?projectId=" + projectId + "&fileId=" + fileId + "&fileExportName=" + JSON.parse(response.Value));
                         }
                         else {
                             Utility.showMessage(scope, $mdDialog, response.Message);
