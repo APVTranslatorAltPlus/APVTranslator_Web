@@ -1179,6 +1179,38 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
            });
         }
 
+        scope.downloadFile = function () {
+            var projectId = scope.currentFileProject.ProjectID;
+            var fileId = scope.currentFileProject.FileID;
+            
+            try {
+                cfpLoadingBar.start();
+                $.ajax({
+                    type: "POST",
+                    url: Utility.getBaseUrl() + 'Translate/BuildExportFile',
+                    data: JSON.stringify({ 'projectId': projectId, 'fileId': fileId }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+
+                    success: function (response) {
+                        cfpLoadingBar.complete();
+                        if (response.IsSuccess) {
+                            window.location.replace(Utility.getBaseUrl() + "Handler/DownloadHandler.ashx?projectId=" + projectId + "&fileId=" + fileId + "&fileExportName=" + JSON.parse(response.Value));
+                        }
+                        else {
+                            Utility.showMessage(scope, $mdDialog, response.Message);
+                        }
+                    },
+                    error: function (error) {
+                        cfpLoadingBar.complete();
+                        Utility.showMessage(scope, $mdDialog, error);
+                    }
+                });
+            } catch (e) {
+                Utility.showMessage(scope, $mdDialog, "Can't dowload export file!");
+            }
+        }
+
     }])
 apvApp.service('serListProject', function ($http) {
     this.data = function () {
