@@ -1320,3 +1320,34 @@ $(window).resize(function () {
         $('.button-toolbar').addClass('btn-default');
     }
 })
+
+$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+    var target = $(e.target).attr("href") // activated tab
+    if (target === "#member-manager") {
+        angular.element(document.getElementById('Homecontroller')).scope().selectedTab = '#member-manager';
+    }
+    if (target === "#project") {
+        angular.element(document.getElementById('Homecontroller')).scope().selectedTab = '#project';
+    }
+
+});
+
+$(function () {
+    $('#useCompanyDBSetting').change(function () {
+
+        $('#checkboxValue').text($(this).prop('checked'));
+
+    })
+})
+
+var lastScrollLeft = 0;
+$(window).scroll(function () {
+    var documentScrollLeft = $(document).scrollLeft();
+    if (lastScrollLeft != documentScrollLeft) {
+        $('#gridTable').trigger('resize');
+        $('.main-index').trigger('resize'); $('#DashBoard').trigger('resize');
+        alert(1);
+        console.log('scroll x');
+        lastScrollLeft = documentScrollLeft;
+    }
+});
