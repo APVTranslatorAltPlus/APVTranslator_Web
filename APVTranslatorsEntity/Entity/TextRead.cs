@@ -14,5 +14,6 @@ namespace APVTranslator_Entity
         public String SheetName { get; set; }
         public Boolean IsSheetName { get; set; }
         public int SheetIndex { get; set; }
+        public int ParagraphsOrShapeIndex { get; set; } = -1;
     }
 }

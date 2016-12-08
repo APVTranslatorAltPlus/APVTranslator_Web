@@ -1,7 +1,6 @@
 ﻿using APVTranslator_Common;
 using APVTranslator_Entity.Models;
 using APVTranslator_Model.Models;
-using APVTranslator_Web.Handler.Class;
 using System;
 using System.Collections.Generic;
 using System.IO;

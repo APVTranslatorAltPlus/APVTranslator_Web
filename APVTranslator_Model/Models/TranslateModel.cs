@@ -18,7 +18,7 @@ namespace APVTranslator_Model.Models
         {
             try
             {
-                string qry = "SELECT [Id], [FileId], [ProjectId], [Type], [TextSegment1], [TextSegment2],[Row],[Col],[SheetName],[InsertTime],[Dictionary],[IsSheetName],[SheetIndex],[Suggestion] ='',[GoogleTranslate]='' FROM [dbo].[TextSegment] (NOLOCK) WHERE [FileId] = @FileId AND [ProjectId] = @ProjectId ORDER BY InsertTime ASC";
+                string qry = "SELECT [Id], [FileId], [ProjectId], [Type], [TextSegment1], [TextSegment2],[Row],[Col],[SheetName],[InsertTime],[Dictionary],[IsSheetName],[SheetIndex],[Suggestion] ='',[GoogleTranslate]='',[ParagraphsOrShapeIndex] FROM [dbo].[TextSegment] (NOLOCK) WHERE [FileId] = @FileId AND [ProjectId] = @ProjectId ORDER BY InsertTime ASC";
                 var lstTextSegment = this.Database.SqlQuery<TextSegment>(qry,
                     new SqlParameter("@FileId", fileId),
                     new SqlParameter("@ProjectId", projectId)
@@ -251,7 +251,7 @@ namespace APVTranslator_Model.Models
                             foreach (var item in segments)
                             {
                                 var newId = Guid.NewGuid().ToString();
-                                const string qry = "INSERT INTO [dbo].[TextSegment] ([Id], [FileId], [ProjectId], [Type], [TextSegment1], [TextSegment2],[InsertTime]) VALUES (@Id, @FileId, @ProjectId, @Type, @TextSegment1, @TextSegment2,@InsertTime)";
+                                const string qry = "INSERT INTO [dbo].[TextSegment] ([Id], [FileId], [ProjectId], [Type], [TextSegment1], [TextSegment2],[InsertTime],[ParagraphsOrShapeIndex]) VALUES (@Id, @FileId, @ProjectId, @Type, @TextSegment1, @TextSegment2,@InsertTime,@ParagraphsOrShapeIndex)";
                                 this.Database.ExecuteSqlCommand(qry,
                                                                 new SqlParameter("@Id", newId),
                                                                 new SqlParameter("@FileId", fileId),
@@ -259,7 +259,8 @@ namespace APVTranslator_Model.Models
                                                                 new SqlParameter("@Type", typeText),
                                                                 new SqlParameter("@TextSegment1", item.Value),
                                                                 new SqlParameter("@TextSegment2", string.Empty),
-                                                                new SqlParameter("@InsertTime", DateTime.Now));
+                                                                new SqlParameter("@InsertTime", DateTime.Now),
+                                                                new SqlParameter("@ParagraphsOrShapeIndex", item.ParagraphsOrShapeIndex));
                                 Thread.Sleep(1);
                             }
                             this.SaveChanges();

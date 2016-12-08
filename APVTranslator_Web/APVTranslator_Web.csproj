@@ -245,7 +245,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Handler\Class\ExportFile.cs" />
     <Compile Include="Handler\DownloadHandler.ashx.cs">
       <DependentUpon>DownloadHandler.ashx</DependentUpon>
     </Compile>
@@ -707,6 +706,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\Icons\" />
+    <Folder Include="Handler\Class\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
