@@ -12,12 +12,22 @@ namespace APVTranslator_Web.Handler
     /// </summary>
     public class SocketHandler : IHttpHandler
     {
-
         public void ProcessRequest(HttpContext context)
         {
-            if ((context.IsWebSocketRequest || context.IsWebSocketRequestUpgrading) && HttpContext.Current.User.Identity.IsAuthenticated)
+            var projectId = context.Request["projectId"];
+            var fileId = context.Request["fileId"];
+            var reconnect = context.Request["reconnect"];
+            if (projectId != null && fileId != null && (context.IsWebSocketRequest || context.IsWebSocketRequestUpgrading) && HttpContext.Current.User.Identity.IsAuthenticated)
             {
-                context.AcceptWebSocketRequest(new wsHandler());
+                Boolean breconnect = false;
+                if (reconnect != null && Boolean.TryParse(reconnect, out breconnect))
+                {
+                    context.AcceptWebSocketRequest(new wsHandler(Convert.ToInt32(projectId), Convert.ToInt32(fileId), breconnect));
+                }
+                else
+                {
+                    context.AcceptWebSocketRequest(new wsHandler(Convert.ToInt32(projectId), Convert.ToInt32(fileId)));
+                }
             }
         }
 

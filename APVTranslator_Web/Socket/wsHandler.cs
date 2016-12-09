@@ -16,11 +16,27 @@ namespace APVTranslator_Web.Socket
     public class wsHandler : WebSocketHandler
     {
         private static WebSocketCollection clients = new WebSocketCollection();
-        private Guid clientId;
+        private Guid clientId = Guid.Empty;
         private int userId;
         private Color userColor = new Color();
         private string userName;
         public string lastMessage;
+        private int projectId;
+        private int fileId;
+        private Boolean breconnect = false;
+        public wsHandler(int projectId, int fileId)
+        {
+            this.projectId = projectId;
+            this.fileId = fileId;
+        }
+
+        public wsHandler(int projectId, int fileId, Boolean _breconnect)
+        {
+            this.projectId = projectId;
+            this.fileId = fileId;
+            this.breconnect = _breconnect;
+        }
+
         public override void OnOpen()
         {
             //this.Send("Welcome!" + this.WebSocketContext.User.Identity.Name);
@@ -32,7 +48,7 @@ namespace APVTranslator_Web.Socket
             clients.Add(this);
             foreach (var item in clients)
             {
-                if (item != this)
+                if (item != this && ((APVTranslator_Web.Socket.wsHandler)item).projectId == this.projectId && ((APVTranslator_Web.Socket.wsHandler)item).fileId == this.fileId)
                 {
                     string msgBack = ((APVTranslator_Web.Socket.wsHandler)item).lastMessage;
                     if (!string.IsNullOrEmpty(msgBack))
@@ -76,7 +92,7 @@ namespace APVTranslator_Web.Socket
             {
                 foreach (var item in clients)
                 {
-                    if (item != this)
+                    if (item != this && ((APVTranslator_Web.Socket.wsHandler)item).projectId == this.projectId && ((APVTranslator_Web.Socket.wsHandler)item).fileId == this.fileId)
                     {
                         string msgBack = jsonMessage;
                         item.Send(msgBack);
@@ -104,8 +120,11 @@ namespace APVTranslator_Web.Socket
                 translateMessage.IsClose = true;
                 foreach (var client in clients)
                 {
-                    string msgBack = JsonConvert.SerializeObject(translateMessage);
-                    client.Send(msgBack);
+                    if (((APVTranslator_Web.Socket.wsHandler)client).projectId == this.projectId && ((APVTranslator_Web.Socket.wsHandler)client).fileId == this.fileId)
+                    {
+                        string msgBack = JsonConvert.SerializeObject(translateMessage);
+                        client.Send(msgBack);
+                    }
                 }
             }
             base.OnClose();

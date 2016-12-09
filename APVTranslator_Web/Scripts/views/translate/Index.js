@@ -9,7 +9,25 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
             else {
                 scope.getListTextSegment(projectId, fileId);
             }
+            window.addEventListener("offline", function () {
+                console.log("offline");
+                $('#connectStatus').show();
+                var clients = scope.clientsEdit;
+                var allCell = $('[Id][Field]');
+                var parentCell = allCell.closest('.ngCell');
+                var toolTip = allCell.next();
+                toolTip.text('');
+                toolTip.css("background-color", 'inherit');
+                parentCell.attr("isreadonly", "0");
+                parentCell.css("border", "none");
+            })
+            window.addEventListener("online", function () {
+                console.log("online");
+                $('#connectStatus').hide();
+                scope.reconectSocket();
+            });
         }
+        scope.closedConnect = false;
         scope.oldTextSegment1 = null;
         scope.currentRow = null;
         scope.currentCol = null;
@@ -213,7 +231,8 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                             obj['GoogleTranslate'] = translatedText;
                         });
                     } catch (e) {
-                        Utility.showMessage(scope, $mdDialog, 'Translate some text error!');
+                        console.log('Translate some text error!');
+                        //Utility.showMessage(scope, $mdDialog, 'Translate some text error!');
                     }
                 }
                 if (col.field != 'TextSegment2' && (rowData['Suggestion'] == undefined || rowData['Suggestion'] == "")) {
@@ -236,7 +255,8 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                                 }
                             }
                             else {
-                                Utility.showMessage(scope, $mdDialog, response.GetSugestionResult.Message);
+                                //Utility.showMessage(scope, $mdDialog, response.GetSugestionResult.Message);
+                                console.log(response.GetSugestionResult.Message);
                             }
                         },
                         error: function (error) {
@@ -308,7 +328,8 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                                     }
                                 }
                                 else {
-                                    Utility.showMessage(scope, $mdDialog, response.GetSugestionResult.Message);
+                                    //Utility.showMessage(scope, $mdDialog, response.GetSugestionResult.Message);
+                                    console.log(response.GetSugestionResult.Message);
                                 }
                             },
                             error: function (error) {
@@ -382,7 +403,6 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                         }
                         scope.projectName = response.ProjectName;
                         scope.fileName = response.FileName;
-                        setTimeout(function () { scope.getSugestion(scope.data) }, 0);
                     }
                     else {
                         Utility.showMessage(scope, $mdDialog, response.ControllerResult.Message);
@@ -395,86 +415,25 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
             });
         }
 
-        scope.getSugestion = function (data) {
-            try {
-                if (data) {
-                    var textSegmentCount = 0;
-                    var arrTextSegment = [];
-                    //for (var i = 0; i < data.length; i++) {
-                    //    if ((data[i]['Suggestion'] == undefined || data[i]['Suggestion'] == '')) {
-                    //        if (textSegmentCount == 10) {
-                    //            $.ajax({
-                    //                type: "POST",
-                    //                url: Utility.getBaseUrl() + 'Services/TranslateService.svc/GetSugestion',
-                    //                data: JSON.stringify({ 'listTexsegment': JSON.stringify(arrTextSegment) }),
-                    //                contentType: "application/json; charset=utf-8",
-                    //                dataType: "json",
-                    //                success: function (response) {
-                    //                    if (response && response.GetSugestionResult.IsSuccess) {
-                    //                        var data = JSON.parse(response.GetSugestionResult.Value);
-                    //                        for (var i = 0; i < data.length; i++) {
-                    //                            var objs = angularScope.grep(angularScope.data, data[i], "Id");
-                    //                            if (objs.length > 0 && data[i]['Suggestion'] != '' && data[i]['Suggestion'] != undefined) {
-                    //                                objs[0]['Suggestion'] = data[i]['Suggestion'];
-                    //                            }
-                    //                        }
-                    //                    }
-                    //                    else {
-                    //                        Utility.showMessage(scope, $mdDialog, response.GetSugestionResult.Message);
-                    //                    }
-                    //                },
-                    //                error: function (error) {
-                    //                    cfpLoadingBar.complete();
-                    //                    Utility.showMessage(scope, $mdDialog, error);
-                    //                }
-                    //            });
-                    //            textSegmentCount = 0;
-                    //            arrTextSegment = [];
-                    //        }
-                    //        else if (textSegmentCount < 10) {
-                    //            textSegmentCount++;
-                    //            arrTextSegment.push(data[i])
-                    //        }
-                    //        if (i == data.length - 1 && textSegmentCount > 0) {
-                    //            $.ajax({
-                    //                type: "POST",
-                    //                url: Utility.getBaseUrl() + 'Services/TranslateService.svc/GetSugestion',
-                    //                data: JSON.stringify({ 'listTexsegment': JSON.stringify(arrTextSegment) }),
-                    //                contentType: "application/json; charset=utf-8",
-                    //                dataType: "json",
-                    //                success: function (response) {
-                    //                    if (response && response.GetSugestionResult.IsSuccess) {
-                    //                        var data = JSON.parse(response.GetSugestionResult.Value);
-                    //                        for (var i = 0; i < data.length; i++) {
-                    //                            var objs = angularScope.grep(angularScope.data, data[i], "Id");
-                    //                            if (objs.length > 0 && data[i]['Suggestion'] != '' && data[i]['Suggestion'] != undefined) {
-                    //                                objs[0]['Suggestion'] = data[i]['Suggestion'];
-                    //                            }
-                    //                        }
-                    //                    }
-                    //                    else {
-                    //                        Utility.showMessage(scope, $mdDialog, response.GetSugestionResult.Message);
-                    //                    }
-                    //                },
-                    //                error: function (error) {
-                    //                    cfpLoadingBar.complete();
-                    //                    Utility.showMessage(scope, $mdDialog, error);
-                    //                }
-                    //            });
-                    //            textSegmentCount = 0;
-                    //            arrTextSegment = [];
-                    //        }
-                    //    }
-                    //    //data[i]['Suggestion'] = 'đấy là gợi ý đó';
-                    //}
-                }
-            } catch (e) {
-
+        scope.reconectSocket = function () {
+            if (ws.readyState == 1) {
+                ws.close();
             }
+            ws = new WebSocket("ws://" + location.host + "/Handler/SocketHandler.ashx" + "?projectId=" + projectId + "&fileId=" + fileId + "&reconnect=true");
+            scope.onopen = function () {
+                try {
+                    console.log('connect to server');
+                } catch (e) {
+
+                }
+            };
+            ws.onmessage = scope.onmessage;
+            ws.onerror = scope.onerror;
+            ws.onclose = scope.onclose;
         }
 
         scope.getSocket = function () {
-            ws = new WebSocket("ws://" + location.host + "/Handler/SocketHandler.ashx" + "?projectId=" + projectId);
+            ws = new WebSocket("ws://" + location.host + "/Handler/SocketHandler.ashx" + "?projectId=" + projectId + "&fileId=" + fileId);
             scope.onopen = function () {
                 try {
                     console.log('connect to server');
@@ -574,7 +533,8 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
         };
 
         scope.onclose = function () {
-            Utility.showMessage(scope, $mdDialog, "Socket closed");
+            console.log("Socket closed");
+            //Utility.showMessage(scope, $mdDialog, "Socket closed");
         };
 
         scope.sendMessageSocket = function (data) {
@@ -584,7 +544,8 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                     ws.send(jsData);
                 }
                 else {
-                    Utility.showMessage(scope, $mdDialog, "Connect to server had closed, please check your network!");
+                    alert("Connect to server had closed, please check your network!");
+                    //Utility.showMessage(scope, $mdDialog, "Connect to server had closed, please check your network!");
                 }
 
             } catch (e) {
