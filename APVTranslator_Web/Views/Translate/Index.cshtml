@@ -10,10 +10,11 @@
         <p id="connectStatus">Lose connection to server, anything your change can be save!</p>
         <p style="display:inline-block" ng-cloak>{{fileName}} - ({{projectName}})</p>
         <select class="form-control" id="destinationLanguageFile" style="width:220px;display:inline-block;float:right">
-            <option value="">--Select a language--</option>
-            <option value="ja">Vietnamese To Japanese</option>
-            <option value="vi">Japanese to Vietnamese</option>
+            <option value="">--Translate to--</option>
+            <option value="ja">Japanese</option>
+            <option value="vi">Vietnamese</option>
         </select>
+        <button type="button"title="Export File" ng-click="dowload_exportFile()"  class="btn btn-primary btn-circle btn-lg"><i class="glyphicon glyphicon-export"></i></button>
     </div>
     <div style="display:inline-block">
 
@@ -21,12 +22,7 @@
     <div class="translate-center">
         <div class="grid-translate gridStyle" ng-init="init()" ng-grid="gridOptions" />
     </div>
-    <md-button class="dowload-file md-fab md-primary md-hue-2" ng-click="dowload_exportFile()" aria-label="dowload">
-        <md-icon class="material-icons">file_download</md-icon>
-        <md-tooltip md-direction="left">
-            Dowload File
-        </md-tooltip>
-    </md-button>
+   
     <ul id="context1" class="dropdown-menu">
         <li><a ng-click="copy()">Copy</a></li>
         <li><a ng-click="copyToDes()">Copy To DestinationLanguage</a></li>
