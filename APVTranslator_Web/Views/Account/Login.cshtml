@@ -8,7 +8,7 @@
     <meta name="google-signin-client_id" content="184146087568-n8oiehaso0nijaeflm2mnd0qkf9652f7.apps.googleusercontent.com">
 </head>
 <h2></h2>
-<div class="row">
+<div class="row" style="width:100%;height:100%;text-align:center; margin-top:10%;position:absolute">
   <!--  <div class="col-md-8">
         <section id="loginForm">
             @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
@@ -55,8 +55,8 @@
         </section>
     </div>
       -->
-    <div class="col-md-12" style="margin-left:65%;margin-top:20%;">
-        <img src="~/Content/Images/logo-incompany.png" class="img-responsive" alt="Cinque Terre" style="margin-left:55% !important;margin-top:5%;">
+    <div class="col-md-12" @*style="margin-left:65%;margin-top:20%;"*@>
+        <img src="~/Content/Images/logo-incompany.png" class="img-responsive" alt="Cinque Terre" style="display: inline-block;">
         <div id="socialLoginForm">
             @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
         </div>

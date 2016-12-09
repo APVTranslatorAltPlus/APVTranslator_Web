@@ -6,9 +6,16 @@
     Layout = "~/Views/Shared/_TranslateLayout.cshtml";
 }
 <div class="translate-body" ng-controller="translateCtrl">
-    <div class="translate-top">
-        <p id="connectStatus">Lose connection to server, anything your change can be save!</p>
-        <p ng-cloak>{{fileName}} - ({{projectName}})</p>
+    <div class="translate-top" style="display:inline-block">
+        <p style="display:inline-block" ng-cloak>{{fileName}} - ({{projectName}})</p>
+        <select class="form-control" id="destinationLanguageFile" style="width:220px;display:inline-block;float:right">
+            <option value="">--Select a language--</option>
+            <option value="ja">Vietnamese To Japanese</option>
+            <option value="vi">Japanese to Vietnamese</option>
+        </select>
+    </div>
+    <div style="display:inline-block">
+
     </div>
     <div class="translate-center">
         <div class="grid-translate gridStyle" ng-init="init()" ng-grid="gridOptions" />
@@ -47,3 +54,10 @@
     }
 </div>
 
+<script>
+    $('select[id ="destinationLanguageFile"]').change(function () {
+        var selectedValue = $(this).prop('selectedIndex');
+        var translateLanguage = document.getElementById("destinationLanguageFile");
+        targetLang = translateLanguage.value;
+    });
+</script>

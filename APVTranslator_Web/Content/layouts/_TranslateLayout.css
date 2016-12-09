@@ -23,3 +23,7 @@
     text-align: center;
     padding-top: 10px;
 }
+
+.ngHeaderButton {
+display:none;
+}

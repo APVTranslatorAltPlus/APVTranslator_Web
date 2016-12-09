@@ -10,88 +10,60 @@
 <div class="row" style="width:100%;height:100%;">
     <div class="col-lg-12" style="width:100%;height:100%;">
         <div ng-controller="MyCtrl" class="app-index" id="Homecontroller">
-            <div class="m-top">
+            <div class="m-top" style="display:table;padding:10px;width:inherit">
                 @*<md-button style="float:right;" class="md-accent" ng-show="checked" ng-click="loadListProject()">Back</md-button>*@
                 @*<label>APVTranslator</label>*@
-                <md-toolbar ng-cloak>
-                    <div class="md-toolbar-tools">
-                        <md-button class="md-raised" ng-show="checkPermissionNewProject()" ng-click="getListUser()" data-toggle="modal" data-target="#createNewProjectModal" data-backdrop="static" data-keyboard="false" aria-label="New">
-                            <md-icon class="material-icons">add</md-icon>
-                            <md-tooltip md-direction="bottom">
-                                New Project
-                            </md-tooltip>
-                            New
-                        </md-button>
-                        <div class="a-divider" ng-show="checkPermissionEditProject()"></div>
-                        <md-button class="md-raised" ng-show="checkPermissionEditProject()" ng-disabled="!projectSelection" ng-click="editProject()" aria-label="Edit">
-                            <md-icon class="material-icons">edit</md-icon>
-                            <md-tooltip md-direction="bottom">
-                                Edit Project
-                            </md-tooltip>
-                            Edit
-                        </md-button>
-                        <div class="a-divider" ng-show="checkPermissionEditProject()"></div>
-                        <md-button class="md-raised" ng-show="checkPermissionEditProject()" ng-disabled="!projectSelection" ng-click="deleteProject()" aria-label="Delete">
-                            <md-icon class="material-icons">delete</md-icon>
-                            <md-tooltip md-direction="bottom">
-                                Delete Project
-                            </md-tooltip>
-                            Delete
-                        </md-button>
-                        <div class="a-divider" ng-show="checkPermissionEditProject()"></div>
-                        <md-button class="md-raised" ng-show="projectSelection" ng-disabled="!projectSelection" aria-label="Setting" data-toggle="modal" data-target="#settingModal" data-backdrop="static" data-keyboard="false" ng-click="initSetting()">
-                            <md-icon class="material-icons">settings</md-icon>
-                            <md-tooltip md-direction="bottom">
-                                Project Setting
-                            </md-tooltip>
-                            Setting
-                        </md-button>
-                        <md-button class="md-raised" ng-show="checked" ng-click="showInputFile()" aria-label="Import">
-                            <md-icon class="material-icons">file_upload</md-icon>
-                            <md-tooltip md-direction="bottom">
-                                Import File
-                            </md-tooltip>
-                            Import
-                        </md-button>
+                <div class="row" style="vertical-align:middle;display:table-cell">
+                    <div style="margin-bottom:6px;display:inline-block">
+                        <button type="button" style="display:inline-block;" class="btn btn-default button-toolbar" ng-show="!checked" ng-click="getListUser()" data-toggle="modal" data-target="#createNewProjectModal" data-backdrop="static" data-keyboard="false">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        Create
+                        </button>
+                        <div class="a-divider " style="display:inline-block;" ng-show="projectSelection"></div>
+                        <button type="button" style="display:inline-block;" class="btn btn-default button-toolbar" ng-show="projectSelection" ng-disabled="!projectSelection" ng-click="editProject()">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                        Edit</button>
+                        <div class="a-divider " style="display:inline-block;" ng-show="projectSelection"></div>
+                        <button type="button" style="display:inline-block;" class="btn btn-default button-toolbar" ng-show="projectSelection" ng-disabled="!projectSelection" ng-click="confirmDeleteProject()">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        Delete</button>
+                        <div class="a-divider" style="display:inline-block;" ng-show="projectSelection"></div>
+                        <button type="button" style="display:inline-block;" class="btn btn-default button-toolbar" ng-show="projectSelection" ng-disabled="!projectSelection" aria-label="Setting" data-toggle="modal" data-target="#settingModal" data-backdrop="static" data-keyboard="false" ng-click="initSetting()">
+                            <span class="glyphicon glyphicon-wrench"></span>
+                        Settings</button>
+                        <button type="button" style="display:inline-block;" class="btn btn-default button-toolbar" ng-show="checked" ng-click="showInputFile()">
+                            <span class="glyphicon glyphicon-download-alt"></span>    
+                        Import</button>
                         <div class="a-divider" ng-show="fileProjectSelection"></div>
-                        <md-button class="md-raised" ng-show="fileProjectSelection" ng-click="confirmDeleteFile()" ng-disabled="!fileProjectSelection" aria-label="delete file">
-                            <md-icon class="material-icons">delete</md-icon>
-                            <md-tooltip md-direction="bottom">
-                                Delete File
-                            </md-tooltip>
-                            Delete
-                        </md-button>
+                        <button type="button" style="display:inline-block;" class="btn btn-default button-toolbar" ng-show="fileProjectSelection" ng-click="confirmDeleteFile()" ng-disabled="!fileProjectSelection">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        Delete</button>
                         <div class="a-divider" ng-show="fileProjectSelection"></div>
-                        <md-button class="md-raised" ng-show="fileProjectSelection" ng-click="translateFile()" ng-disabled="!fileProjectSelection" aria-label="trans;ate file">
-                            <md-icon class="material-icons">g_translate</md-icon>
-                            <md-tooltip md-direction="bottom">
-                                Translate file
-                            </md-tooltip>
-                            Translate
-                        </md-button>
-                        <input type="file" id="file" accept=".xlsx,.xls,.doc,.docx,.ppt,.pptx" style="display:none" value="upload" multiple />
+                        <button type="button" style="display:inline-block;" class="btn btn-default button-toolbar" ng-show="fileProjectSelection" ng-click="downloadFile()" ng-disabled="!fileProjectSelection">
+                            <span class="glyphicon glyphicon-download-alt"></span>
+                            Download
+                        </button>
+                        <input type="file" id="file" accept=".xlsx,.xls,.doc,.docx.,.ppt,.pptx" style="display:none" value="upload" multiple />
                         <span flex></span>
-                        <div id="custom-search-input" style="width:300px;height:36px;">
+
+                     </div>
+                    <div style="float:right;display:inline-block;vertical-align:middle;display:table-cell;">
+                        <div id="custom-search-input" style="width:300px;height:36px;display:inline-block; float:left;margin-bottom:8px;">
                             <div class="input-group" style="width:300px;height:36px;">
-                                <input type="text" onfocus="if(this.value != '') {this.value=''}" id="textSearchBox" style="height: 30px;" class="form-control input-lg" placeholder="Search..." ng-keypress="myFunct($event)" />
+                                <input type="text" onfocus="if(this.value != '') {this.value=''}" id="textSearchBox" style="height: 30px;" class = "input-lg" placeholder="Search..." ng-keypress="myFunct($event)" />
                                 <span class="input-group-btn" style="vertical-align: top !important;bottom:2px;">
                                     <button class="btn btn-info btn-lg" type="button" ng-click="searchText()">
-                                        <i class="glyphicon glyphicon-search"></i>
+                                        <i class="glyphicon glyphicon-search" style="font-size: 18px;"></i>
                                     </button>
                                 </span>
                             </div>
                         </div>
-
-                        <div class="a-divider" ng-show="showSearchBoxDivider"></div>
-                        <md-button class="md-raised md-warn" aria-label="Back" ng-show="checked" ng-click="loadListProject()">
-                            <md-icon class="material-icons">undo</md-icon>
-                            <md-tooltip md-direction="bottom">
-                                Back To List Project
-                            </md-tooltip>
-                            Back
-                        </md-button>
+                        <div class="a-divider" ng-show="showSearchBoxDivider" style="display:inline-block;"></div>
+                        <button type="button" ng-show="checked" ng-click="loadListProject()" style="display:inline-block;" class="btn btn-default button-toolbar">
+                            <span class="glyphicon glyphicon-backward"></span>
+                        Back</button>
                     </div>
-                </md-toolbar>
+                </div>
             </div>
             <div class="m-center">
 
@@ -106,7 +78,7 @@
                         <div class="detail-item">
                             <b>Status:</b>
                             <p id="Status">
-                                {{currentProject.Status?'Translated':'Translating'}}
+                                {{currentProject.Progress*100<100?"Translating":"Translated"}}
                             </p>
                         </div>
                         <div class="detail-item">
@@ -124,7 +96,7 @@
                         <div class="detail-item">
                             <b>Translate Language:</b>
                             <p id="TranslateLanguage">
-                                {{currentProject.LanguageDescription}}
+                                {{currentProject.TranslateLanguageID == 1?"Japanese To Vietnamese":"Vietnamese To Japanese"}}
                             </p>
                         </div>
                         <div class="detail-item">
@@ -200,7 +172,7 @@
                                 <label>Create At:</label>
                                 <a class="dropdown-toggle" id="dropdownStart" role="button" data-toggle="dropdown">
                                     <div class="input-group date">
-                                        <input type="text" id="startDate" data-date-time-input="YYYY-MM-DD HH:MM:SS" class="form-control" data-ng-model="dateRangeStart" style="max-width:100%!important">
+                                        <input type="text" id="startDate" data-date-time-input="YYYY-MM-DD HH:mm:ss" class="form-control" data-ng-model="dateRangeStart" style="max-width:100%!important">
                                         <span class="input-group-addon" style="color:#3f4a54"><i class="glyphicon glyphicon-calendar"></i></span>
                                     </div>
                                 </a>
@@ -216,7 +188,7 @@
                                 <label>Deadline:</label>
                                 <a class="dropdown-toggle" id="dropdownEnd" role="button" data-toggle="dropdown">
                                     <div class="input-group date">
-                                        <input type="text" id="deadline" data-date-time-input="YYYY-MM-DD HH:MM:SS" class="form-control" data-ng-model="dateRangeEnd" style="max-width:100%!important">
+                                        <input type="text" id="deadline" data-date-time-input="YYYY-MM-DD HH:mm:ss" class="form-control" data-ng-model="dateRangeEnd" style="max-width:100%!important">
                                         <span class="input-group-addon" style="color:#3f4a54"><i class="glyphicon glyphicon-calendar"></i></span>
                                     </div>
                                 </a>
@@ -248,13 +220,13 @@
                         <div class="modal-body" style="width:100%">
 
                             <ul class="nav nav-tabs" id="tabContent">
-                                <li class="active"><a href="#dictionaries" data-toggle="tab">Dictionaries</a></li>
+                                <li class="active"><a href="#project" data-toggle="tab">Project</a></li>
                                 <li><a href="#member-manager" data-toggle="tab">Member Manager</a></li>
-                                <li><a href="#file-manager" data-toggle="tab">File Manager</a></li>
+                               @* <li><a href="#dictionary-manager" data-toggle="tab">Dictionary Manager</a></li>*@
                             </ul>
 
                             <div class="tab-content">
-                                <div class="tab-pane active" id="dictionaries">
+                                <div class="tab-pane active" id="project">
                                     <div class="form-group">
                                         <label for="usr">Project Name:</label>
                                         <input type="text" class="form-control" id="projectNameSetting" style="max-width:100%!important;" disabled="disabled">
@@ -305,8 +277,17 @@
 
                                 </div>
 
-                                <div class="tab-pane" id="file-manager">
-
+                                <div class="tab-pane" id="dictionary-manager">
+                                    <table class="table" id="dictionary-table">
+                                        <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Dictionary Name</th>
+                                                <th>Delete Dictionary</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="Dic-table-body"></tbody>
+                                    </table>
                                 </div>
                             </div>
 
@@ -329,7 +310,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content" style="width:100%">
             <div class="modal-body" style="width:100%">
-                <p id="successMessage" style="display:inline;font-size:35px;color:#5cb85c;padding:10px;">Create new project successfully!!!</p>
+                <p id="successMessage" style="display:inline;font-size:33px;color:#5cb85c;padding:10px;">Create new project successfully!!!</p>
                 <img src="~/Content/Images/success.png" alt="" style="height:30px;width:30px;margin-bottom:12px; object-fit: cover;overflow:hidden ;display:inline">
             </div>
 
@@ -361,8 +342,8 @@
                     <div class="input-group" style="width:300px;height:40px;">
                         <input type="text" id="textSearchBox2" onfocus="if(this.value != '') {this.value=''}" style="height: 30px;top:2px;" class="form-control input-lg" placeholder="Search..." onkeypress="angular.element(document.getElementById('Homecontroller')).scope().myFunct(event);" />
                         <span class="input-group-btn" style="vertical-align: top !important;bottom:2px;">
-                            <button class="btn btn-info btn-lg" type="button" onclick="angular.element(document.getElementById('Homecontroller')).scope().searchText();">
-                                <i class="glyphicon glyphicon-search"></i>
+                            <button class="btn btn-info btn-lg" type="button" onclick="angular.element(document.getElementById('Homecontroller')).scope().searchText();" style="padding: 8px 8px 0 10px !important">
+                                <i class="glyphicon glyphicon-search" style="font-size: 18px;"></i>
                             </button>
                         </span>
                     </div>
@@ -389,47 +370,4 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-<style>
-    @@media screen and (min-width: 768px) {
 
-        #createNewProjectModal .modal-dialog {
-            /*width: 900px;*/
-        }
-    }
-
-    @@media screen and (min-width: 768px) {
-
-        #successModal .modal-dialog {
-            width: 650px !important;
-            height: 50px !important;
-        }
-    }
-
-    @@media screen and (min-width: 768px) {
-
-        #errorModal .modal-dialog {
-            width: 820px !important;
-            height: 50px !important;
-        }
-    }
-
-    @@media (max-width: 900px) {
-        .m-top {
-            width: 100%;
-        }
-    }
-
-    @@media (max-width: 480px) {
-        .m-top {
-            font-size: 70%;
-            margin: 0;
-        }
-    }
-
-    }
-</style>
-@section scripts{
-    <script>
-        var userRole = @ViewBag.UserRole;
-    </script>
-}

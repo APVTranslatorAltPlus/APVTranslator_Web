@@ -122,6 +122,7 @@
     <Compile Include="Models\AspNetRoleMap.cs" />
     <Compile Include="Models\DashBoardModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\ListProjectFileViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MemberSettingViewModel.cs" />
     <Compile Include="Models\SearchViewModel.cs" />

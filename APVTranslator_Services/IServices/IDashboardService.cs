@@ -45,7 +45,7 @@ namespace APVTranslator_Services.Services
         ServiceResult GetListProjectDBReference(int projectId);
         [OperationContract]
         [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped)]
-        ServiceResult SaveChangeDictionarySetting(object project, IEnumerable<int> newlyInsertedIDList, IEnumerable<int> deletedIDList);
+        ServiceResult SaveChangeProjectSetting(object project, IEnumerable<int> newlyInsertedIDList, IEnumerable<int> deletedIDList);
         [OperationContract]
         [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped)]
         ServiceResult GetInfoForMemberSetting(int projectId);
@@ -55,5 +55,8 @@ namespace APVTranslator_Services.Services
         [OperationContract]
         [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped)]
         ServiceResult GetTextSearch(string textSearch);
+        [OperationContract]
+        [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped)]
+        ServiceResult GetListDictionary(int projectId);
     }
 }

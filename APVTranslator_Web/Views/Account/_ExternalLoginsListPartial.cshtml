@@ -19,18 +19,20 @@
         using (Html.BeginForm("ExternalLogin", "Account", new { ReturnUrl = Model.ReturnUrl }))
         {
             @Html.AntiForgeryToken()
-            <div id="socialLoginList" style="margin-left:35%;margin-top:5%; width:500px;">
-                <p>
-                    @foreach (AuthenticationDescription p in loginProviders)
+                    <div id="socialLoginList" style="display:inline-block; width:500px;">
+                        <p>
+                            @foreach (AuthenticationDescription p in loginProviders)
                     {
-                        <button type="submit" style="background-color:#dd4b39;" class="btn btn-block btn-social btn-lg btn-google-plus" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="Log in using your @p.Caption account">
-                            <i class="fa fa-google-plus" style="color:white"></i>
-                            <i style="color:white;margin-left:15%;">Đăng nhập bằng tài khoản Google</i>
-                        </button>
+                                <button type="submit" style="background-color:#dd4b39;" class="btn btn-block btn-social btn-lg btn-google-plus" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="Log in using your @p.Caption account">
+                                    <i class="fa fa-google-plus" style="color:white"></i>
+                                    <i style="color:white;margin-left:15%;">Đăng nhập bằng tài khoản Google</i>
+                                </button>
 
-                    }
-                </p>
-            </div>
+                            }
+                        </p>
+                    </div>
+
+
 
 
         }

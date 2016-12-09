@@ -3,8 +3,8 @@
 //        cfpLoadingBarProvider.includeSpinner = true;
 //    })
 
-apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFileProject', 'cfpLoadingBar', '$mdDialog', 'deleteFileProject', 'serCreateNewProject', 'serGetListUser', 'cfpLoadingBar', 'serGetProjectInfo', 'serGetListProjectMember', 'serUpdateProject', 'serDeleteProject', 'serGetListProjectDBReference', 'serSaveChangeDictionarySetting', 'serGetInfoForMemberSetting', 'serSaveChangeMemberSetting', 'serGetTextSearch',
-    function (scope, http, serListProject, serListFileProject, cfpLoadingBar, $mdDialog, deleteFileProject, serCreateNewProject, serGetListUser, cfpLoadingBar, serGetProjectInfo, serGetListProjectMember, serUpdateProject, serDeleteProject, serGetListProjectDBReference, serSaveChangeDictionarySetting, serGetInfoForMemberSetting, serSaveChangeMemberSetting, serGetTextSearch) {
+apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFileProject', 'cfpLoadingBar', '$mdDialog', 'deleteFileProject', 'serCreateNewProject', 'serGetListUser', 'cfpLoadingBar', 'serGetProjectInfo', 'serGetListProjectMember', 'serUpdateProject', 'serDeleteProject', 'serGetListProjectDBReference', 'serSaveChangeProjectSetting', 'serGetInfoForMemberSetting', 'serSaveChangeMemberSetting', 'serGetTextSearch', 'serGetListDictionary',
+    function (scope, http, serListProject, serListFileProject, cfpLoadingBar, $mdDialog, deleteFileProject, serCreateNewProject, serGetListUser, cfpLoadingBar, serGetProjectInfo, serGetListProjectMember, serUpdateProject, serDeleteProject, serGetListProjectDBReference, serSaveChangeProjectSetting, serGetInfoForMemberSetting, serSaveChangeMemberSetting, serGetTextSearch, serGetListDictionary) {
         scope.init = function () {
             scope.loadListProject();
         }
@@ -21,21 +21,22 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
         scope.columnDefs = [];
         scope.isEdit = false;
         //columns list file in project
-        scope.columnDefs2 = [{ displayName: 'STT', cellTemplate: '<div style="text-align:center;">{{row.rowIndex}}</div>', width: 50, enableCellEdit: false },
+        scope.columnDefs2 = [{ displayName: 'STT', cellTemplate: '<div style="text-align:center;">{{row.rowIndex +1}}</div>', width: 50, enableCellEdit: false },
                              { field: 'FileName', displayName: 'FileName', enableCellEdit: false, minWidth: 220, resizable: true },
+                             { field: 'FileProgress', displayName: 'File Progress', enableCellEdit: false, width: 120, cellTemplate: '<div class="ngCellText ng-scope ngCellElement">{{buildProcess(row.entity.FileProgress)}}</div>', resizable: true },
                              { field: 'FilePath', displayName: 'File Path', enableCellEdit: false, minWidth: 350, resizable: true },
                              { field: 'FileType', displayName: 'File Type', cellTemplate: '<div class="ngCellText ng-scope ngCellElement">{{getFileTypeName(row.entity.FileType)}}</div>', enableCellEdit: false, width: 100, minWidth: 50, resizable: true },
-                            { field: 'LastUpdate', displayName: 'Last Update', type: 'date', cellFilter: 'date:\'mm:hh dd/MM/yyyy\'', enableCellEdit: false, minWidth: 150, resizable: true }];
+                            { field: 'LastUpdate', displayName: 'Last Update', type: 'date', cellFilter: 'date:\'HH:mm dd/MM/yyyy\'', enableCellEdit: false, minWidth: 150, resizable: true }];
         //column list project
-        scope.columnDefs1 = [{ displayName: 'STT', cellTemplate: '<div style="text-align:center;">{{row.rowIndex}}</div>', width: 50, enableCellEdit: false },
+        scope.columnDefs1 = [{ displayName: 'STT', cellTemplate: '<div style="text-align:center;">{{row.rowIndex + 1}}</div>', width: 50, enableCellEdit: false },
                              { field: 'Title', displayName: 'ProjectName', enableCellEdit: false, minWidth: 200, resizable: true },
-                             { field: 'Status', displayName: 'Status', minWidth: 100, cellTemplate: '<div class="ngCellText ng-scope ngCellElement">{{row.entity.Progress<100?"Translating":"Translated"}}</div>', enableCellEdit: false, resizable: true },
+                             { field: 'Status', displayName: 'Status', minWidth: 100, cellTemplate: '<div class="ngCellText ng-scope ngCellElement">{{row.entity.Progress*100<100?"Translating":"Translated"}}</div>', enableCellEdit: false, resizable: true },
                              { field: 'Progress', displayName: 'Progress', minWidth: 100, cellTemplate: '<div class="ngCellText ng-scope ngCellElement">{{buildProcess(row.entity.Progress)}}</div>', width: 80, enableCellEdit: false, resizable: true },
                              { field: 'Path', displayName: 'Path', enableCellEdit: false, resizable: true, minWidth: 220 },
                              { field: 'TranslateLanguageID', displayName: 'TranslateLanguage', enableCellEdit: false, resizable: true, minWidth: 220, cellTemplate: '<div class="ngCellText ng-scope ngCellElement">{{row.entity.TranslateLanguageID == 1?"Japanese To Vietnamese":"Vietnamese To Japanese"}}</div>' },
                              { field: 'CreateAt', displayName: 'CreateAt', enableCellEdit: false, type: 'date', cellFilter: 'date:\'hh:mm dd/MM/yyyy\'', resizable: true, minWidth: 150 },
                              { field: 'CreateBy', displayName: 'CreateBy', minWidth: 200, enableCellEdit: false, resizable: true },
-                             { field: 'DeadLine', displayName: 'DeadLine', enableCellEdit: false, cellFilter: 'date:\'mm:hh dd/MM/yyyy\'', resizable: true, minWidth: 150 }];
+                             { field: 'DeadLine', displayName: 'DeadLine', enableCellEdit: false, cellFilter: 'date:\'HH:mm dd/MM/yyyy\'', resizable: true, minWidth: 150 }];
         scope.gridOptions = {
             data: 'data',
             enableCellSelection: false,
@@ -64,6 +65,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
             rowTemplate: rowTemplate(),
             columnDefs: 'columnDefs'
         };
+        scope.FilterOptions = { filterText: '', useExternalFilter: false };
         scope.showSearchBoxDivider = false;
         scope.rowDblClick = function (row) {
             try {
@@ -87,10 +89,6 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
             }
         }
 
-        function rowTemplate() {
-            return '<div ng-dblclick="rowDblClick(row)" ng-style="{\'cursor\': row.cursor, \'z-index\': col.zIndex() }" ng-repeat="col in renderedColumns" ng-class="col.colIndex()" class="ngCell {{col.cellClass}}" ng-cell></div>';
-        }
-
         scope.checkPermissionNewProject = function () {
             if (parseInt(userRole) == Enumeration.UserRole.Admin && !scope.checked) {
                 return true;
@@ -107,6 +105,10 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
             else {
                 return false;
             }
+        }
+
+        function rowTemplate() {
+            return '<div ng-dblclick="rowDblClick(row)" ng-style="{\'cursor\': row.cursor, \'z-index\': col.zIndex() }" ng-repeat="col in renderedColumns" ng-class="col.colIndex()" class="ngCell {{col.cellClass}}" ng-cell></div>';
         }
 
         scope.getFileTypeName = function (typeFile) {
@@ -244,13 +246,14 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                             });
                         }
                     } catch (e) {
-                        $('#file').replaceWith($('#file').val('').clone(true));
                         Utility.showMessage(scope, $mdDialog, e.message);
+                        $('#file').replaceWith($('#file').val('').clone(true));
                     }
                 })
                 $('#file').click();
             } catch (e) {
                 Utility.showMessage(scope, $mdDialog, e.message);
+                $('#file').replaceWith($('#file').val('').clone(true));
             }
         }
 
@@ -442,7 +445,6 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                 scope.tags.push(item);
                 isDuplicated = false;
             }
-            //alert(item.value);
             console.log(scope.tags);
         }
 
@@ -463,8 +465,6 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                 scope.ProjectTags.push(item);
                 isDuplicated = false;
             }
-            //alert(item.value);
-            // console.log(scope.tags);
         }
 
         //Handle datetime validation
@@ -519,12 +519,10 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
             scope.oldIDList = [];
             if (scope.currentProject) {
                 projectId = scope.currentProject.Id;
-                //alert(projectId);
                 serGetProjectInfo.data(projectId)
                     .success(function (response) {
                         if (response.GetProjectInfoResult && response.GetProjectInfoResult.IsSuccess) {
                             var project = JSON.parse(response.GetProjectInfoResult.Value);
-                            angular.element('#startDate').val(moment(project.CreateAt).format('YYYY-MM-DD HH:mm:ss'));
 
                             scope.getListUser();
                             scope.isEdit = true;
@@ -544,14 +542,15 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                             }
                             document.getElementById("projectName").disabled = "disabled";
                             document.getElementById("descriptions").value = project.Descriptions;
+                            var translateLanguage = document.getElementById("translateLanguage");
+                            translateLanguage.value = project.TranslateLanguageID;
                             //scope.IdList = [];
                             //scope.dateRangeStart = '';
                             //scope.dateRangeEnd = '';
                             //angular.element("#errorMess").text("");
                         }
                         else {
-                            alert(23);
-                            //   Utility.showMessage(scope, $mdDialog, response.GetListFileProjectResult.Message);
+                            Utility.showMessage(scope, $mdDialog, response.GetProjectInfoResult.Message);
                         }
                     }).error(function (err) {
                         console.log(err);
@@ -576,7 +575,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                         console.log("INITIAL = " + scope.oldIDList[i]);
                     }
                 } else {
-                    alert("error");
+                    Utility.showMessage(scope, $mdDialog, response.GetListProjectMemberResult.Message);
                 }
             }).error(function (err) {
                 console.log(err);
@@ -599,7 +598,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                         console.log("INITIAL = " + scope.oldIDList[i]);
                     }
                 } else {
-                    // alert("error");
+                    Utility.showMessage(scope, $mdDialog, response.GetListProjectDBReferenceResult.Message);
                 }
             }).error(function (err) {
                 console.log(err);
@@ -729,7 +728,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                });
         }
 
-        scope.settingDictionary = function () {
+        scope.settingProject = function () {
 
             angular.element('#projectNameSetting').val("");
             var translateLanguage = document.getElementById("translateLanguageSetting");
@@ -790,7 +789,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
             }
         }
 
-        scope.saveChangeDictionarySetting = function () {
+        scope.saveChangeProjectSetting = function () {
             var projectObject = {};
             if (scope.currentProject) {
                 projectId = scope.currentProject.Id;
@@ -848,9 +847,10 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                     }
                 }
 
-                serSaveChangeDictionarySetting.data(JSON.stringify(projectObject), scope.newlyInsertedIDList, scope.deletedIDList)
+                serSaveChangeProjectSetting.data(JSON.stringify(projectObject), scope.newlyInsertedIDList, scope.deletedIDList)
                    .success(function (response) {
-                       if (response.SaveChangeDictionarySettingResult.IsSuccess && response.SaveChangeDictionarySettingResult.Value === "true") {
+                       if (response.SaveChangeProjectSettingResult.IsSuccess && response.SaveChangeProjectSettingResult.Value === "true") {
+                           scope.loadListProject();
                            $('#successModal').modal('show');
                            $('#settingModal').modal('hide');
                            document.getElementById("successMessage").innerHTML = "Save changes successfully!!!";
@@ -1047,7 +1047,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                          });
 
                      } else {
-                         alert("error");
+                         Utility.showMessage(scope, $mdDialog, response.GetInfoForMemberSettingResult.Message);
                      }
                  }).error(function (err) {
                      console.log(err);
@@ -1055,8 +1055,29 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                  });
             }
         }
+        scope.settingDictionary = function () {
+            $('#Dic-table-body').empty();
+            if (scope.currentProject) {
+                projectId = scope.currentProject.Id;
 
-        scope.selectedTab = '#dictionaries';
+                serGetListDictionary.data(projectId)
+                 .success(function (response) {
+
+                     if (response.GetListDictionaryResult && response.GetListDictionaryResult.IsSuccess) {
+                         var listDictionaries = JSON.parse(response.GetListDictionaryResult.Value);
+                         console.log(listDictionaries);
+                         //pending
+
+                     } else {
+                         Utility.showMessage(scope, $mdDialog, response.GetListDictionaryResult.Message);
+                     }
+                 }).error(function (err) {
+                     console.log(err);
+                     cfpLoadingBar.complete();
+                 });
+            }
+        }
+        scope.selectedTab = '#project';
 
         scope.saveChangeMemberSetting = function () {
             if (scope.currentProject) {
@@ -1083,8 +1104,8 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
 
         scope.saveChangesSetting = function () {
 
-            if (scope.selectedTab == "#dictionaries") {
-                scope.saveChangeDictionarySetting();
+            if (scope.selectedTab == "#project") {
+                scope.saveChangeProjectSetting();
             }
             if (scope.selectedTab == "#member-manager") {
                 scope.saveChangeMemberSetting();
@@ -1093,14 +1114,15 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
 
         scope.initSetting = function () {
             scope.settingMember();
-            scope.settingDictionary();
+            scope.settingProject();
+            //    scope.settingDictionary();
         }
         scope.callRestService = function () {
             //$http({ method: 'GET', url: '/someUrl' }).
             //  success(function (data, status, headers, config) {
             //      $scope.results.push(data);  //retrieve results and add to existing results
             //  })
-            alert(10);
+            //alert(10);
         }
         scope.isTextSearchBox2 = false;
 
@@ -1155,6 +1177,38 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                console.log(err);
                cfpLoadingBar.complete();
            });
+        }
+
+        scope.downloadFile = function () {
+            var projectId = scope.currentFileProject.ProjectID;
+            var fileId = scope.currentFileProject.FileID;
+            
+            try {
+                cfpLoadingBar.start();
+                $.ajax({
+                    type: "POST",
+                    url: Utility.getBaseUrl() + 'Translate/BuildExportFile',
+                    data: JSON.stringify({ 'projectId': projectId, 'fileId': fileId }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+
+                    success: function (response) {
+                        cfpLoadingBar.complete();
+                        if (response.IsSuccess) {
+                            window.location.replace(Utility.getBaseUrl() + "Handler/DownloadHandler.ashx?projectId=" + projectId + "&fileId=" + fileId + "&fileExportName=" + JSON.parse(response.Value));
+                        }
+                        else {
+                            Utility.showMessage(scope, $mdDialog, response.Message);
+                        }
+                    },
+                    error: function (error) {
+                        cfpLoadingBar.complete();
+                        Utility.showMessage(scope, $mdDialog, error);
+                    }
+                });
+            } catch (e) {
+                Utility.showMessage(scope, $mdDialog, "Can't dowload export file!");
+            }
         }
 
     }])
@@ -1215,9 +1269,9 @@ apvApp.service('serGetListProjectDBReference', function ($http) {
         return $http.post(Utility.getBaseUrl() + 'Services/DashboardService.svc/GetListProjectDBReference', { 'projectId': projectId });
     };
 });
-apvApp.service('serSaveChangeDictionarySetting', function ($http) {
+apvApp.service('serSaveChangeProjectSetting', function ($http) {
     this.data = function (project, newlyInsertedIDList, deletedIDList) {
-        return $http.post(Utility.getBaseUrl() + 'Services/DashboardService.svc/SaveChangeDictionarySetting', { 'project': project, 'newlyInsertedIDList': newlyInsertedIDList, 'deletedIDList': deletedIDList });
+        return $http.post(Utility.getBaseUrl() + 'Services/DashboardService.svc/SaveChangeProjectSetting', { 'project': project, 'newlyInsertedIDList': newlyInsertedIDList, 'deletedIDList': deletedIDList });
     };
 });
 
@@ -1236,9 +1290,14 @@ apvApp.service('serGetTextSearch', function ($http) {
         return $http.post(Utility.getBaseUrl() + 'Services/DashboardService.svc/GetTextSearch', { 'textSearch': textSearch });
     };
 });
-
+apvApp.service('serGetListDictionary', function ($http) {
+    this.data = function (projectId) {
+        return $http.post(Utility.getBaseUrl() + 'Services/DashboardService.svc/GetListDictionary', { 'projectId': projectId });
+    };
+});
 //Handle splitter transition 
 var isOpen = true;
+var isCollapsed = false;
 var initialWidth;
 function toggle() {
     if (isOpen == true) {
@@ -1269,13 +1328,38 @@ function closeNav() {
     document.getElementById("mySidenav").style.overflow = "hidden";
 }
 
+function closeExpandedArea() {
+
+    if (isCollapsed) {
+        $("button.navbar-toggle").click();
+        isCollapsed = false;
+    }
+}
+
+function openExpandedArea() {
+    isCollapsed = true;
+}
+
+$(window).resize(function () {
+    var width = $(window).width();
+    //Assuming X=550   
+    if (width <= 450) {
+        //  $('.button-toolbar').removeClass('btn-default');
+        $('.button-toolbar').addClass('btn-sm');
+    }
+    else {
+        $('.button-toolbar').removeClass('btn-sm');
+        $('.button-toolbar').addClass('btn-default');
+    }
+})
+
 $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
     var target = $(e.target).attr("href") // activated tab
     if (target === "#member-manager") {
         angular.element(document.getElementById('Homecontroller')).scope().selectedTab = '#member-manager';
     }
-    if (target === "#dictionaries") {
-        angular.element(document.getElementById('Homecontroller')).scope().selectedTab = '#dictionaries';
+    if (target === "#project") {
+        angular.element(document.getElementById('Homecontroller')).scope().selectedTab = '#project';
     }
 
 });
