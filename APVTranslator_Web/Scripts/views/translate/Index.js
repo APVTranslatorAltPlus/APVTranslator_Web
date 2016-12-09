@@ -95,7 +95,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                              field: 'Col',
                              displayName: 'Col',
                              enableCellEdit: false,
-                             cellTemplate: '<div ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText" style="white-space: normal;">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
+                             cellTemplate: '<div ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText" style="white-space: normal;">{{toColumnName(row.getProperty(col.field))}}</div></div><div class="cellTooltip"></div>',
                              minWidth: 100,
                              width: 100,
                              resizable: true
@@ -665,6 +665,15 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
             textArea.select();
             var successful = document.execCommand('copy');
             document.body.removeChild(textArea);
+        }
+
+        scope.toColumnName = function (num) {
+            if (num === -1) return '-1';
+            for (var ret = '', a = 1, b = 26; (num -= a) >= 0; a = b, b *= 26) {
+                ret = String.fromCharCode(parseInt((num % b) / a) + 65) + ret;
+            }
+           
+            return ret;
         }
     }]);
 apvApp.directive('context', [
