@@ -62,3 +62,8 @@
 .tooltip {
     font-size: 16px;
 }
+
+#connectStatus {
+    background-color: #ff5200;
+    display:none;
+}

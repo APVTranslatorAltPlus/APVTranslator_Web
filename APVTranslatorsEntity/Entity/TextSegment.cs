@@ -40,5 +40,6 @@ namespace APVTranslator_Entity.Models
         public bool? IsSheetName { get; set; }
 
         public int? SheetIndex { get; set; }
+        public int? ParagraphsOrShapeIndex { get; set; }
     }
 }

@@ -89,15 +89,13 @@ namespace APVTranslator_Common.Helpers
                                 var stringSeparators = new char[] { '。', '.', '\n', '\r', '\a', '\u0001', '\v' };
                                 var segment = text.Split(stringSeparators, StringSplitOptions.RemoveEmptyEntries);
                                 segment = segment.Where(x => x.Length > 0 && !Double.TryParse(x, out checkInt)).ToArray();
-                                int k = 0;
                                 foreach (var itsegment in segment)
                                 {
-                                    TextRead oTempTextRead = new TextRead() { Row = -1, Col = -1, Value = itsegment.Trim(), SheetName = String.Empty };
-                                    if (!String.IsNullOrEmpty(itsegment.Trim()) && !lstTextRead.Any(a => a.Value == itsegment.Trim()))
+                                    TextRead oTempTextRead = new TextRead() { Row = -1, Col = -1, Value = itsegment.Trim(), SheetName = String.Empty, ParagraphsOrShapeIndex = i + 1 };
+                                    if (!String.IsNullOrEmpty(itsegment.Trim()) && !lstTextRead.Any(a => a.Value == itsegment.Trim() && a.ParagraphsOrShapeIndex == i + 1))
                                     {
                                         lstTextRead.Add(oTempTextRead);
                                     }
-                                    k++;
                                 }
                             }
                         }
@@ -112,14 +110,15 @@ namespace APVTranslator_Common.Helpers
             }
         }
 
-        public void ReplaceObject(string what, string replacement)
+        public void ReplaceObject(string what, string replacement, int? paragraphsOrShapeIndex)
         {
             try
             {
                 int slideCount = _presentation.Slides.Count;
-                for (var i = 0; i < slideCount; i++)
+                if (paragraphsOrShapeIndex != null)
                 {
-                    foreach (var item in _presentation.Slides[i + 1].Shapes)
+                    int i = Convert.ToInt32(paragraphsOrShapeIndex);
+                    foreach (var item in _presentation.Slides[paragraphsOrShapeIndex].Shapes)
                     {
                         var shape = (PowerPoint.Shape)item;
                         if (shape.HasTextFrame != MsoTriState.msoTrue) continue;
@@ -133,7 +132,30 @@ namespace APVTranslator_Common.Helpers
                             {
                                 string text = textRange.Text;
                                 textRange.Text = text.Replace(what, replacement);
-                                //textRange.Text = textRange.Text.Replace(what, replacement);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    for (var i = 0; i < slideCount; i++)
+                    {
+                        foreach (var item in _presentation.Slides[i + 1].Shapes)
+                        {
+                            var shape = (PowerPoint.Shape)item;
+                            if (shape.HasTextFrame != MsoTriState.msoTrue) continue;
+                            if (shape.TextFrame.HasText != MsoTriState.msoTrue) continue;
+                            var textRange = shape.TextFrame.TextRange;
+                            var stringSeparators = new char[] { '。', '.', '\n', '\r', '\a', '\u0001', '\v' };
+                            var segment = textRange.Text.Trim().Split(stringSeparators, StringSplitOptions.RemoveEmptyEntries);
+                            foreach (var sItem in segment)
+                            {
+                                if (sItem.Trim() == what)
+                                {
+                                    string text = textRange.Text;
+                                    textRange.Text = text.Replace(what, replacement);
+                                    //textRange.Text = textRange.Text.Replace(what, replacement);
+                                }
                             }
                         }
                     }
