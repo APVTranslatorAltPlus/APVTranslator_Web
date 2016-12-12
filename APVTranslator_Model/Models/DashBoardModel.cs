@@ -51,6 +51,16 @@ namespace APVTranslator_Model.Models
                 {
                     try
                     {
+                        string sTargetLang = "vi";
+                        TranslatorLanguage oTranslatorLanguage = GetTranslateLanguage(projectId);
+                        if (oTranslatorLanguage != null && !String.IsNullOrEmpty(oTranslatorLanguage.LanguagePair))
+                        {
+                            var arrLang = oTranslatorLanguage.LanguagePair.Split('|');
+                            if (arrLang.Length == 2 && !String.IsNullOrEmpty(arrLang[1]))
+                            {
+                                sTargetLang = arrLang[1];
+                            }
+                        }
                         foreach (var file in lstFile)
                         {
                             int fileType = 1;//default excel
@@ -73,13 +83,14 @@ namespace APVTranslator_Model.Models
                                     fileType = (int)FileTypes.PDF;
                                     break;
                             }
-                            this.Database.ExecuteSqlCommand("Proc_InsertFileToProject @projectId, @FileName, @FilePath, @FileType, @IsLoadText ,@LastUpdate",
+                            this.Database.ExecuteSqlCommand("Proc_InsertFileToProject @projectId, @FileName, @FilePath, @FileType, @IsLoadText ,@LastUpdate,@TargetLang",
                                                                                           new SqlParameter("@projectId", projectId),
                                                                                           new SqlParameter("@FileName", file.FileName),
                                                                                           new SqlParameter("@FilePath", importPath),
                                                                                           new SqlParameter("@FileType", fileType),
                                                                                           new SqlParameter("@IsLoadText", false),
-                                                                                          new SqlParameter("@LastUpdate", DateTime.Now));
+                                                                                          new SqlParameter("@LastUpdate", DateTime.Now),
+                                                                                          new SqlParameter("@TargetLang", sTargetLang));
                         }
                         this.SaveChanges();
                         dbContextTransaction.Commit();
@@ -97,6 +108,38 @@ namespace APVTranslator_Model.Models
                 throw;
             }
         }
+
+        private TranslatorLanguage GetTranslateLanguage(int projectId)
+        {
+            try
+            {
+                if (projectId == default(int))
+                {
+                    return null;
+                }
+                else
+                {
+                    var translateLang = Projects
+                                    .Where(p => p.Id == projectId)
+                                    .Join(TranslatorLanguages, p => p.TranslateLanguageID, tl => tl.TranslatorLanguageID, (tl, p) => p)
+                                    .Select(tl => new { tl.TranslatorLanguageID, tl.LanguageDescription, tl.LanguagePair })
+                                    .FirstOrDefault();
+                    if (translateLang != null)
+                    {
+                        return new TranslatorLanguage() { TranslatorLanguageID = translateLang.TranslatorLanguageID, LanguageDescription = translateLang.LanguageDescription, LanguagePair = translateLang.LanguagePair };
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
         /// <summary>
         /// check user has permission to delete file
         /// </summary>
@@ -398,7 +441,7 @@ namespace APVTranslator_Model.Models
                         if (memberView.isAMember == 1)
                         {
                             var sql3 = @"INSERT INTO ProjectMembers VALUES({0}, {1},{2})";
-                            this.Database.ExecuteSqlCommand(sql3, projectId, memberView.UserID,memberView.ProjectRole);
+                            this.Database.ExecuteSqlCommand(sql3, projectId, memberView.UserID, memberView.ProjectRole);
                         }
                     }
 

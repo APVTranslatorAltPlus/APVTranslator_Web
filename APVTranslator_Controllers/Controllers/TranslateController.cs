@@ -30,12 +30,12 @@ namespace APVTranslator_Controllers.Controllers
                 ViewBag.FileId = Request.QueryString["fileId"];
                 ViewBag.UserId = SessionUser.GetUserId();
                 TranslateModel translateModel = new TranslateModel();
-                if (ViewBag.ProjectId != null)
+                if (ViewBag.ProjectId != null && ViewBag.FileId != null)
                 {
-                    TranslatorLanguage oTranslatorLanguage = translateModel.GetTranslateLanguage(Convert.ToInt32(ViewBag.ProjectId));
-                    if (oTranslatorLanguage != null)
+                    ProjectFile oProjectFile = translateModel.GetFile(Convert.ToInt32(ViewBag.ProjectId), Convert.ToInt32(ViewBag.FileId));
+                    if (oProjectFile != null)
                     {
-                        ViewBag.LanguagePair = oTranslatorLanguage.LanguagePair;
+                        ViewBag.TargetLang = oProjectFile.TargetLang;
                     }
                 }
                 return View();
@@ -488,6 +488,39 @@ namespace APVTranslator_Controllers.Controllers
             {
                 return false;
             }
+        }
+
+        public ActionResult SaveTargetLang(int projectId, int fileId, string targetLang)
+        {
+            ControllerResult oControllerResult = new ControllerResult();
+            try
+            {
+                if (User.Identity.IsAuthenticated && GetUserPermission(SessionUser.GetUserId(), projectId))
+                {
+                    TranslateModel translateModel = new TranslateModel();
+                    ProjectFile oProjectFile = translateModel.GetFile(projectId, fileId);
+                    if (oProjectFile != null && !String.IsNullOrEmpty(targetLang))
+                    {
+                        translateModel.SaveTargetLang(projectId, fileId, targetLang);
+                    }
+                    else
+                    {
+                        oControllerResult.IsSuccess = false;
+                        oControllerResult.Message = "project or file don't exists!";
+                    }
+                }
+                else
+                {
+                    oControllerResult.IsSuccess = false;
+                    oControllerResult.Message = "You don't had permission in file!";
+                }
+            }
+            catch (Exception ex)
+            {
+                oControllerResult.IsSuccess = false;
+                oControllerResult.Message = ex.Message;
+            }
+            return Json(new { success = oControllerResult.IsSuccess, responseText = oControllerResult.Message }, JsonRequestBehavior.AllowGet);
         }
     }
 }
