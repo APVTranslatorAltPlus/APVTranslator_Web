@@ -313,5 +313,21 @@ namespace APVTranslator_Model.Models
                 throw;
             }
         }
+
+        public void SaveTargetLang(int projectId, int fileId, string targetLang)
+        {
+            try
+            {
+                this.Database.ExecuteSqlCommand("Proc_UpdateTargetLanguageFile @projectID,@fileID,@TargetLang",
+                                                              new SqlParameter("@projectID", projectId),
+                                                              new SqlParameter("@fileID", fileId),
+                                                              new SqlParameter("@TargetLang", targetLang));
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
     }
 }

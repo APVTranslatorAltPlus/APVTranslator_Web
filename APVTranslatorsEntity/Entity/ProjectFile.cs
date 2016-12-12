@@ -29,6 +29,7 @@ namespace APVTranslator_Entity.Models
 
         public bool? IsLoadText { get; set; }
 
+        public String TargetLang { get; set; }
         //public decimal? FileProgress { get; set; }
     }
 }
