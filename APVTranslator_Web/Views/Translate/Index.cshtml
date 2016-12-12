@@ -14,7 +14,7 @@
             <option value="ja">Japanese</option>
             <option value="vi">Vietnamese</option>
         </select>
-        <button type="button"title="Export File" ng-click="dowload_exportFile()"  class="btn btn-primary btn-circle btn-lg"><i class="glyphicon glyphicon-export"></i></button>
+        <button type="button" title="Export File" ng-click="dowload_exportFile()" class="btn btn-primary btn-circle btn-lg"><i class="glyphicon glyphicon-export"></i></button>
     </div>
     <div style="display:inline-block">
 
@@ -22,7 +22,7 @@
     <div class="translate-center">
         <div class="grid-translate gridStyle" ng-init="init()" ng-grid="gridOptions" />
     </div>
-   
+
     <ul id="context1" class="dropdown-menu">
         <li><a ng-click="copy()">Copy</a></li>
         <li><a ng-click="copyToDes()">Copy To DestinationLanguage</a></li>
@@ -41,12 +41,12 @@
             var projectId = '@ViewBag.ProjectId';
             var fileId = '@ViewBag.FileId';
             var userId = '@ViewBag.UserId';
-            var languagePair = '@ViewBag.LanguagePair';
-            var arrLang = languagePair.split('|');
-            var targetLang = null;
-            if (arrLang.length == 2) {
-                targetLang = arrLang[1];
+            var targetLang = '@ViewBag.TargetLang';
+            if (targetLang == null || targetLang == '') {
+                targetLang = 'vi';
             }
+            var translateBox = $('select[id ="destinationLanguageFile"]');
+            translateBox.val(targetLang);
         </script>
     }
 </div>
@@ -56,5 +56,23 @@
         var selectedValue = $(this).prop('selectedIndex');
         var translateLanguage = document.getElementById("destinationLanguageFile");
         targetLang = translateLanguage.value;
+        $.ajax({
+            type: "POST",
+            url: Utility.getBaseUrl() + 'Translate/SaveTargetLang',
+            data: JSON.stringify({ 'projectId': projectId, 'fileId': fileId, 'targetLang': targetLang }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response.success) {
+
+                }
+                else {
+                    alert(response.responseText);
+                }
+            },
+            error: function (error) {
+                alert(error);
+            }
+        });
     });
 </script>
