@@ -345,13 +345,12 @@ namespace APVTranslator_Controllers.Controllers
                                                 {
                                                     lstTextSegmentNoExists.Add(new TextSegment() { TextSegment1 = item.TextSegment1, TextSegment2 = textSegment.TextSegment2, Type = item.Type, Row = item.Row, Col = item.Col, SheetName = item.SheetName, IsSheetName = item.IsSheetName, SheetIndex = item.SheetIndex });
                                                 }
-                                                else
+                                                else if (!String.IsNullOrEmpty(item.TextSegment2))
                                                 {
                                                     lstTextSegmentNoExists.Add(new TextSegment() { TextSegment1 = item.TextSegment1, TextSegment2 = item.TextSegment2, Type = item.Type, Row = item.Row, Col = item.Col, SheetName = item.SheetName, IsSheetName = item.IsSheetName, SheetIndex = item.SheetIndex });
                                                 }
                                             }
                                             lstTextSegmentNoExists = lstTextSegmentNoExists.OrderByDescending(x => x.TextSegment1.Length).ToList();
-                                            int count = lstTextSegmentNoExists.Count == 0 ? 1 : lstTextSegmentNoExists.Count;
                                             foreach (TextSegment itTextSegment in lstTextSegmentNoExists)
                                             {
                                                 if (!string.IsNullOrEmpty(itTextSegment.TextSegment2))
@@ -387,13 +386,12 @@ namespace APVTranslator_Controllers.Controllers
                                             {
                                                 lstTextSegmentNoExists.Add(new TextSegment() { TextSegment1 = item.TextSegment1, TextSegment2 = textSegment.TextSegment2, Type = item.Type, Row = item.Row, Col = item.Col, SheetName = item.SheetName, IsSheetName = item.IsSheetName, SheetIndex = item.SheetIndex, ParagraphsOrShapeIndex = item.ParagraphsOrShapeIndex });
                                             }
-                                            else
+                                            else if (!String.IsNullOrEmpty(item.TextSegment2))
                                             {
                                                 lstTextSegmentNoExists.Add(new TextSegment() { TextSegment1 = item.TextSegment1, TextSegment2 = item.TextSegment2, Type = item.Type, Row = item.Row, Col = item.Col, SheetName = item.SheetName, IsSheetName = item.IsSheetName, SheetIndex = item.SheetIndex, ParagraphsOrShapeIndex = item.ParagraphsOrShapeIndex });
                                             }
                                         }
                                         lstTextSegmentNoExists = lstTextSegmentNoExists.OrderByDescending(x => x.TextSegment1.Length).ToList();
-                                        int count = lstTextSegmentNoExists.Count == 0 ? 1 : lstTextSegmentNoExists.Count;
                                         foreach (TextSegment itTextSegment in lstTextSegmentNoExists)
                                         {
                                             if (!string.IsNullOrEmpty(itTextSegment.TextSegment2))
@@ -416,9 +414,21 @@ namespace APVTranslator_Controllers.Controllers
                                     using (var powerpoint = new PowerPointHelper(translatedFile, false))
                                     {
                                         List<TextSegment> lstTextSegment = translateModel.GetTextSegment(projectId, fileId);
-                                        lstTextSegment = lstTextSegment.OrderByDescending(x => x.TextSegment1.Length).ToList();
-                                        int count = lstTextSegment.Count == 0 ? 1 : lstTextSegment.Count;
-                                        foreach (TextSegment itTextSegment in lstTextSegment)
+                                        List<TextSegment> lstTextSegmentNoExists = new List<TextSegment>();
+                                        foreach (var item in lstTextSegment)
+                                        {
+                                            var textSegment = lstTextSegment.Where(a => !String.IsNullOrEmpty(a.TextSegment2) && a.TextSegment1 == item.TextSegment1 && String.IsNullOrEmpty(item.TextSegment2)).FirstOrDefault();
+                                            if (textSegment != null)
+                                            {
+                                                lstTextSegmentNoExists.Add(new TextSegment() { TextSegment1 = item.TextSegment1, TextSegment2 = textSegment.TextSegment2, Type = item.Type, Row = item.Row, Col = item.Col, SheetName = item.SheetName, IsSheetName = item.IsSheetName, SheetIndex = item.SheetIndex, ParagraphsOrShapeIndex = item.ParagraphsOrShapeIndex });
+                                            }
+                                            else if (!String.IsNullOrEmpty(item.TextSegment2))
+                                            {
+                                                lstTextSegmentNoExists.Add(new TextSegment() { TextSegment1 = item.TextSegment1, TextSegment2 = item.TextSegment2, Type = item.Type, Row = item.Row, Col = item.Col, SheetName = item.SheetName, IsSheetName = item.IsSheetName, SheetIndex = item.SheetIndex, ParagraphsOrShapeIndex = item.ParagraphsOrShapeIndex });
+                                            }
+                                        }
+                                        lstTextSegmentNoExists = lstTextSegmentNoExists.OrderByDescending(x => x.TextSegment1.Length).ToList();
+                                        foreach (TextSegment itTextSegment in lstTextSegmentNoExists)
                                         {
                                             if (!string.IsNullOrEmpty(itTextSegment.TextSegment2))
                                             {

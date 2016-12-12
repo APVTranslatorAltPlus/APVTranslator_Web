@@ -78,42 +78,34 @@ namespace APVTranslator_Common.Helpers
                 _application.EnableEvents = false;
                 _application.ScreenUpdating = false;
                 _application.Calculation = Excel.XlCalculation.xlCalculationManual;
-                foreach (Excel.Worksheet worksheet in _workbook.Worksheets)
+                Excel.Worksheet worksheet = _workbook.Worksheets[sheetIndex];
+                if (isSheetName && !String.IsNullOrEmpty(replacement) && !Regex.IsMatch(replacement, "[\\[\\]*?]"))
                 {
-                    int sIndex = worksheet.Index;
-                    if (sIndex == sheetIndex)
+                    if (replacement.Length > 31)
                     {
-                        if (isSheetName && !String.IsNullOrEmpty(replacement) && !Regex.IsMatch(replacement, "[\\[\\]*?]"))
+                        replacement = replacement.Substring(0, 31);
+                    }
+                    worksheet.Name = replacement;
+                }
+                else
+                {
+                    Excel.Range xlRange = worksheet.UsedRange;
+                    if (row > 0 && col > 0 && !string.IsNullOrEmpty(replacement))
+                    {
+                        string formulaCell = ((object[,])xlRange.Formula)[row, col].ToString();
+                        try
                         {
-                            if (replacement.Length > 31)
-                            {
-                                replacement = replacement.Substring(0, 31);
-                            }
-                            worksheet.Name = replacement;
+                            formulaCell = formulaCell.Replace(what, replacement);
+                            ((Excel.Range)xlRange.Cells[row, col]).Formula = formulaCell;
                         }
-                        else
+                        catch (Exception ex)
                         {
-                            Excel.Range xlRange = worksheet.UsedRange;
-                            if (row > 0 && col > 0 && !string.IsNullOrEmpty(replacement))
-                            {
-                                string formulaCell = ((object[,])xlRange.Formula)[row, col].ToString();
-                                try
-                                {
-                                    formulaCell = formulaCell.Replace(what, replacement);
-                                    ((Excel.Range)xlRange.Cells[row, col]).Formula = formulaCell;
-                                }
-                                catch (Exception ex)
-                                {
-                                    ((Excel.Range)xlRange.Cells[row, col]).Formula = " " + formulaCell;
-                                    //trường hợp formula sửa thành hàm lỗi cho thêm dấu cách trước đầu
-                                    continue;
-                                }
-
-                            }
+                            ((Excel.Range)xlRange.Cells[row, col]).Formula = " " + formulaCell;
+                            //trường hợp formula sửa thành hàm lỗi cho thêm dấu cách trước đầu
                         }
                     }
-                    Marshal.ReleaseComObject(worksheet);
                 }
+                Marshal.ReleaseComObject(worksheet);
                 _application.EnableEvents = true;
                 _application.ScreenUpdating = true;
                 _application.Calculation = Excel.XlCalculation.xlCalculationAutomatic;
