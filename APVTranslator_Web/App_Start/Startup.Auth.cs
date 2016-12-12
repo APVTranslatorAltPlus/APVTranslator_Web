@@ -61,17 +61,17 @@ namespace APVTranslator_Web
             //   appSecret: "f0149db31b28ec085f59b2927cfec9ac");
 
             //real server
-            app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
-            {
-                ClientId = "184146087568-a30ntlrnkn6fdtn6q13rpbkkn8kitbdr.apps.googleusercontent.com",
-                ClientSecret = "Dyafhc4NYrDd8JKxiUCQeO83"
-            });
-            //local test
             //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
             //{
-            //    ClientId = "184146087568-23421gppd0h8ocu9vt70tg8du2uda9si.apps.googleusercontent.com",
-            //    ClientSecret = "OEbzhDuu7CeizCiybv_701Bh"
+            //    ClientId = "184146087568-a30ntlrnkn6fdtn6q13rpbkkn8kitbdr.apps.googleusercontent.com",
+            //    ClientSecret = "Dyafhc4NYrDd8JKxiUCQeO83"
             //});
+            //local test
+            app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+            {
+                ClientId = "184146087568-23421gppd0h8ocu9vt70tg8du2uda9si.apps.googleusercontent.com",
+                ClientSecret = "OEbzhDuu7CeizCiybv_701Bh"
+            });
             //local iis
             //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
             //{

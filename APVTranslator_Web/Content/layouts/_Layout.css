@@ -111,3 +111,7 @@ display:none;
     background-image: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#e0e0e0));
     background-image: linear-gradient(to bottom, #fff 0%, #ffffff 100%);
 }
+
+.navbar-fixed-top, .navbar-fixed-bottom{
+    position:absolute !important;
+}

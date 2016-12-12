@@ -20,6 +20,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
         scope.listProject = [];
         scope.columnDefs = [];
         scope.isEdit = false;
+
         //columns list file in project
         scope.columnDefs2 = [{ displayName: 'STT', cellTemplate: '<div style="text-align:center;">{{row.rowIndex +1}}</div>', width: 50, enableCellEdit: false },
                              { field: 'FileName', displayName: 'FileName', enableCellEdit: false, minWidth: 220, resizable: true },
@@ -30,7 +31,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
         //column list project
         scope.columnDefs1 = [{ displayName: 'STT', cellTemplate: '<div style="text-align:center;">{{row.rowIndex + 1}}</div>', width: 50, enableCellEdit: false },
                              { field: 'Title', displayName: 'ProjectName', enableCellEdit: false, minWidth: 200, resizable: true },
-                             { field: 'Status', displayName: 'Status', minWidth: 100, cellTemplate: '<div class="ngCellText ng-scope ngCellElement">{{row.entity.Progress*100<100?"Translating":"Translated"}}</div>', enableCellEdit: false, resizable: true },
+                             { field: 'Status', displayName: 'Status', minWidth: 100, cellTemplate: '<div class="ngCellText ng-scope ngCellElement">{{buildStatus(row.entity.Progress)}}</div>', enableCellEdit: false, resizable: true },
                              { field: 'Progress', displayName: 'Progress', minWidth: 100, cellTemplate: '<div class="ngCellText ng-scope ngCellElement">{{buildProcess(row.entity.Progress)}}</div>', width: 80, enableCellEdit: false, resizable: true },
                              { field: 'Path', displayName: 'Path', enableCellEdit: false, resizable: true, minWidth: 220 },
                              { field: 'TranslateLanguageID', displayName: 'TranslateLanguage', enableCellEdit: false, resizable: true, minWidth: 220, cellTemplate: '<div class="ngCellText ng-scope ngCellElement">{{row.entity.TranslateLanguageID == 1?"Japanese To Vietnamese":"Vietnamese To Japanese"}}</div>' },
@@ -43,6 +44,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
             enableColumnResize: true,
             selectedItems: scope.gridSelections,
             rowHeight: 50,
+            selectedRowIndex: 0,
             enableRowSelection: scope.enableRowSelection,
             afterSelectionChange: function (row, event) {
                 if (scope.gridType == Enumeration.GridType.ListProject) {
@@ -63,8 +65,21 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
             showFilter: true,
             multiSelect: false,
             rowTemplate: rowTemplate(),
-            columnDefs: 'columnDefs'
+            columnDefs: 'columnDefs',
+            initialSelected: 1
         };
+
+        scope.$on('ngGridEventData', function () {
+            scope.gridOptions.selectRow(0, true);
+        });
+
+        scope.selectFirstRow = function () {
+            angular.forEach(scope.data, function (data, index) {
+                scope.gridOptions.selectItem(index, true);
+                return;
+            });
+        };
+
         scope.FilterOptions = { filterText: '', useExternalFilter: false };
         scope.showSearchBoxDivider = false;
         scope.rowDblClick = function (row) {
@@ -135,7 +150,20 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                 return "0%";
             }
         }
-
+        scope.buildStatus = function (value) {
+            if (value) {
+                if (Math.floor(value * 100) < 100) {
+                    return "Translating";
+                }
+                else
+                    if (Math.floor(value * 100) == 100) {
+                        return "Translated";
+                    }
+            }
+            else {
+                return "New";
+            }
+        }
         scope.loadListProject = function () {
             cfpLoadingBar.start();
             scope.enableRowSelection = true;
@@ -145,6 +173,11 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                 if (response.GetListProjectResult && response.GetListProjectResult.IsSuccess) {
                     scope.data = JSON.parse(response.GetListProjectResult.Value);
                     scope.setGridList(Enumeration.GridType.ListProject);
+                    if (scope.data.length > 0) {
+                        scope.projectSelection = true;
+                        scope.currentProject = scope.data[0];
+                        scope.selectFirstRow();
+                    }
                 }
                 else {
                     Utility.showMessage(scope, $mdDialog, response.GetListProjectResult.Message);
@@ -1182,7 +1215,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
         scope.downloadFile = function () {
             var projectId = scope.currentFileProject.ProjectID;
             var fileId = scope.currentFileProject.FileID;
-            
+
             try {
                 cfpLoadingBar.start();
                 $.ajax({

@@ -84,7 +84,7 @@
                         <div class="detail-item">
                             <b>Status:</b>
                             <p id="Status">
-                                {{currentProject.Progress*100<100?"Translating":"Translated"}}
+                                {{buildStatus(currentProject.Progress)}}
                             </p>
                         </div>
                         <div class="detail-item">
