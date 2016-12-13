@@ -6,6 +6,7 @@ using Microsoft.Web.WebSockets;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
@@ -108,6 +109,18 @@ namespace APVTranslator_Web.Socket
 
         public override void OnClose()
         {
+            try
+            {
+                
+                    DashBoardModel dbModel = new DashBoardModel();
+                    dbModel.UpdateLastModified(this.fileId, String.Format("{0:s}", DateTime.Now));
+                
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
+
             if (clients.Any(a => a == this))
             {
                 clients.Remove(this);

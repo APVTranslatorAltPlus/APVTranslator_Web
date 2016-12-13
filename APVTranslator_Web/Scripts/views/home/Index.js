@@ -23,20 +23,20 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
 
         //columns list file in project
         scope.columnDefs2 = [{ displayName: 'STT', cellTemplate: '<div style="text-align:center;">{{row.rowIndex +1}}</div>', width: 50, enableCellEdit: false },
-                             { field: 'FileName', displayName: 'FileName', enableCellEdit: false, minWidth: 220, resizable: true },
-                             { field: 'FileProgress', displayName: 'File Progress', enableCellEdit: false, width: 120, cellTemplate: '<div class="ngCellText ng-scope ngCellElement">{{buildProcess(row.entity.FileProgress)}}</div>', resizable: true },
-                             { field: 'FilePath', displayName: 'File Path', enableCellEdit: false, minWidth: 350, resizable: true },
-                             { field: 'FileType', displayName: 'File Type', cellTemplate: '<div class="ngCellText ng-scope ngCellElement">{{getFileTypeName(row.entity.FileType)}}</div>', enableCellEdit: false, width: 100, minWidth: 50, resizable: true },
+                             { field: 'FileName', displayName: 'FileName', enableCellEdit: false, width: 220, resizable: true },
+                             { field: 'FileProgress', displayName: 'File Progress', enableCellEdit: false, minWidth: 120, cellTemplate: '<div class="ngCellText ng-scope ngCellElement">{{buildProcess(row.entity.FileProgress)}}</div>', resizable: true },
+                             //{ field: 'FilePath', displayName: 'File Path', enableCellEdit: false, minWidth: 350, resizable: true },
+                             { field: 'FileType', displayName: 'File Type', cellTemplate: '<div class="ngCellText ng-scope ngCellElement">{{getFileTypeName(row.entity.FileType)}}</div>', enableCellEdit: false, minWidth: 100, minWidth: 50, resizable: true },
                             { field: 'LastUpdate', displayName: 'Last Update', type: 'date', cellFilter: 'date:\'HH:mm dd/MM/yyyy\'', enableCellEdit: false, minWidth: 150, resizable: true }];
         //column list project
         scope.columnDefs1 = [{ displayName: 'STT', cellTemplate: '<div style="text-align:center;">{{row.rowIndex + 1}}</div>', width: 50, enableCellEdit: false },
-                             { field: 'Title', displayName: 'ProjectName', enableCellEdit: false, minWidth: 200, resizable: true },
-                             { field: 'Status', displayName: 'Status', minWidth: 100, cellTemplate: '<div class="ngCellText ng-scope ngCellElement">{{buildStatus(row.entity.Progress)}}</div>', enableCellEdit: false, resizable: true },
-                             { field: 'Progress', displayName: 'Progress', minWidth: 100, cellTemplate: '<div class="ngCellText ng-scope ngCellElement">{{buildProcess(row.entity.Progress)}}</div>', width: 80, enableCellEdit: false, resizable: true },
-                             { field: 'Path', displayName: 'Path', enableCellEdit: false, resizable: true, minWidth: 220 },
-                             { field: 'TranslateLanguageID', displayName: 'TranslateLanguage', enableCellEdit: false, resizable: true, minWidth: 220, cellTemplate: '<div class="ngCellText ng-scope ngCellElement">{{row.entity.TranslateLanguageID == 1?"Japanese To Vietnamese":"Vietnamese To Japanese"}}</div>' },
+                             { field: 'Title', displayName: 'ProjectName', enableCellEdit: false, width: 300, resizable: true },
+                             { field: 'Status', displayName: 'Status', width: 150, cellTemplate: '<div class="ngCellText ng-scope ngCellElement">{{buildStatus(row.entity.Progress)}}</div>', enableCellEdit: false, resizable: true },
+                             { field: 'Progress', displayName: 'Progress', width: 150, cellTemplate: '<div class="ngCellText ng-scope ngCellElement">{{buildProcess(row.entity.Progress)}}</div>', width: 80, enableCellEdit: false, resizable: true },
+                             //{ field: 'Path', displayName: 'Path', enableCellEdit: false, resizable: true, minWidth: 220 },
+                             //{ field: 'TranslateLanguageID', displayName: 'TranslateLanguage', enableCellEdit: false, resizable: true, minWidth: 220, cellTemplate: '<div class="ngCellText ng-scope ngCellElement">{{row.entity.TranslateLanguageID == 1?"Japanese To Vietnamese":"Vietnamese To Japanese"}}</div>' },
                              { field: 'CreateAt', displayName: 'CreateAt', enableCellEdit: false, type: 'date', cellFilter: 'date:\'hh:mm dd/MM/yyyy\'', resizable: true, minWidth: 150 },
-                             { field: 'CreateBy', displayName: 'CreateBy', minWidth: 200, enableCellEdit: false, resizable: true },
+                             { field: 'CreateBy', displayName: 'CreateBy', width: 250, enableCellEdit: false, resizable: true },
                              { field: 'DeadLine', displayName: 'DeadLine', enableCellEdit: false, cellFilter: 'date:\'HH:mm dd/MM/yyyy\'', resizable: true, minWidth: 150 }];
         scope.gridOptions = {
             data: 'data',
@@ -1184,8 +1184,8 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                    var textSearchResult = JSON.parse(response.GetTextSearchResult.Value);
                    var trHTML = '';
                    $.each(textSearchResult, function (i, item) {
-
-                       trHTML += '<tr><td>' + i + '</td><td>' + item.TextSegment1 + '</td>'
+                       var stt = parseInt(i) + 1;
+                       trHTML += '<tr><td>' + stt + '</td><td>' + item.TextSegment1 + '</td>'
                      + '<td>' + item.TextSegment2 + ' </td>'
                       + '<td>' + item.Dictionary + ' </td>'
                        + '<td>' + item.Title + ' </td>'

@@ -475,5 +475,11 @@ namespace APVTranslator_Model.Models
             listDictionaries = this.Dictionaries.Where(d => d.ProjectID == projectId).Select(d => new Dictionary()).ToList();
             return listDictionaries;
         }
+
+        public virtual void UpdateLastModified(int fileId,string lastModified)
+        {
+            var sql = @"UPDATE ProjectFiles SET LastUpdate = {0} WHERE FileID = {1}";
+            this.Database.ExecuteSqlCommand(sql, lastModified, fileId);
+        }
     }
 }
