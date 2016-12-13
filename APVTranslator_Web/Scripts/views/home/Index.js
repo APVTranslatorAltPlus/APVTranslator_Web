@@ -764,18 +764,18 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
         scope.settingProject = function () {
 
             angular.element('#projectNameSetting').val("");
-            var translateLanguage = document.getElementById("translateLanguageSetting");
-            translateLanguage.value = 2;
-            angular.element('#pathSetting').val("");
+            //var translateLanguage = document.getElementById("translateLanguageSetting");
+            //translateLanguage.value = 2;
+            //angular.element('#pathSetting').val("");
             $('#useCompanyDBSetting').bootstrapToggle('off');
-            angular.element('#project').val('');
+            angular.element('#projectSelect').val('');
             angular.element('#tagListSetting').val(' ');
             scope.ProjectTags = [];
             scope.newlyInsertedIDList = [];
             scope.deletedIDList = [];
             scope.oldIDList = [];
             scope.IdList = [];
-
+          //  $("#tagListSetting").attr("disabled","disabled");
             if (scope.currentProject) {
                 projectId = scope.currentProject.Id;
                 serListProject.data()
@@ -799,14 +799,30 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                         if (response.GetProjectInfoResult && response.GetProjectInfoResult.IsSuccess) {
                             var project = JSON.parse(response.GetProjectInfoResult.Value);
                             angular.element('#projectNameSetting').val(project.Title);
-                            var translateLanguage = document.getElementById("translateLanguageSetting");
-                            translateLanguage.value = project.TranslateLanguageID;
-                            angular.element('#pathSetting').val(project.Path);
+                            //var translateLanguage = document.getElementById("translateLanguageSetting");
+                            //translateLanguage.value = project.TranslateLanguageID;
+                            //angular.element('#pathSetting').val(project.Path);
                             if (project.UseCompanyDB == 0) {
                                 $('#useCompanyDBSetting').bootstrapToggle('off');
+                                $("#tagListSetting").attr("disabled", "disabled");
+                                $("#projectSelect").attr("disabled", "disabled");
+
                             } else {
                                 $('#useCompanyDBSetting').bootstrapToggle('on');
+                                $("#tagListSetting").removeAttr("disabled");
+                                $("#projectSelect").removeAttr("disabled");
                             }
+                            $('#useCompanyDBSetting').change(function () {
+                                var isAMemberToggleValue = $(this).prop('checked');
+
+                                if (isAMemberToggleValue === true) {
+                                    $("#tagListSetting").removeAttr("disabled");
+                                    $("#projectSelect").removeAttr("disabled");
+                                } else {
+                                    $("#tagListSetting").attr("disabled", "disabled");
+                                    $("#projectSelect").attr("disabled", "disabled");
+                                }
+                            });
 
                             scope.getListProjectDBReference(projectId);
 
@@ -820,6 +836,8 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                         cfpLoadingBar.complete();
                     });
             }
+
+    
         }
 
         scope.saveChangeProjectSetting = function () {
@@ -827,16 +845,16 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
             if (scope.currentProject) {
                 projectId = scope.currentProject.Id;
 
-                var translateLanguage = document.getElementById("translateLanguageSetting");
-                var translateLanguageValue = translateLanguage.options[translateLanguage.selectedIndex].value;
-                projectObject['TranslateLanguage'] = translateLanguageValue;
+                //var translateLanguage = document.getElementById("translateLanguageSetting");
+                //var translateLanguageValue = translateLanguage.options[translateLanguage.selectedIndex].value;
+                //projectObject['TranslateLanguage'] = translateLanguageValue;
                 projectObject['Id'] = projectId;
                 if ($('#checkboxValue').text() === 'true') {
                     projectObject['UseCompanyDB'] = 1;
                 } else {
                     projectObject['UseCompanyDB'] = 0;
                 }
-                console.log("tranlsatelanguage = " + translateLanguageValue);
+               
                 console.log("UsecompanyDB = " + projectObject['UseCompanyDB']);
                 console.log("id = " + projectObject['Id']);
 
@@ -919,20 +937,20 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                          console.log(listProjectMembers);
                          var trHTML = '';
                          $.each(listProjectMembers, function (i, item) {
-
+                             var No = parseInt(i) + 1;
                              if (item.ProjectRole == 0 && item.isAMember == 1) {
-                                 trHTML += '<tr><td>' + item.UserID + '</td><td>' + item.UserName + '</td>'
+                                 trHTML += '<tr><td style="display:none">' + item.UserID + '</td><td>' + No + '</td><td>' + item.UserName + '</td>'
                                + '<td>  <select class="form-control" ' + 'id="isAMemberRole_' + i + '" style="max-width:100%!important">';
                                  trHTML += '    <option value="0" selected ="selected">Comter Member</option>';
                                  trHTML += '    <option value="1">Comter Leader</option>'
                              } else
                                  if (item.ProjectRole == 1 && item.isAMember == 1) {
-                                     trHTML += '<tr><td>' + item.UserID + '</td><td>' + item.UserName + '</td>'
+                                     trHTML += '<tr><td style="display:none">' + item.UserID + '</td><td>' + No + '</td><td>' + item.UserName + '</td>'
                                  + '<td>  <select class="form-control" ' + 'id="isAMemberRole_' + i + '" style="max-width:100%!important">';
                                      trHTML += '    <option value="0">Comter Member</option>';
                                      trHTML += '    <option value="1" selected ="selected">Comter Leader</option>'
                                  } else {
-                                     trHTML += '<tr><td>' + item.UserID + '</td><td>' + item.UserName + '</td>'
+                                     trHTML += '<tr><td style="display:none">' + item.UserID + '</td><td>' + No + '</td><td>' + item.UserName + '</td>'
                                 + '<td>  <select class="form-control" ' + 'id="notAMemberRole_' + i + '" style="max-width:100%!important">';
                                      trHTML += '    <option value="0" selected ="selected">Comter Member</option>';
                                      trHTML += '    <option value="1">Comter Leader</option>'
@@ -1115,7 +1133,6 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
         scope.saveChangeMemberSetting = function () {
             if (scope.currentProject) {
                 projectId = scope.currentProject.Id;
-
                 serSaveChangeMemberSetting.data(projectId, JSON.stringify(scope.modifiedIsAMemberList), JSON.stringify(scope.modifiedNotAMemberList))
                    .success(function (response) {
                        if (response.SaveChangeMemberSettingResult.IsSuccess && response.SaveChangeMemberSettingResult.Value === "true") {
@@ -1139,6 +1156,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
 
             if (scope.selectedTab == "#project") {
                 scope.saveChangeProjectSetting();
+
             }
             if (scope.selectedTab == "#member-manager") {
                 scope.saveChangeMemberSetting();
@@ -1386,20 +1404,10 @@ $(window).resize(function () {
     }
 })
 
-$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-    var target = $(e.target).attr("href") // activated tab
-    if (target === "#member-manager") {
-        angular.element(document.getElementById('Homecontroller')).scope().selectedTab = '#member-manager';
-    }
-    if (target === "#project") {
-        angular.element(document.getElementById('Homecontroller')).scope().selectedTab = '#project';
-    }
 
-});
 
 $(function () {
     $('#useCompanyDBSetting').change(function () {
-
         $('#checkboxValue').text($(this).prop('checked'));
 
     })

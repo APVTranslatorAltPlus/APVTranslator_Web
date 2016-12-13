@@ -238,7 +238,7 @@
                                         <input type="text" class="form-control" id="projectNameSetting" style="max-width:100%!important;" disabled="disabled">
                                     </div>
 
-                                    <div class="form-group">
+                                    @*<div class="form-group">
                                         <label for="translateLanguage">Translate Language:</label>
                                         <select class="form-control" id="translateLanguageSetting" style="max-width:100%!important">
                                             <option value="1">Japanese to Vietnamese</option>
@@ -249,21 +249,21 @@
                                     <div class="form-group">
                                         <label for="usr">Path:</label>
                                         <input type="text" class="form-control" id="pathSetting" style="max-width:100%!important" disabled="disabled">
-                                    </div>
+                                    </div>*@
 
-                                    <div class="form-group">
+                                    <div class="form-group" >
                                         <label for="usr">Using Company Database:</label>
-                                        <input type="checkbox" data-toggle="toggle" data-on="Yes" data-off="No" id="useCompanyDBSetting">
+                                        <input  type="checkbox" data-toggle="toggle" data-on="Yes" data-off="No" id="useCompanyDBSetting">
                                     </div>
 
                                     <div class="form-group">
                                         <label for="pwd">Using Separate Project Database:</label>
-                                        <select type="text" class="form-control" id="project" style="max-width:100%!important" ng-change="changedValueSetting(listProject.selectedOption)" ng-options="option.Title for option in listProject.availableOptions track by option.Id"
+                                        <select disabled ="disabled" type="text" class="form-control" id="projectSelect" style="max-width:100%!important" ng-change="changedValueSetting(listProject.selectedOption)" ng-options="option.Title for option in listProject.availableOptions track by option.Id"
                                                 ng-model="listProject.selectedOption" @*ng-init="data2.selectedOption = data2.availableOptions[0].Email" *@></select>
                                         @*    <hr>*@
                                         @*   <tt>option = {{data2.selectedOption.Email}}</tt><br />*@
                                     </div>
-                                    <tags-input id="tagListSetting" display-property="Title" key-property="Id" ng-model="ProjectTags" placeholder="Add project database here" add-from-autocomplete-only="true" style="height:100px;">
+                                    <tags-input disabled="disabled" id="tagListSetting" display-property="Title" key-property="Id" ng-model="ProjectTags" placeholder="Add project database here" add-from-autocomplete-only="true" style="height:100px;">
                                         <auto-complete source="loadTags($query)"></auto-complete>
                                     </tags-input>
                                 </div>
@@ -272,7 +272,8 @@
                                     <table class="table" id="member-table">
                                         <thead>
                                             <tr>
-                                                <th>ID</th>
+                                                <th style="display:none">ID</th>
+                                                <th>No</th>
                                                 <th>Username</th>
                                                 <th>Project Role</th>
                                                 <th>Is A Member</th>
@@ -380,5 +381,15 @@
 @section scripts{
     <script>
         var userRole = @ViewBag.UserRole;
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            var target = $(e.target).attr("href") // activated tab
+            if (target === "#member-manager") {
+                angular.element(document.getElementById('Homecontroller')).scope().selectedTab = '#member-manager';
+            }
+            if (target === "#project") {
+                angular.element(document.getElementById('Homecontroller')).scope().selectedTab = '#project';
+            }
+
+        });
     </script>
 }

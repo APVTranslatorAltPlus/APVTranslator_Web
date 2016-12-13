@@ -340,7 +340,7 @@ namespace APVTranslator_Model.Models
 
                     int Id = stuff.Id;
                     int UseCompanyDB = stuff.UseCompanyDB;
-                    int TranslateLanguageID = stuff.TranslateLanguage;
+               //     int TranslateLanguageID = stuff.TranslateLanguage;
                     foreach (var referId in newlyInsertedIDList)
                     {
                         var sql = @"INSERT INTO ReferenceDB VALUES({0}, {1})";
@@ -354,8 +354,8 @@ namespace APVTranslator_Model.Models
                         this.Database.ExecuteSqlCommand(sql, Id, referId);
                     }
 
-                    var sql2 = @"UPDATE Projects SET Projects.UseCompanyDB = {0},Projects.TranslateLanguageID = {1} WHERE Projects.Id = {2}";
-                    this.Database.ExecuteSqlCommand(sql2, UseCompanyDB, TranslateLanguageID, Id);
+                    var sql2 = @"UPDATE Projects SET Projects.UseCompanyDB = {0} WHERE Projects.Id = {1}";
+                    this.Database.ExecuteSqlCommand(sql2, UseCompanyDB, Id);
 
                     this.SaveChanges();
 
