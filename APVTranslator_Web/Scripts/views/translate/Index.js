@@ -70,8 +70,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                              displayName: 'Suggestion',
                              enableCellEdit: false,
                              cellTemplate: '<div ng-right-click="rightClickCell(row,col)" context="context1" ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText" style="white-space: normal;">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
-                             width: 250,
-                             minWidth: 200,
+                             width: 270,
                              resizable: true
                          },
                          {
@@ -79,7 +78,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                              displayName: 'GoogleTranslate',
                              cellTemplate: '<div ng-right-click="rightClickCell(row,col)" context="context1" ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText" style="white-space: normal;">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
                              enableCellEdit: false,
-                             width: 200,
+                             width: 270,
                              resizable: true
                          },
                          {
@@ -87,8 +86,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                              displayName: 'Row',
                              enableCellEdit: false,
                              cellTemplate: '<div ng-right-click="rightClickCell(row,col)" context="context2" ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText" style="white-space: normal;">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
-                             minWidth: 100,
-                             width: 100,
+                             width: 120,
                              resizable: true
                          },
                          {
@@ -96,8 +94,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                              displayName: 'Col',
                              enableCellEdit: false,
                              cellTemplate: '<div ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText" style="white-space: normal;">{{toColumnName(row.getProperty(col.field))}}</div></div><div class="cellTooltip"></div>',
-                             minWidth: 100,
-                             width: 100,
+                             width: 120,
                              resizable: true
                          },
                          {
@@ -121,7 +118,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                              displayName: 'Source Language',
                              enableCellEdit: true,
                              editableCellTemplate: '<textarea type="text" cols="40" rows="5" style="border-left:1px solid green;border-right:1px solid green;height:99%;width:99.5%; word-wrap: break-word;" ng-class="\'colt\' + col.index" ng-input="COL_FIELD" ng-model="COL_FIELD" />',
-                             minWidth: 300,
+                             minWidth: 320,
                              resizable: true
                          },
                          {
@@ -130,7 +127,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                              displayName: 'DestinationLanguage',
                              enableCellEdit: true,
                              editableCellTemplate: '<textarea type="text" cols="40" rows="5" style="border-left:1px solid green;border-right:1px solid green;height:99%;width:99.5%; word-wrap: break-word;" ng-class="\'colt\' + col.index" ng-input="COL_FIELD" ng-model="COL_FIELD" />',
-                             minWidth: 300,
+                             minWidth: 320,
                              resizable: true
                          },
                          {
@@ -139,7 +136,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                              displayName: 'Suggestion',
                              enableCellEdit: false,
                              width: 250,
-                             minWidth: 200,
+                             minWidth: 250,
                              resizable: true
                          },
                          {
