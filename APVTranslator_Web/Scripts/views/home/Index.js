@@ -3,10 +3,45 @@
 //        cfpLoadingBarProvider.includeSpinner = true;
 //    })
 
-apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFileProject', 'cfpLoadingBar', '$mdDialog', 'deleteFileProject', 'serCreateNewProject', 'serGetListUser', 'cfpLoadingBar', 'serGetProjectInfo', 'serGetListProjectMember', 'serUpdateProject', 'serDeleteProject', 'serGetListProjectDBReference', 'serSaveChangeProjectSetting', 'serGetInfoForMemberSetting', 'serSaveChangeMemberSetting', 'serGetTextSearch', 'serGetListDictionary',
-    function (scope, http, serListProject, serListFileProject, cfpLoadingBar, $mdDialog, deleteFileProject, serCreateNewProject, serGetListUser, cfpLoadingBar, serGetProjectInfo, serGetListProjectMember, serUpdateProject, serDeleteProject, serGetListProjectDBReference, serSaveChangeProjectSetting, serGetInfoForMemberSetting, serSaveChangeMemberSetting, serGetTextSearch, serGetListDictionary) {
+apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFileProject', 'cfpLoadingBar', '$mdDialog', 'deleteFileProject', 'serCreateNewProject', 'serGetListUser', 'cfpLoadingBar', 'serGetProjectInfo', 'serGetListProjectMember', 'serUpdateProject', 'serDeleteProject', 'serGetListProjectDBReference', 'serSaveChangeProjectSetting', 'serGetInfoForMemberSetting', 'serSaveChangeMemberSetting', 'serGetTextSearch', 'serGetListDictionary','serGetProjectProgress',
+    function (scope, http, serListProject, serListFileProject, cfpLoadingBar, $mdDialog, deleteFileProject, serCreateNewProject, serGetListUser, cfpLoadingBar, serGetProjectInfo, serGetListProjectMember, serUpdateProject, serDeleteProject, serGetListProjectDBReference, serSaveChangeProjectSetting, serGetInfoForMemberSetting, serSaveChangeMemberSetting, serGetTextSearch, serGetListDictionary, serGetProjectProgress) {
         scope.init = function () {
-            scope.loadListProject();
+            if(projectId === null){
+                scope.loadListProject();
+            } else {
+                scope.loadListFileProject(projectId);
+                scope.showSearchBoxDivider = true;
+                serGetProjectInfo.data(projectId)
+                    .success(function (response) {
+                        if (response.GetProjectInfoResult && response.GetProjectInfoResult.IsSuccess) {
+                            var project = JSON.parse(response.GetProjectInfoResult.Value);
+                            scope.currentProject = Utility.clone(project);
+                            serGetProjectProgress.data(projectId)
+                  .success(function (response) {
+                      if (response.GetProjectProgressResult && response.GetProjectProgressResult.IsSuccess) {
+                          var object = JSON.parse(response.GetProjectProgressResult.Value);
+                          scope.currentProject.Progress = object;
+                          console.log(object);
+                      }
+                      else {
+                          Utility.showMessage(scope, $mdDialog, response.GetProjectProgressResult.Message);
+                      }
+                  }).error(function (err) {
+                      console.log(err);
+                      Utility.showMessage(scope, $mdDialog, err.message)
+                      cfpLoadingBar.complete();
+                  });
+                        }
+                        else {
+                            Utility.showMessage(scope, $mdDialog, response.GetProjectInfoResult.Message);
+                        }
+                    }).error(function (err) {
+                        console.log(err);
+                        Utility.showMessage(scope, $mdDialog, err.message)
+                        cfpLoadingBar.complete();
+                    });
+            }
+
         }
         scope.currentProject = {};
         scope.currentFileProject = {};
@@ -20,7 +55,8 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
         scope.listProject = [];
         scope.columnDefs = [];
         scope.isEdit = false;
-
+        scope.isListProjectScreen = true;
+        scope.projectId = null;
         //columns list file in project
         scope.columnDefs2 = [{ displayName: 'STT', cellTemplate: '<div style="text-align:center;">{{row.rowIndex +1}}</div>', width: 50, enableCellEdit: false },
                              { field: 'FileName', displayName: 'FileName', enableCellEdit: false, width: 220, resizable: true },
@@ -87,6 +123,9 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                 scope.showSearchBoxDivider = true;
                 if (scope.gridType == Enumeration.GridType.ListProject) {
                     scope.loadListFileProject(row.entity.Id);
+                    //window.location.href = Utility.getBaseUrl()+"Home/Index?projectId=" + row.entity.Id;
+                    window.history.replaceState("", "", Utility.getBaseUrl() + "Home/Index?projectId=" + row.entity.Id);
+
                 }
                 if (scope.gridType == Enumeration.GridType.ListFileProject) {
                     scope.translateFile();
@@ -97,12 +136,16 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
         };
 
         scope.backToListProject = function () {
-            try {
-                scope.columnDefs = scope.columnDefs1;
-            } catch (e) {
-                Utility.showMessage(scope, $mdDialog, e.message);
-            }
+            scope.loadListProject();
+            window.history.replaceState("", "", Utility.getBaseUrl() + "Home/Index")
         }
+        //scope.backToListProject = function () {
+        //    try {
+        //        scope.columnDefs = scope.columnDefs1;
+        //    } catch (e) {
+        //        Utility.showMessage(scope, $mdDialog, e.message);
+        //    }
+        //}
 
         scope.checkPermissionNewProject = function () {
             if (parseInt(userRole) == Enumeration.UserRole.Admin && !scope.checked) {
@@ -764,18 +807,18 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
         scope.settingProject = function () {
 
             angular.element('#projectNameSetting').val("");
-            var translateLanguage = document.getElementById("translateLanguageSetting");
-            translateLanguage.value = 2;
-            angular.element('#pathSetting').val("");
+            //var translateLanguage = document.getElementById("translateLanguageSetting");
+            //translateLanguage.value = 2;
+            //angular.element('#pathSetting').val("");
             $('#useCompanyDBSetting').bootstrapToggle('off');
-            angular.element('#project').val('');
+            angular.element('#projectSelect').val('');
             angular.element('#tagListSetting').val(' ');
             scope.ProjectTags = [];
             scope.newlyInsertedIDList = [];
             scope.deletedIDList = [];
             scope.oldIDList = [];
             scope.IdList = [];
-
+          //  $("#tagListSetting").attr("disabled","disabled");
             if (scope.currentProject) {
                 projectId = scope.currentProject.Id;
                 serListProject.data()
@@ -799,14 +842,30 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                         if (response.GetProjectInfoResult && response.GetProjectInfoResult.IsSuccess) {
                             var project = JSON.parse(response.GetProjectInfoResult.Value);
                             angular.element('#projectNameSetting').val(project.Title);
-                            var translateLanguage = document.getElementById("translateLanguageSetting");
-                            translateLanguage.value = project.TranslateLanguageID;
-                            angular.element('#pathSetting').val(project.Path);
+                            //var translateLanguage = document.getElementById("translateLanguageSetting");
+                            //translateLanguage.value = project.TranslateLanguageID;
+                            //angular.element('#pathSetting').val(project.Path);
                             if (project.UseCompanyDB == 0) {
                                 $('#useCompanyDBSetting').bootstrapToggle('off');
+                                $("#tagListSetting").attr("disabled", "disabled");
+                                $("#projectSelect").attr("disabled", "disabled");
+
                             } else {
                                 $('#useCompanyDBSetting').bootstrapToggle('on');
+                                $("#tagListSetting").removeAttr("disabled");
+                                $("#projectSelect").removeAttr("disabled");
                             }
+                            $('#useCompanyDBSetting').change(function () {
+                                var isAMemberToggleValue = $(this).prop('checked');
+
+                                if (isAMemberToggleValue === true) {
+                                    $("#tagListSetting").removeAttr("disabled");
+                                    $("#projectSelect").removeAttr("disabled");
+                                } else {
+                                    $("#tagListSetting").attr("disabled", "disabled");
+                                    $("#projectSelect").attr("disabled", "disabled");
+                                }
+                            });
 
                             scope.getListProjectDBReference(projectId);
 
@@ -820,6 +879,8 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                         cfpLoadingBar.complete();
                     });
             }
+
+    
         }
 
         scope.saveChangeProjectSetting = function () {
@@ -827,16 +888,16 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
             if (scope.currentProject) {
                 projectId = scope.currentProject.Id;
 
-                var translateLanguage = document.getElementById("translateLanguageSetting");
-                var translateLanguageValue = translateLanguage.options[translateLanguage.selectedIndex].value;
-                projectObject['TranslateLanguage'] = translateLanguageValue;
+                //var translateLanguage = document.getElementById("translateLanguageSetting");
+                //var translateLanguageValue = translateLanguage.options[translateLanguage.selectedIndex].value;
+                //projectObject['TranslateLanguage'] = translateLanguageValue;
                 projectObject['Id'] = projectId;
                 if ($('#checkboxValue').text() === 'true') {
                     projectObject['UseCompanyDB'] = 1;
                 } else {
                     projectObject['UseCompanyDB'] = 0;
                 }
-                console.log("tranlsatelanguage = " + translateLanguageValue);
+               
                 console.log("UsecompanyDB = " + projectObject['UseCompanyDB']);
                 console.log("id = " + projectObject['Id']);
 
@@ -919,20 +980,20 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                          console.log(listProjectMembers);
                          var trHTML = '';
                          $.each(listProjectMembers, function (i, item) {
-
+                             var No = parseInt(i) + 1;
                              if (item.ProjectRole == 0 && item.isAMember == 1) {
-                                 trHTML += '<tr><td>' + item.UserID + '</td><td>' + item.UserName + '</td>'
+                                 trHTML += '<tr><td style="display:none">' + item.UserID + '</td><td>' + No + '</td><td>' + item.UserName + '</td>'
                                + '<td>  <select class="form-control" ' + 'id="isAMemberRole_' + i + '" style="max-width:100%!important">';
                                  trHTML += '    <option value="0" selected ="selected">Comter Member</option>';
                                  trHTML += '    <option value="1">Comter Leader</option>'
                              } else
                                  if (item.ProjectRole == 1 && item.isAMember == 1) {
-                                     trHTML += '<tr><td>' + item.UserID + '</td><td>' + item.UserName + '</td>'
+                                     trHTML += '<tr><td style="display:none">' + item.UserID + '</td><td>' + No + '</td><td>' + item.UserName + '</td>'
                                  + '<td>  <select class="form-control" ' + 'id="isAMemberRole_' + i + '" style="max-width:100%!important">';
                                      trHTML += '    <option value="0">Comter Member</option>';
                                      trHTML += '    <option value="1" selected ="selected">Comter Leader</option>'
                                  } else {
-                                     trHTML += '<tr><td>' + item.UserID + '</td><td>' + item.UserName + '</td>'
+                                     trHTML += '<tr><td style="display:none">' + item.UserID + '</td><td>' + No + '</td><td>' + item.UserName + '</td>'
                                 + '<td>  <select class="form-control" ' + 'id="notAMemberRole_' + i + '" style="max-width:100%!important">';
                                      trHTML += '    <option value="0" selected ="selected">Comter Member</option>';
                                      trHTML += '    <option value="1">Comter Leader</option>'
@@ -1115,7 +1176,6 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
         scope.saveChangeMemberSetting = function () {
             if (scope.currentProject) {
                 projectId = scope.currentProject.Id;
-
                 serSaveChangeMemberSetting.data(projectId, JSON.stringify(scope.modifiedIsAMemberList), JSON.stringify(scope.modifiedNotAMemberList))
                    .success(function (response) {
                        if (response.SaveChangeMemberSettingResult.IsSuccess && response.SaveChangeMemberSettingResult.Value === "true") {
@@ -1139,6 +1199,7 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
 
             if (scope.selectedTab == "#project") {
                 scope.saveChangeProjectSetting();
+
             }
             if (scope.selectedTab == "#member-manager") {
                 scope.saveChangeMemberSetting();
@@ -1328,6 +1389,11 @@ apvApp.service('serGetListDictionary', function ($http) {
         return $http.post(Utility.getBaseUrl() + 'Services/DashboardService.svc/GetListDictionary', { 'projectId': projectId });
     };
 });
+apvApp.service('serGetProjectProgress', function ($http) {
+    this.data = function (projectId) {
+        return $http.post(Utility.getBaseUrl() + 'Services/DashboardService.svc/GetProjectProgress', { 'projectId': projectId });
+    };
+});
 //Handle splitter transition 
 var isOpen = true;
 var isCollapsed = false;
@@ -1386,20 +1452,10 @@ $(window).resize(function () {
     }
 })
 
-$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-    var target = $(e.target).attr("href") // activated tab
-    if (target === "#member-manager") {
-        angular.element(document.getElementById('Homecontroller')).scope().selectedTab = '#member-manager';
-    }
-    if (target === "#project") {
-        angular.element(document.getElementById('Homecontroller')).scope().selectedTab = '#project';
-    }
 
-});
 
 $(function () {
     $('#useCompanyDBSetting').change(function () {
-
         $('#checkboxValue').text($(this).prop('checked'));
 
     })

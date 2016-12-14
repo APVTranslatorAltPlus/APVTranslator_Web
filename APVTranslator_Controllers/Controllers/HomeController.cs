@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using Microsoft.AspNet.Identity;
 using System.IO;
 using APVTranslator_Common;
+using System.Diagnostics;
 
 namespace APVTranslator_Controllers.Controllers
 {
@@ -19,8 +20,16 @@ namespace APVTranslator_Controllers.Controllers
         DashBoardModel db = new DashBoardModel();
 
         [Authorize]
-        public ActionResult Index()
+        public ActionResult Index(int? projectId = null)
         {
+            if (projectId.HasValue)
+            {
+                ViewBag.ProjectId = projectId;
+            }
+            else
+            {
+                ViewBag.ProjectId = null;
+            }
             var user = HttpContext.User;
             if (user.Identity.IsAuthenticated)
             {
@@ -35,6 +44,7 @@ namespace APVTranslator_Controllers.Controllers
                 {
                     ViewBag.UserRole = (int)UserRoles.Other;
                 }
+                
             }
             return View();
         }

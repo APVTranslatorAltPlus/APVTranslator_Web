@@ -85,7 +85,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                              field: 'Row',
                              displayName: 'Row',
                              enableCellEdit: false,
-                             cellTemplate: '<div ng-right-click="rightClickCell(row,col)" context="context2" ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText" style="white-space: normal;">{{row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
+                             cellTemplate: '<div ng-right-click="rightClickCell(row,col)" context="context2" ng-click="cellClick(row,col)" Id={{row.getProperty("Id")}} Field={{col.field}} ng-class=""><div class="ngCellText" style="white-space: normal;">{{row.getProperty(col.field)==-1?\' \':row.getProperty(col.field)}}</div></div><div class="cellTooltip"></div>',
                              width: 120,
                              resizable: true
                          },
@@ -665,7 +665,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
         }
 
         scope.toColumnName = function (num) {
-            if (num === -1) return '-1';
+            if (num === -1) return '';
             for (var ret = '', a = 1, b = 26; (num -= a) >= 0; a = b, b *= 26) {
                 ret = String.fromCharCode(parseInt((num % b) / a) + 65) + ret;
             }

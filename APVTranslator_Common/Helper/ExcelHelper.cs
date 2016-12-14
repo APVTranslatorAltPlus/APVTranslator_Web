@@ -329,6 +329,54 @@ namespace APVTranslator_Common.Helpers
                             }
                         }
                     }
+                    else if (data.GetType().Name == "String")
+                    {
+                        try
+                        {
+                            Double.TryParse(data, out checkNumber);
+                        }
+                        catch (Exception ex)
+                        {
+                            throw;
+                        }
+                        if (!String.IsNullOrEmpty(data) && !Double.TryParse(data, out checkNumber))
+                        {
+                            string textValue = data;
+                            var stringSeparators = new char[] { '。', '.', '\n', '\r' };// '\a', '\u0001'
+                                                                                       //var segment = cellText.Split(stringSeparators, StringSplitOptions.None);
+                            bool isURL = Uri.IsWellFormedUriString(textValue.Trim(), UriKind.RelativeOrAbsolute);//Regex.IsMatch(textValue.Trim(), Constant.sRegexLink);
+                            string[] segment;
+                            List<String> lstResult = new List<string>();
+                            if (isURL)
+                            {
+                                if (!String.IsNullOrEmpty(textValue.Trim()))
+                                {
+                                    lstResult.Add(textValue.Trim());
+                                }
+                            }
+                            else
+                            {
+                                segment = textValue.Split(stringSeparators, StringSplitOptions.RemoveEmptyEntries);
+                                List<String> lstSegment = new List<string>();
+                                foreach (var item in segment)
+                                {
+                                    string sValue = item.Trim();
+                                    if (!String.IsNullOrEmpty(sValue.Trim()))
+                                    {
+                                        lstSegment.Add(sValue);
+                                    }
+                                }
+                                lstResult = lstSegment.Where(x => x.Length > 0 && !Double.TryParse(x, out checkNumber)).ToList();
+                            }
+                            foreach (var item in lstResult)
+                            {
+                                if (!lstTextExcel.Any(a => a.Value == item && a.Row == 1 && a.Col == 1 && a.SheetName == worksheet.Name && a.SheetIndex == sheetIndex))
+                                {
+                                    lstTextExcel.Add(new TextRead() { Row = 1, Col = 1, Value = item, SheetName = worksheet.Name, SheetIndex = sheetIndex, IsSheetName = false });
+                                }
+                            }
+                        }
+                    }
                 }
                 return lstTextExcel;
             }
