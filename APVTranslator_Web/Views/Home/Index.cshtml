@@ -2,6 +2,18 @@
 @{
     ViewBag.Title = "Home Page";
 }
+<script>
+    var projectId = null;
+    @if(@ViewBag.ProjectId != null)
+    {
+      @:projectId = @ViewBag.ProjectId;
+        }
+    else
+    {
+      @:projectId = null;
+        }
+
+</script>
 <script src="~/Scripts/jquery.tabletojson.min.js"></script>
 <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
@@ -17,23 +29,27 @@
                     <div style="margin-bottom:6px;display:inline-block">
                         <button type="button" style="display:inline-block;" class="btn btn-default button-toolbar" ng-show="!checked" ng-click="getListUser()" data-toggle="modal" data-target="#createNewProjectModal" data-backdrop="static" data-keyboard="false">
                             <span class="glyphicon glyphicon-plus"></span>
-                        Create
+                            Create
                         </button>
                         <div class="a-divider " style="display:inline-block;" ng-show="projectSelection"></div>
                         <button type="button" style="display:inline-block;" class="btn btn-default button-toolbar" ng-show="projectSelection" ng-disabled="!projectSelection" ng-click="editProject()">
                             <span class="glyphicon glyphicon-pencil"></span>
-                        Edit</button>
+                            Edit
+                        </button>
                         <div class="a-divider " style="display:inline-block;" ng-show="projectSelection"></div>
                         <button type="button" style="display:inline-block;" class="btn btn-default button-toolbar" ng-show="projectSelection" ng-disabled="!projectSelection" ng-click="confirmDeleteProject()">
                             <span class="glyphicon glyphicon-remove"></span>
-                        Delete</button>
+                            Delete
+                        </button>
                         <div class="a-divider" style="display:inline-block;" ng-show="projectSelection"></div>
                         <button type="button" style="display:inline-block;" class="btn btn-default button-toolbar" ng-show="projectSelection" ng-disabled="!projectSelection" aria-label="Setting" data-toggle="modal" data-target="#settingModal" data-backdrop="static" data-keyboard="false" ng-click="initSetting()">
                             <span class="glyphicon glyphicon-wrench"></span>
-                        Settings</button>
+                            Settings
+                        </button>
                         <button type="button" style="display:inline-block;" class="btn btn-default button-toolbar" ng-show="checked" ng-click="showInputFile()">
-                            <span class="glyphicon glyphicon-import"></span>    
-                        Import</button>
+                            <span class="glyphicon glyphicon-import"></span>
+                            Import
+                        </button>
                         <div class="a-divider" ng-show="fileProjectSelection"></div>
                         <button type="button" style="display:inline-block;" class="btn btn-default button-toolbar" ng-show="fileProjectSelection" ng-click="downloadFile()" ng-disabled="!fileProjectSelection">
                             <span class="glyphicon glyphicon-export"></span>
@@ -52,11 +68,11 @@
                         <input type="file" id="file" accept=".xlsx,.xls,.doc,.docx.,.ppt,.pptx" style="display:none" value="upload" multiple />
                         <span flex></span>
 
-                     </div>
+                    </div>
                     <div style="float:right;display:inline-block;vertical-align:middle;display:table-cell;">
                         <div id="custom-search-input" style="width:300px;height:36px;display:inline-block; float:left;margin-bottom:8px;">
                             <div class="input-group" style="width:300px;height:36px;">
-                                <input type="text" onfocus="if(this.value != '') {this.value=''}" id="textSearchBox" style="height: 30px;" class = "input-lg" placeholder="Search..." ng-keypress="myFunct($event)" />
+                                <input type="text" onfocus="if(this.value != '') {this.value=''}" id="textSearchBox" style="height: 30px;" class="input-lg" placeholder="Search..." ng-keypress="myFunct($event)" />
                                 <span class="input-group-btn" style="vertical-align: top !important;bottom:2px;">
                                     <button class="btn btn-info btn-lg" type="button" ng-click="searchText()">
                                         <i class="glyphicon glyphicon-search" style="font-size: 18px;"></i>
@@ -65,9 +81,10 @@
                             </div>
                         </div>
                         <div class="a-divider" ng-show="showSearchBoxDivider" style="display:inline-block;"></div>
-                        <button type="button" ng-show="checked" ng-click="loadListProject()" style="display:inline-block;" class="btn btn-default button-toolbar">
+                        <button type="button" ng-show="checked" ng-click="backToListProject()" style="display:inline-block;" class="btn btn-default button-toolbar">
                             <span class="glyphicon glyphicon-backward"></span>
-                        Back</button>
+                            Back
+                        </button>
                     </div>
                 </div>
             </div>
@@ -94,17 +111,17 @@
                             </p>
                         </div>
                         @*<div class="detail-item">
-                            <b>Path:</b>
-                            <p id="Path">
-                                {{currentProject.Path}}
-                            </p>
-                        </div>*@
+                                <b>Path:</b>
+                                <p id="Path">
+                                    {{currentProject.Path}}
+                                </p>
+                            </div>*@
                         @*<div class="detail-item">
-                            <b>Translate Language:</b>
-                            <p id="TranslateLanguage">
-                                {{currentProject.TranslateLanguageID == 1?"Japanese To Vietnamese":"Vietnamese To Japanese"}}
-                            </p>
-                        </div>*@
+                                <b>Translate Language:</b>
+                                <p id="TranslateLanguage">
+                                    {{currentProject.TranslateLanguageID == 1?"Japanese To Vietnamese":"Vietnamese To Japanese"}}
+                                </p>
+                            </div>*@
                         <div class="detail-item">
                             <b>Create At:</b>
                             <p id="CreateAt">
@@ -228,7 +245,7 @@
                             <ul class="nav nav-tabs" id="tabContent">
                                 <li class="active"><a href="#project" data-toggle="tab">Project</a></li>
                                 <li><a href="#member-manager" data-toggle="tab">Member Manager</a></li>
-                               @* <li><a href="#dictionary-manager" data-toggle="tab">Dictionary Manager</a></li>*@
+                                @* <li><a href="#dictionary-manager" data-toggle="tab">Dictionary Manager</a></li>*@
                             </ul>
 
                             <div class="tab-content">
@@ -239,26 +256,26 @@
                                     </div>
 
                                     @*<div class="form-group">
-                                        <label for="translateLanguage">Translate Language:</label>
-                                        <select class="form-control" id="translateLanguageSetting" style="max-width:100%!important">
-                                            <option value="1">Japanese to Vietnamese</option>
-                                            <option value="2">Vietnamese To Japanese</option>
-                                        </select>
-                                    </div>
+                                            <label for="translateLanguage">Translate Language:</label>
+                                            <select class="form-control" id="translateLanguageSetting" style="max-width:100%!important">
+                                                <option value="1">Japanese to Vietnamese</option>
+                                                <option value="2">Vietnamese To Japanese</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="usr">Path:</label>
+                                            <input type="text" class="form-control" id="pathSetting" style="max-width:100%!important" disabled="disabled">
+                                        </div>*@
 
                                     <div class="form-group">
-                                        <label for="usr">Path:</label>
-                                        <input type="text" class="form-control" id="pathSetting" style="max-width:100%!important" disabled="disabled">
-                                    </div>*@
-
-                                    <div class="form-group" >
                                         <label for="usr">Using Company Database:</label>
-                                        <input  type="checkbox" data-toggle="toggle" data-on="Yes" data-off="No" id="useCompanyDBSetting">
+                                        <input type="checkbox" data-toggle="toggle" data-on="Yes" data-off="No" id="useCompanyDBSetting">
                                     </div>
 
                                     <div class="form-group">
                                         <label for="pwd">Using Separate Project Database:</label>
-                                        <select disabled ="disabled" type="text" class="form-control" id="projectSelect" style="max-width:100%!important" ng-change="changedValueSetting(listProject.selectedOption)" ng-options="option.Title for option in listProject.availableOptions track by option.Id"
+                                        <select disabled="disabled" type="text" class="form-control" id="projectSelect" style="max-width:100%!important" ng-change="changedValueSetting(listProject.selectedOption)" ng-options="option.Title for option in listProject.availableOptions track by option.Id"
                                                 ng-model="listProject.selectedOption" @*ng-init="data2.selectedOption = data2.availableOptions[0].Email" *@></select>
                                         @*    <hr>*@
                                         @*   <tt>option = {{data2.selectedOption.Email}}</tt><br />*@

@@ -455,5 +455,21 @@ namespace APVTranslator_Services.Services
             }
             return sResult;
         }
+
+        public ServiceResult GetProjectProgress(int projectId)
+        {
+            ServiceResult sResult = new ServiceResult();
+            try
+            {
+                DashBoardModel dbModel = new DashBoardModel();
+                sResult.Value = dbModel.Proc_GetProjectProgress(projectId);
+            }
+            catch (Exception ex)
+            {
+                sResult.IsSuccess = false;
+                sResult.Message = ex.Message;
+            }
+            return sResult;
+        }
     }
 }

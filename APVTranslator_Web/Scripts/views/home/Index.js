@@ -3,10 +3,45 @@
 //        cfpLoadingBarProvider.includeSpinner = true;
 //    })
 
-apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFileProject', 'cfpLoadingBar', '$mdDialog', 'deleteFileProject', 'serCreateNewProject', 'serGetListUser', 'cfpLoadingBar', 'serGetProjectInfo', 'serGetListProjectMember', 'serUpdateProject', 'serDeleteProject', 'serGetListProjectDBReference', 'serSaveChangeProjectSetting', 'serGetInfoForMemberSetting', 'serSaveChangeMemberSetting', 'serGetTextSearch', 'serGetListDictionary',
-    function (scope, http, serListProject, serListFileProject, cfpLoadingBar, $mdDialog, deleteFileProject, serCreateNewProject, serGetListUser, cfpLoadingBar, serGetProjectInfo, serGetListProjectMember, serUpdateProject, serDeleteProject, serGetListProjectDBReference, serSaveChangeProjectSetting, serGetInfoForMemberSetting, serSaveChangeMemberSetting, serGetTextSearch, serGetListDictionary) {
+apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFileProject', 'cfpLoadingBar', '$mdDialog', 'deleteFileProject', 'serCreateNewProject', 'serGetListUser', 'cfpLoadingBar', 'serGetProjectInfo', 'serGetListProjectMember', 'serUpdateProject', 'serDeleteProject', 'serGetListProjectDBReference', 'serSaveChangeProjectSetting', 'serGetInfoForMemberSetting', 'serSaveChangeMemberSetting', 'serGetTextSearch', 'serGetListDictionary','serGetProjectProgress',
+    function (scope, http, serListProject, serListFileProject, cfpLoadingBar, $mdDialog, deleteFileProject, serCreateNewProject, serGetListUser, cfpLoadingBar, serGetProjectInfo, serGetListProjectMember, serUpdateProject, serDeleteProject, serGetListProjectDBReference, serSaveChangeProjectSetting, serGetInfoForMemberSetting, serSaveChangeMemberSetting, serGetTextSearch, serGetListDictionary, serGetProjectProgress) {
         scope.init = function () {
-            scope.loadListProject();
+            if(projectId === null){
+                scope.loadListProject();
+            } else {
+                scope.loadListFileProject(projectId);
+                scope.showSearchBoxDivider = true;
+                serGetProjectInfo.data(projectId)
+                    .success(function (response) {
+                        if (response.GetProjectInfoResult && response.GetProjectInfoResult.IsSuccess) {
+                            var project = JSON.parse(response.GetProjectInfoResult.Value);
+                            scope.currentProject = Utility.clone(project);
+                            serGetProjectProgress.data(projectId)
+                  .success(function (response) {
+                      if (response.GetProjectProgressResult && response.GetProjectProgressResult.IsSuccess) {
+                          var object = JSON.parse(response.GetProjectProgressResult.Value);
+                          scope.currentProject.Progress = object;
+                          console.log(object);
+                      }
+                      else {
+                          Utility.showMessage(scope, $mdDialog, response.GetProjectProgressResult.Message);
+                      }
+                  }).error(function (err) {
+                      console.log(err);
+                      Utility.showMessage(scope, $mdDialog, err.message)
+                      cfpLoadingBar.complete();
+                  });
+                        }
+                        else {
+                            Utility.showMessage(scope, $mdDialog, response.GetProjectInfoResult.Message);
+                        }
+                    }).error(function (err) {
+                        console.log(err);
+                        Utility.showMessage(scope, $mdDialog, err.message)
+                        cfpLoadingBar.complete();
+                    });
+            }
+
         }
         scope.currentProject = {};
         scope.currentFileProject = {};
@@ -20,7 +55,8 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
         scope.listProject = [];
         scope.columnDefs = [];
         scope.isEdit = false;
-
+        scope.isListProjectScreen = true;
+        scope.projectId = null;
         //columns list file in project
         scope.columnDefs2 = [{ displayName: 'STT', cellTemplate: '<div style="text-align:center;">{{row.rowIndex +1}}</div>', width: 50, enableCellEdit: false },
                              { field: 'FileName', displayName: 'FileName', enableCellEdit: false, width: 220, resizable: true },
@@ -87,6 +123,9 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
                 scope.showSearchBoxDivider = true;
                 if (scope.gridType == Enumeration.GridType.ListProject) {
                     scope.loadListFileProject(row.entity.Id);
+                    //window.location.href = Utility.getBaseUrl()+"Home/Index?projectId=" + row.entity.Id;
+                    window.history.replaceState("", "", Utility.getBaseUrl() + "Home/Index?projectId=" + row.entity.Id);
+
                 }
                 if (scope.gridType == Enumeration.GridType.ListFileProject) {
                     scope.translateFile();
@@ -97,12 +136,16 @@ apvApp.controller('MyCtrl', ['$scope', '$http', 'serListProject', 'serListFilePr
         };
 
         scope.backToListProject = function () {
-            try {
-                scope.columnDefs = scope.columnDefs1;
-            } catch (e) {
-                Utility.showMessage(scope, $mdDialog, e.message);
-            }
+            scope.loadListProject();
+            window.history.replaceState("", "", Utility.getBaseUrl() + "Home/Index")
         }
+        //scope.backToListProject = function () {
+        //    try {
+        //        scope.columnDefs = scope.columnDefs1;
+        //    } catch (e) {
+        //        Utility.showMessage(scope, $mdDialog, e.message);
+        //    }
+        //}
 
         scope.checkPermissionNewProject = function () {
             if (parseInt(userRole) == Enumeration.UserRole.Admin && !scope.checked) {
@@ -1344,6 +1387,11 @@ apvApp.service('serGetTextSearch', function ($http) {
 apvApp.service('serGetListDictionary', function ($http) {
     this.data = function (projectId) {
         return $http.post(Utility.getBaseUrl() + 'Services/DashboardService.svc/GetListDictionary', { 'projectId': projectId });
+    };
+});
+apvApp.service('serGetProjectProgress', function ($http) {
+    this.data = function (projectId) {
+        return $http.post(Utility.getBaseUrl() + 'Services/DashboardService.svc/GetProjectProgress', { 'projectId': projectId });
     };
 });
 //Handle splitter transition 

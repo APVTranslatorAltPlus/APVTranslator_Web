@@ -31,8 +31,8 @@ namespace APVTranslator_Model.Models
 
         public virtual List<ListProjectFileViewModel> Proc_GetListFileProject(object projectId)
         {
-            var userIDParameter = new SqlParameter("@projectId", projectId);
-            List<ListProjectFileViewModel> listProjects = this.Database.SqlQuery<ListProjectFileViewModel>("Proc_GetListPorjectFileViewModel @projectId", userIDParameter).ToList();
+            var projectIDParameter = new SqlParameter("@projectId", projectId);
+            List<ListProjectFileViewModel> listProjects = this.Database.SqlQuery<ListProjectFileViewModel>("Proc_GetListPorjectFileViewModel @projectId", projectIDParameter).ToList();
             return listProjects;
         }
         /// <summary>
@@ -303,9 +303,13 @@ namespace APVTranslator_Model.Models
                     var sql2 = @"DELETE FROM ProjectMembers WHERE ProjectID = {0} ";
                     this.Database.ExecuteSqlCommand(sql2, projectId);
 
-                    //Delete this project
-                    var sql3 = @"DELETE FROM Projects WHERE Id = {0} ";
+                    // Delete all TextSegment of this project from DB
+                     var sql3 = @"DELETE FROM TextSegment WHERE ProjectID = {0} ";
                     this.Database.ExecuteSqlCommand(sql3, projectId);
+
+                    //Delete this project
+                    var sql4 = @"DELETE FROM Projects WHERE Id = {0} ";
+                    this.Database.ExecuteSqlCommand(sql4, projectId);
 
                     this.SaveChanges();
 
@@ -480,6 +484,12 @@ namespace APVTranslator_Model.Models
         {
             var sql = @"UPDATE ProjectFiles SET LastUpdate = {0} WHERE FileID = {1}";
             this.Database.ExecuteSqlCommand(sql, lastModified, fileId);
+        }
+        public virtual object Proc_GetProjectProgress(int projectId)
+        {
+            var projectIDParameter = new SqlParameter("@projectId", projectId);
+            object progress = this.Database.SqlQuery<Decimal>("Proc_GetProjectProgress @projectId", projectIDParameter);
+            return progress;
         }
     }
 }
