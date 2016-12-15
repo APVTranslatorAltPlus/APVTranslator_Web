@@ -26,6 +26,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                 $('#connectStatus').hide();
                 scope.reconectSocket();
             });
+
         }
         scope.closedConnect = false;
         scope.oldTextSegment1 = null;
@@ -368,7 +369,8 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                     dataEdit.TextSegment1 = rowData.TextSegment1;
                     dataEdit.TextSegment2 = rowData.TextSegment2;
                     dataEdit.Field = col.field;
-                    scope.sendMessageSocket(dataEdit)
+                    scope.updateProgress();
+                    scope.sendMessageSocket(dataEdit);
                 }
             } catch (e) {
                 Utility.showMessage(scope, $mdDialog, "Can't sent edited to server!");
@@ -400,6 +402,7 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                         }
                         scope.projectName = response.ProjectName;
                         scope.fileName = response.FileName;
+                        scope.updateProgress();
                     }
                     else {
                         Utility.showMessage(scope, $mdDialog, response.ControllerResult.Message);
@@ -485,6 +488,8 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                         }
                         else if (arrRecord.length == 1) {
                             arrRecord[0][data.Field] = data[data.Field];
+                            scope.updateProgress();
+
                         }
                     }
                     else {
@@ -615,7 +620,8 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                             dataEdit.TextSegment1 = this.currentRow.entity['TextSegment1'];
                             dataEdit.TextSegment2 = arrRecord[0]['TextSegment2'];
                             dataEdit.Field = 'TextSegment2';
-                            scope.sendMessageSocket(dataEdit)
+                            scope.updateProgress();
+                            scope.sendMessageSocket(dataEdit);
                         }
                     }
                     else if (arrResult.length >= 1 && arrResult[0]['Field'] == 'TextSegment2') {
@@ -637,7 +643,8 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
                         dataEdit.TextSegment1 = this.currentRow.entity['TextSegment1'];
                         dataEdit.TextSegment2 = arrRecord[0]['TextSegment2'];
                         dataEdit.Field = 'TextSegment2';
-                        scope.sendMessageSocket(dataEdit)
+                        scope.updateProgress();
+                        scope.sendMessageSocket(dataEdit);
                     }
                 }
             } catch (e) {
@@ -671,6 +678,17 @@ apvApp.controller('translateCtrl', ['$scope', '$http', 'cfpLoadingBar', '$mdDial
             }
            
             return ret;
+        }
+
+        scope.updateProgress = function () {
+            console.log(scope.data);
+            var totalNumOfTranslatedTextSegment2 = 0;
+            $.each(scope.data, function (i, item) {
+                if (item.TextSegment2 != '' && item.TextSegment2!= null) {
+                    totalNumOfTranslatedTextSegment2++;
+                }
+            });
+            $('#realTimeProgress').text(parseFloat(totalNumOfTranslatedTextSegment2) / parseFloat(scope.data.length) * 100 + '%');
         }
     }]);
 apvApp.directive('context', [
